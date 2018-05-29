@@ -95,6 +95,12 @@
             "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
         }
     },
+    "knplabs/knp-components": {
+        "version": "1.3.8"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v2.8.0"
+    },
     "ldaptools/ldaptools": {
         "version": "v0.25.2"
     },
