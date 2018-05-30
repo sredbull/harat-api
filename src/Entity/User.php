@@ -2,8 +2,9 @@
 // src/Entity/User.php
 namespace App\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
+use JMS\Serializer\Annotation as JMSSerializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("email")
  * @UniqueEntity("username")
+ *
+ * @JMSSerializer\ExclusionPolicy("all")
  */
 class User extends BaseUser
 {
@@ -22,6 +25,9 @@ class User extends BaseUser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("integer")
      */
     protected $id;
 
@@ -29,6 +35,9 @@ class User extends BaseUser
      * The name of the user.
      *
      * @Assert\NotBlank()
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     protected $username;
 
@@ -41,6 +50,9 @@ class User extends BaseUser
      *     checkMX = true,
      *     checkHost = true
      * )
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     protected $email;
 
