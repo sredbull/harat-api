@@ -1,14 +1,16 @@
 ldap_tools:
+    general:
+        schema_folder: "%kernel.root_dir%/Resources/LdapToolsBundle/schema"
+        schema_format: yml
     domains:
-        # The below "example" key can be anything you want. It just has to be a unique name for the YML config.
-        example:
-            # The LDAP FQDN is required
-            domain_name: data.housearatus.space
-            # The username to use for the LDAP connection
-            username: foo
-            # The password to use for the username
-            password: secret
-            # The base DN for LDAP searches (queried from the RootDSE if not provided)
-            base_dn: "dc=example,dc=local"
-            # The LDAP servers to use for the connection (Queried from DNS if not provided)
-            servers: ["dc1", "dc2", "dc3"]
+        housearatus:
+            domain_name: housearatus.space
+            username: cn=admin,dc=housearatus,dc=space
+            password: H8rat@us
+            base_dn: "dc=housearatus,dc=space"
+            servers: ["ldap.housearatus.space"]
+            ldap_type: openldap
+            use_ssl: true
+            port: 636
+    security:
+        user: App\Entity\User

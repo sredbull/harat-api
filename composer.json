@@ -11,6 +11,7 @@
         "knplabs/knp-paginator-bundle": "^2.8",
         "ldaptools/ldaptools-bundle": "^0.9.1",
         "lexik/jwt-authentication-bundle": "^2.4",
+        "nelmio/api-doc-bundle": "^3.2",
         "nelmio/cors-bundle": "^1.5",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/console": "^4.0",

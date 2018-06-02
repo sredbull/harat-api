@@ -1,5 +1,7 @@
 # Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
 fos_rest:
+    body_listener: true
+    param_fetcher_listener: force
     body_converter:
         enabled: true
     format_listener: true
@@ -11,3 +13,5 @@ fos_rest:
             enabled: true
     serializer:
         serialize_null: true
+    exception:
+        enabled: true

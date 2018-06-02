@@ -1,10 +1,10 @@
 fos_user:
     db_driver: orm
-    firewall_name: main
-    user_class: FOS\UserBundle\Model\User
+    firewall_name: api
+    user_class: App\Entity\User
     from_email:
-        address: test@test.com
-        sender_name: test
+        address: info@housearatus.space
+        sender_name: House Aratus
     use_flash_notifications: false
     registration:
         confirmation:
@@ -12,5 +12,9 @@ fos_user:
     resetting:
         email:
             from_email:
-                address: resetting@example.com
-                sender_name: Demo Resetting
+                address: info@housearatus.space
+                sender_name: House Aratus
+services:
+    registration_form:
+        alias: fos_user.registration.form.factory
+        public: true

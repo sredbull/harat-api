@@ -1,3 +1,11 @@
 users:
     type:     rest
     resource: App\Controller\UserController
+
+login:
+    type: rest
+    resource: App\Controller\LoginController
+
+registration:
+    type: rest
+    resource: App\Controller\RegistrationController
