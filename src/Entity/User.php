@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMSSerializer;
-use LdapTools\Bundle\LdapToolsBundle\Security\User\LdapUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @JMSSerializer\ExclusionPolicy("all")
  */
-class User extends BaseUser implements LdapUserInterface
+class User extends BaseUser
 {
     /**
      * The id of the user.
@@ -71,29 +70,5 @@ class User extends BaseUser implements LdapUserInterface
     public function __construct()
     {
         parent::__construct();
-    }
-
-    /**
-     * Set ldapGuid.
-     *
-     * @param string $ldapGuid The ldap id of the user.
-     *
-     * @return User
-     */
-    public function setLdapGuid($ldapGuid) : User
-    {
-        $this->ldapGuid = $ldapGuid;
-
-        return $this;
-    }
-
-    /**
-     * Get ldapGuid.
-     *
-     * @return string
-     */
-    public function getLdapGuid() : string
-    {
-        return $this->ldapGuid;
     }
 }
