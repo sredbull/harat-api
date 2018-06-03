@@ -1,0 +1,24 @@
+ldap_tools:
+    general:
+        schema_folder: "%kernel.root_dir%/Resources/LdapToolsBundle/schema"
+    domains:
+        housearatus:
+            domain_name: housearatus.space
+            username: cn=admin,dc=housearatus,dc=space
+            password: H8rat@us
+            base_dn: "dc=housearatus,dc=space"
+            bind_format: "uniqueIdentifier=%%username%%,ou=people,dc=housearatus,dc=space"
+            servers: ["ldap.housearatus.space"]
+            ldap_type: openldap
+            use_ssl: true
+            port: 636
+    security:
+        ldap_object_type: SymfonyUser
+        default_role: ROLE_USER
+        refresh_user_attributes: true
+        refresh_user_roles: true
+        additional_attributes: ["mail"]
+        guard:
+            default_target_path: /login
+            username_parameter: username
+            password_parameter: password

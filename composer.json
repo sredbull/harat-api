@@ -9,6 +9,7 @@
         "friendsofsymfony/user-bundle": "^2.1",
         "jms/serializer-bundle": "^2.4",
         "knplabs/knp-paginator-bundle": "^2.8",
+        "ldaptools/ldaptools-bundle": "^0.9.1",
         "lexik/jwt-authentication-bundle": "^2.4",
         "nelmio/api-doc-bundle": "^3.2",
         "nelmio/cors-bundle": "^1.5",

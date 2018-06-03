@@ -1,14 +1,16 @@
 <?php
-// src/Entity/User.php
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMSSerializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Class User.
+ *
  * @ORM\Entity
  * @ORM\Table(name="user")
  *
@@ -16,8 +18,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("username")
  *
  * @JMSSerializer\ExclusionPolicy("all")
+ *
+ * @package App\Entity
  */
-class User extends BaseUser
+class User extends BaseUser implements UserInterface
 {
     /**
      * The id of the user.
@@ -30,14 +34,6 @@ class User extends BaseUser
      * @JMSSerializer\Type("integer")
      */
     protected $id;
-
-    /**
-     * The ldap id of the user.
-     *
-     * @ORM\Column(type="string", length=100)
-     */
-    private $ldapGuid;
-
 
     /**
      * The name of the user.
@@ -63,6 +59,15 @@ class User extends BaseUser
      * @JMSSerializer\Type("string")
      */
     protected $email;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group")
+     * @ORM\JoinTable(name="user_group",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
 
     /**
      * User constructor.

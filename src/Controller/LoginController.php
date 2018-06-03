@@ -8,6 +8,9 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 
 /**
  * The LoginController Class.
+ *
+ * @package App\Controller
+ *
  * @Rest\RouteResource("Login", pluralize=false)
  */
 class LoginController extends FOSRestController implements ClassResourceInterface
@@ -18,5 +21,13 @@ class LoginController extends FOSRestController implements ClassResourceInterfac
     public function postAction()
     {
         throw new \DomainException('Handled by JWT');
+    }
+
+    /**
+     * @Rest\Get("login", name="login")
+     */
+    public function loginAction()
+    {
+        throw new \DomainException('Handled by LDAP');
     }
 }

@@ -2,6 +2,8 @@ fos_user:
     db_driver: orm
     firewall_name: api
     user_class: App\Entity\User
+    group:
+        group_class: App\Entity\Group
     from_email:
         address: info@housearatus.space
         sender_name: House Aratus

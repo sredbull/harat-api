@@ -1,0 +1,9 @@
+extends_default: openldap
+objects:
+    login_user:
+        extends_default: [ 'openldap', 'user' ]
+        type: 'SymfonyUser'
+        class: organizationalPerson
+        attributes:
+            username: uniqueIdentifier
+            email: mail

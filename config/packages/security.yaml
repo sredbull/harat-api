@@ -1,14 +1,14 @@
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: bcrypt
+        App\Entity\User: bcrypt
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username_email
+        ldap:
+            id: ldap_tools.security.user.ldap_user_provider
 
     firewalls:
         dev:
@@ -18,20 +18,16 @@ security:
           pattern:  ^/login
           stateless: true
           anonymous: true
-          form_login:
-              check_path:               /login
-              require_previous_session: false
-              success_handler:          lexik_jwt_authentication.handler.authentication_success
-              failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-              username_parameter:       username
-              password_parameter:       password
-
+          guard:
+              authenticators:
+                  - ldap_tools.security.ldap_guard_authenticator
         api_register:
             pattern: ^/register
             anonymous: true
         api:
             pattern:   ^/
             stateless: true
+            provider: ldap
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator

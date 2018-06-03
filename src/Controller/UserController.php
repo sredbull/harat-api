@@ -15,7 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * The UserController Class.
+ * Class UserController.
+ *
+ * @package App\Controller
  *
  * @Rest\RouteResource("User", pluralize=false)
  */
@@ -76,13 +78,6 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function getAction(string $userId): Response
     {
-        $ldap = $this->get('ldap_tools.ldap_manager');
-        $users = $ldap->buildLdapQuery()->fromUsers()->getLdapQuery()->getResult();
-
-        var_dump($users);
-        die;
-
-
         $user = $this->userRepository->find($userId);
 
         if (null === $user) {
