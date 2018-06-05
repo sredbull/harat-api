@@ -1,5 +1,15 @@
-<?php
+<?php declare (strict_types = 1);
 
+/*
+ * This file is part of the House Aratus package.
+ *
+ * (c) Sven Roodbol <roodbol.sven@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @copyright House Aratus
+ */
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -12,14 +22,16 @@ use JMS\Serializer\Annotation as JMSSerializer;
  *
  * @ORM\Entity
  * @ORM\Table(name="groups")
- * @package App\Entity
  *
  * @JMSSerializer\ExclusionPolicy("all")
  */
 class Group extends BaseGroup implements GroupInterface
 {
+
     /**
      * The id of the group.
+     *
+     * @var int $id
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -29,4 +41,5 @@ class Group extends BaseGroup implements GroupInterface
      * @JMSSerializer\Type("integer")
      */
     protected $id;
+
 }

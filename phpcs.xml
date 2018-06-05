@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<ruleset name="housearatus-coding-standard">
+    <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
+    <rule ref="Generic.PHP.LowerCaseConstant"/>
+    <rule ref="Generic.PHP.DisallowShortOpenTag"/>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
+    <rule ref="Generic.Commenting.DocComment"/>
+    <rule ref="Squiz.Commenting.BlockComment">
+        <exclude name="Squiz.Commenting.BlockComment.FirstLineIndent" />
+        <exclude name="Squiz.Commenting.BlockComment.LastLineIndent" />
+        <exclude name="Squiz.Commenting.BlockComment.LineIndent" />
+        <exclude name="Squiz.Commenting.BlockComment.NoEmptyLineAfter" />
+    </rule>
+    <rule ref="Squiz.Commenting.ClassComment">
+        <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" />
+    </rule>
+    <rule ref="Squiz.Commenting.DocCommentAlignment" />
+    <rule ref="Squiz.Commenting.EmptyCatchComment" />
+    <rule ref="Squiz.Commenting.FunctionComment" />
+    <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
+    <rule ref="Squiz.Commenting.InlineComment" />
+    <rule ref="Squiz.Commenting.VariableComment">
+        <exclude name="Squiz.Commenting.VariableComment.TagNotAllowed" />
+    </rule>
+    <rule ref="Squiz.Strings.DoubleQuoteUsage" />
+    <rule ref="Squiz.Strings.DoubleQuoteUsage" />
+
+    <!--Symfony Coding Standard-->
+    <rule ref="vendor/escapestudios/symfony2-coding-standard">
+        <exclude name="Symfony.ControlStructure.YodaConditions.Invalid" />
+        <exclude name="Symfony.Functions.Arguments.Invalid" />
+    </rule>
+
+    <!--Slevomat Coding Standard-->
+    <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+        <exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectLinesCountBetweenDifferentAnnotationsTypes" />
+        <exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces" />
+        <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName" />
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName" />
+        <exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison" />
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions.NonFullyQualified" />
+        <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName" />
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions.NonFullyQualifiedException" />
+        <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification" />
+        <properties>
+            <property name="searchAnnotations" value="true" />
+        </properties>
+    </rule>
+</ruleset>

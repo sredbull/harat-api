@@ -1,5 +1,13 @@
-<?php
+<?php declare (strict_types = 1);
 
+/*
+ * This file is part of the House Aratus package.
+ *
+ * (c) Sven Roodbol <roodbol.sven@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace App\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -11,16 +19,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * The RegistrationController Class.
+ * Class RegistrationController.
  *
  * @Rest\RouteResource("Register", pluralize=false)
  */
 class RegistrationController extends FOSRestController implements ClassResourceInterface
 {
+
     /**
      * The user manager interface.
      *
-     * @var UserManagerInterface
+     * @var UserManagerInterface $userManager
      */
     private $userManager;
 
@@ -42,7 +51,7 @@ class RegistrationController extends FOSRestController implements ClassResourceI
      *
      * @return View
      */
-    public function postAction(Request $request) : View
+    public function postAction(Request $request): View
     {
         $formFactory = $this->get('registration_form');
 
@@ -50,12 +59,12 @@ class RegistrationController extends FOSRestController implements ClassResourceI
         $user->setEnabled(true);
 
         $form = $formFactory->createForm([
-            'csrf_protection'    => false
+            'csrf_protection'    => false,
         ]);
         $form->setData($user);
         $form->submit($request->request->all());
 
-        if (false === $form->isValid()) {
+        if ($form->isValid() === false) {
             return $this->view($form);
         }
 
@@ -67,9 +76,10 @@ class RegistrationController extends FOSRestController implements ClassResourceI
                     ->trans('registration.flash.user_created', [], 'FOSUserBundle'),
                 'token' => $this->get('lexik_jwt_authentication.jwt_manager')
                     ->create($user),
-                'data' => $user
+                'data' => $user,
             ],
             Response::HTTP_CREATED
         );
     }
+
 }

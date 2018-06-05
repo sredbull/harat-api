@@ -1,5 +1,13 @@
-<?php
+<?php declare (strict_types = 1);
 
+/*
+ * This file is part of the House Aratus package.
+ *
+ * (c) Sven Roodbol <roodbol.sven@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace App\Controller;
 
 use App\Entity\User;
@@ -10,38 +18,37 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class UserController.
  *
- * @package App\Controller
- *
  * @Rest\RouteResource("User", pluralize=false)
  */
 class UserController extends FOSRestController implements ClassResourceInterface
 {
+
     /**
      * The Doctrine entity manager.
      *
-     * @var EntityManagerInterface
+     * @var EntityManagerInterface $entityManager
      */
     private $entityManager;
 
     /**
      * The userRepository.
      *
-     * @var UserRepository
+     * @var UserRepository $userRepository
      */
     private $userRepository;
 
     /**
      * UserController constructor.
      *
-     * @param EntityManagerInterface    $entityManager  The Doctrine entity manager.
-     * @param UserRepository            $userRepository The userRepository.
+     * @param EntityManagerInterface $entityManager  The Doctrine entity manager.
+     * @param UserRepository         $userRepository The userRepository.
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -74,13 +81,14 @@ class UserController extends FOSRestController implements ClassResourceInterface
      * @param string $userId The id of the user to retrieve.
      *
      * @return Response
-     * @throws NotFoundHttpException
+     *
+     * @throws NotFoundHttpException Thrown when the user could not be found.
      */
     public function getAction(string $userId): Response
     {
         $user = $this->userRepository->find($userId);
 
-        if (null === $user) {
+        if ($user === null) {
             throw new NotFoundHttpException();
         }
 
@@ -99,12 +107,12 @@ class UserController extends FOSRestController implements ClassResourceInterface
      *
      * @return View
      */
-    public function postAction(Request $request) : View
+    public function postAction(Request $request): View
     {
         $form = $this->createForm(UserType::class, new User());
         $form->submit($request->request->all());
 
-        if (false === $form->isValid()) {
+        if ($form->isValid() === false) {
             return $this->view($form);
         }
 
@@ -122,24 +130,25 @@ class UserController extends FOSRestController implements ClassResourceInterface
     /**
      * Updates an user.
      *
-     * @param Request $request  The original request.
-     * @param string  $userId   The id of the user.
+     * @param Request $request The original request.
+     * @param string  $userId  The id of the user.
      *
      * @return View
-     * @throws NotFoundHttpException When the user could not be found.
+     *
+     * @throws NotFoundHttpException Thrown when the user could not be found.
      */
-    public function patchAction(request $request, string $userId) : View
+    public function patchAction(Request $request, string $userId): View
     {
         $existingUser = $this->userRepository->find($userId);
 
-        if (null === $existingUser) {
+        if ($existingUser === null) {
             throw new NotFoundHttpException();
         }
 
         $form = $this->createForm(UserType::class, $existingUser);
         $form->submit($request->request->all());
 
-        if (false === $form->isValid()) {
+        if ($form->isValid() === false) {
             return $this->view($form);
         }
 
@@ -157,13 +166,14 @@ class UserController extends FOSRestController implements ClassResourceInterface
      * @param string $userId The user id to delete.
      *
      * @return View
-     * @throws NotFoundHttpException When the user could not be found.
+     *
+     * @throws NotFoundHttpException Thrown when the user could not be found.
      */
-    public function deleteAction(string $userId) : View
+    public function deleteAction(string $userId): View
     {
         $existingUser = $this->userRepository->find($userId);
 
-        if (null === $existingUser) {
+        if ($existingUser === null) {
             throw new NotFoundHttpException();
         }
 
@@ -175,4 +185,5 @@ class UserController extends FOSRestController implements ClassResourceInterface
             Response::HTTP_NO_CONTENT
         );
     }
+
 }

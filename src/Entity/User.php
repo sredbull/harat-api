@@ -1,7 +1,20 @@
-<?php
+<?php declare (strict_types = 1);
+
+/*
+ * This file is part of the House Aratus package.
+ *
+ * (c) Sven Roodbol <roodbol.sven@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @copyright House Aratus
+ */
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMSSerializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,13 +31,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("username")
  *
  * @JMSSerializer\ExclusionPolicy("all")
- *
- * @package App\Entity
  */
 class User extends BaseUser implements UserInterface
 {
+
     /**
      * The id of the user.
+     *
+     * @var int $id
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -38,6 +52,8 @@ class User extends BaseUser implements UserInterface
     /**
      * The name of the user.
      *
+     * @var string $username
+     *
      * @Assert\NotBlank()
      *
      * @JMSSerializer\Expose
@@ -47,6 +63,8 @@ class User extends BaseUser implements UserInterface
 
     /**
      * The email of the user.
+     *
+     * @var string $email
      *
      * @Assert\Email(
      *     strict = true,
@@ -61,6 +79,10 @@ class User extends BaseUser implements UserInterface
     protected $email;
 
     /**
+     * The
+     *
+     * @var GroupInterface[]|Collection $groups
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Group")
      * @ORM\JoinTable(name="user_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -76,4 +98,5 @@ class User extends BaseUser implements UserInterface
     {
         parent::__construct();
     }
+
 }
