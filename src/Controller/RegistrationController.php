@@ -10,13 +10,16 @@
  */
 namespace App\Controller;
 
+use App\Exception\ValidationException;
+use App\ParamConverter\Registration\PostRegistrationParamConverter;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Class RegistrationController.
@@ -47,39 +50,49 @@ class RegistrationController extends FOSRestController implements ClassResourceI
     /**
      * Register a new user.
      *
-     * @param Request $request The request containing the user data.
+     * @param PostRegistrationParamConverter   $params           The validated registration fields.
+     * @param ConstraintViolationListInterface $validationErrors The validation validation errors.
+     *
+     * @Rest\Post("register")
+     *
+     * @ParamConverter("params", converter="fos_rest.request_body")
      *
      * @return View
+     *
+     * @throws ValidationException Thrown when the registration validation fails.
      */
-    public function postAction(Request $request): View
+    public function postAction(PostRegistrationParamConverter $params, ConstraintViolationListInterface $validationErrors): View
     {
-        $formFactory = $this->get('registration_form');
-
-        $user = $this->userManager->createUser();
-        $user->setEnabled(true);
-
-        $form = $formFactory->createForm([
-            'csrf_protection'    => false,
-        ]);
-        $form->setData($user);
-        $form->submit($request->request->all());
-
-        if ($form->isValid() === false) {
-            return $this->view($form);
+        if (count($validationErrors) > 0) {
+            throw new ValidationException($validationErrors);
         }
 
-        $this->userManager->updateUser($user);
+        dump($params->getUsername());
+
+//        $formFactory = $this->get('registration_form');
+//
+//        $user = $this->userManager->createUser();
+//        $user->setEnabled(true);
+//
+//        $form = $formFactory->createForm([
+//            'csrf_protection'    => false,
+//        ]);
+//        $form->setData($user);
+//        $form->submit($request->request->all());
+//
+//        if ($form->isValid() === false) {
+//            return $this->view($form);
+//        }
+//
+//        $this->userManager->updateUser($user);
 
         return $this->view(
             [
-                'msg' => $this->get('translator')
-                    ->trans('registration.flash.user_created', [], 'FOSUserBundle'),
-                'token' => $this->get('lexik_jwt_authentication.jwt_manager')
-                    ->create($user),
-                'data' => $user,
+                'status' => 'ok',
             ],
             Response::HTTP_CREATED
         );
     }
 
 }
+

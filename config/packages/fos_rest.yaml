@@ -4,7 +4,11 @@ fos_rest:
     param_fetcher_listener: force
     body_converter:
         enabled: true
-    format_listener: true
+        validate: true
+    format_listener:
+        rules:
+            prefer_extension: false
+            fallback_format: json
     routing_loader:
         default_format: json
         include_format: false
@@ -15,3 +19,4 @@ fos_rest:
         serialize_null: true
     exception:
         enabled: true
+        exception_controller: 'App\Controller\ExceptionController::showAction'
