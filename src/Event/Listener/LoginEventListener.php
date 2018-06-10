@@ -110,7 +110,7 @@ class LoginEventListener
             $user->setEnabled(true);
         }
 
-        $ldapGroups = $ldapUser->get('groups');
+        $ldapGroups = $ldapUser->get('groups') ? $ldapUser->get('groups') : [];
         $userGroups = $this->groupRepository->findAllGroupNames();
         $diffGroups = array_diff($ldapGroups, $userGroups);
 

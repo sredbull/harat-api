@@ -1,9 +1,74 @@
-extends_default: openldap
 objects:
-    login_user:
-        extends_default: [ 'openldap', 'user' ]
-        type: 'SymfonyUser'
-        class: organizationalPerson
+    user:
+        # This is a LdapTools specific to refer to this object type overall.
+        type: user
+        # The LDAP objectClass
+        class: ['extensibleObject', 'organizationalPerson', 'person', 'PostfixBookMailAccount' ,'top']
+        rdn: uniqueIdentifier
+        default_values:
+            objectclass: ['extensibleObject', 'organizationalPerson', 'person', 'PostfixBookMailAccount' ,'top']
+        converter_options:
+            group_membership:
+                groups:
+                    to_attribute: uniqueMember
+                    from_attribute: memberOf
+                    attribute: cn
+                    filter:
+                        objectClass: groupOfUniqueNames
+        # These are converters to be applied for going both to and from LDAP.
+        converters:
+             generalized_time:
+                 - 'created'
+                 - 'modified'
+             group_membership:
+                 - 'groups'
         attributes:
-            username: uniqueIdentifier
             email: mail
+            name: sn
+            password: userPassword
+            username: cn
+            uid: uniqueIdentifier
+        attributes_to_select:
+            - 'email'
+            - 'name'
+            - 'password'
+            - 'username'
+        multivalued_attributes:
+            - 'groups'
+    group:
+        type: group
+        class: groupOfUniqueNames
+        converters:
+             generalized_time:
+                 - 'created'
+                 - 'modified'
+        attributes:
+            created: createTimestamp
+            description: description
+            name: cn
+            modified: modifyTimestamp
+            members: uniqueMember
+        multivalued_attributes:
+            - members
+        attributes_to_select:
+            - 'name'
+            - 'description'
+            - 'created'
+    ou:
+        type: ou
+        class: organizationalUnit
+        converters:
+             generalized_time:
+                 - 'created'
+                 - 'modified'
+        attributes:
+            created: createTimestamp
+            dn: dn
+            modified: modifyTimestamp
+            name: ou
+        attributes_to_select:
+            - 'name'
+        default_values:
+            objectclass: [ 'top', 'organizationalUnit' ]
+        required_attributes:
+            - 'name'

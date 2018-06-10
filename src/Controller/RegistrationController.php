@@ -10,6 +10,7 @@
  */
 namespace App\Controller;
 
+use App\Exception\RegistrationFailedException;
 use App\Exception\ValidationException;
 use App\ParamConverter\Registration\PostRegistrationParamConverter;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -17,6 +18,9 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
 use FOS\UserBundle\Model\UserManagerInterface;
+use LdapTools\Exception\LdapConnectionException;
+use LdapTools\LdapManager;
+use LdapTools\Object\LdapObjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -30,6 +34,13 @@ class RegistrationController extends FOSRestController implements ClassResourceI
 {
 
     /**
+     * The ldap manager.
+     *
+     * @var LdapManager $ldapManager
+     */
+    private $ldapManager;
+
+    /**
      * The user manager interface.
      *
      * @var UserManagerInterface $userManager
@@ -39,11 +50,14 @@ class RegistrationController extends FOSRestController implements ClassResourceI
     /**
      * RegistrationController constructor.
      *
+     * @param LdapManager          $ldapManager The LDAP manager.
      * @param UserManagerInterface $userManager The user manager interface.
      */
     public function __construct(
+        LdapManager $ldapManager,
         UserManagerInterface $userManager
     ){
+        $this->ldapManager = $ldapManager;
         $this->userManager = $userManager;
     }
 
@@ -59,7 +73,8 @@ class RegistrationController extends FOSRestController implements ClassResourceI
      *
      * @return View
      *
-     * @throws ValidationException Thrown when the registration validation fails.
+     * @throws ValidationException         Thrown when the registration validation fails.
+     * @throws RegistrationFailedException Thrown when the registration fails for some reason.
      */
     public function postAction(PostRegistrationParamConverter $params, ConstraintViolationListInterface $validationErrors): View
     {
@@ -67,27 +82,26 @@ class RegistrationController extends FOSRestController implements ClassResourceI
             throw new ValidationException($validationErrors);
         }
 
-        dump($params->getUsername());
-
-//        $formFactory = $this->get('registration_form');
-//
-//        $user = $this->userManager->createUser();
-//        $user->setEnabled(true);
-//
-//        $form = $formFactory->createForm([
-//            'csrf_protection'    => false,
-//        ]);
-//        $form->setData($user);
-//        $form->submit($request->request->all());
-//
-//        if ($form->isValid() === false) {
-//            return $this->view($form);
-//        }
-//
-//        $this->userManager->updateUser($user);
+        try {
+            $this->ldapManager
+                ->createLdapObject()
+                ->createUser()
+                ->in('ou=people,dc=housearatus,dc=space')
+                ->with([
+                    'email' => $params->getEmail(),
+                    'name' => $params->getUsername(),
+                    'password' => $params->getPassword()['first'],
+                    'username' => $params->getUsername(),
+                    'uid' => $params->getUsername(),
+                ])
+                ->execute();
+        } catch (LdapConnectionException $exception) {
+            throw new RegistrationFailedException($exception->getMessage());
+        }
 
         return $this->view(
             [
+                'code' => Response::HTTP_CREATED,
                 'status' => 'ok',
             ],
             Response::HTTP_CREATED

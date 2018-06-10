@@ -27,7 +27,6 @@ class ApiException extends \Exception
             'code' => $this->getCode() ? $this->getCode() : 500,
             'status' => 'error',
             'message' => $this->getMessage() ? $this->getMessage() : 'API Exception',
-            'trace' => $this->getTraceAsString(),
         ];
     }
 

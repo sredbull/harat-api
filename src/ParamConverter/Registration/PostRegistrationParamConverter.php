@@ -12,6 +12,7 @@ namespace App\ParamConverter\Registration;
 
 use JMS\Serializer\Annotation as JMSSerializer;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as AppAssert;
 
 /**
  * Class RegisterUserRequest.
@@ -25,6 +26,13 @@ class PostRegistrationParamConverter
      * @var string $email
      *
      * @Assert\NotBlank
+     * @Assert\Email(
+     *     strict = true,
+     *     checkMX = true,
+     *     checkHost = true
+     * )
+     *
+     * @AppAssert\ExistingLdapUser()
      *
      * @JMSSerializer\Type("string")
      */
@@ -36,6 +44,8 @@ class PostRegistrationParamConverter
      * @var string $username
      *
      * @Assert\NotBlank
+     *
+     * @AppAssert\ExistingLdapUser()
      *
      * @JMSSerializer\Type("string")
      */

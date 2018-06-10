@@ -48,7 +48,6 @@ class ValidationException extends ApiException
             'status' => 'error',
             'message' => Response::$statusTexts[422],
             'errors' => $this->validationErrors,
-            'trace' => $this->getTraceAsString(),
         ];
     }
 

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ValidationException.
  */
-class UserNotFoundException extends ApiException
+class RegistrationFailedException extends ApiException
 {
 
     /**
@@ -28,7 +28,7 @@ class UserNotFoundException extends ApiException
         return [
             'code' => Response::HTTP_NOT_FOUND,
             'status' => 'error',
-            'message' => 'User not found',
+            'message' => 'Registration failed: ' . $this->getMessage(),
         ];
     }
 
