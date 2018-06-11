@@ -17,10 +17,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
-use FOS\UserBundle\Model\UserManagerInterface;
 use LdapTools\Exception\LdapConnectionException;
 use LdapTools\LdapManager;
-use LdapTools\Object\LdapObjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -41,24 +39,14 @@ class RegistrationController extends FOSRestController implements ClassResourceI
     private $ldapManager;
 
     /**
-     * The user manager interface.
-     *
-     * @var UserManagerInterface $userManager
-     */
-    private $userManager;
-
-    /**
      * RegistrationController constructor.
      *
-     * @param LdapManager          $ldapManager The LDAP manager.
-     * @param UserManagerInterface $userManager The user manager interface.
+     * @param LdapManager $ldapManager The LDAP manager.
      */
     public function __construct(
-        LdapManager $ldapManager,
-        UserManagerInterface $userManager
+        LdapManager $ldapManager
     ){
         $this->ldapManager = $ldapManager;
-        $this->userManager = $userManager;
     }
 
     /**
@@ -103,6 +91,7 @@ class RegistrationController extends FOSRestController implements ClassResourceI
             [
                 'code' => Response::HTTP_CREATED,
                 'status' => 'ok',
+                'message' => 'User registered',
             ],
             Response::HTTP_CREATED
         );

@@ -138,6 +138,9 @@ class LoginEventListener
         $response = new Response(
             json_encode(
                 [
+                    'code' => Response::HTTP_OK,
+                    'status' => 'ok',
+                    'message' => 'Login successful',
                     'token' => $token,
                 ]
             ),

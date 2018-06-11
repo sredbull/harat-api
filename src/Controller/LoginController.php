@@ -10,9 +10,13 @@
  */
 namespace App\Controller;
 
+use App\Exception\ValidationException;
+use App\ParamConverter\Login\PostLoginParamConverter;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * The LoginController Class.
@@ -25,13 +29,25 @@ class LoginController extends FOSRestController implements ClassResourceInterfac
     /**
      * Login route.
      *
+     * @param PostLoginParamConverter          $params           The validated login fields.
+     * @param ConstraintViolationListInterface $validationErrors The validation validation errors.
+     *
+     * @Rest\Post("login")
+     *
+     * @ParamConverter("params", converter="fos_rest.request_body")
+     *
      * @return void
      *
-     * @throws \DomainException Should never be thrown because the response is handled by the LDAP service.
+     * @throws ValidationException Thrown when the registration login fails.
+     * @throws \DomainException    Should never be thrown because the response is handled by the LDAP service.
      */
-    public function postAction(): void
+    public function postAction(PostLoginParamConverter $params, ConstraintViolationListInterface $validationErrors): void
     {
-        throw new \DomainException('Handled by LDAP');
+        if (count($validationErrors) > 0) {
+            throw new ValidationException($validationErrors);
+        }
+
+        throw new \DomainException(sprintf('%s, this should be handled by LDAP', $params->getUsername()));
     }
 
     /**
