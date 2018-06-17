@@ -24,6 +24,12 @@ security:
         api_register:
             pattern: ^/register
             anonymous: true
+        sso_login:
+            pattern: ^/sso/login
+            anonymous: true
+        sso_callback:
+            pattern: ^/sso/callback
+            anonymous: true
         api:
             pattern:   ^/
             stateless: true
@@ -33,6 +39,8 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
-        - { path: ^/register,   role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login,      role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/,           role: IS_AUTHENTICATED_FULLY }
+        - { path: ^/register,      role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login,         role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/sso/login,     role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/sso/callback,  role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/,              role: IS_AUTHENTICATED_FULLY }

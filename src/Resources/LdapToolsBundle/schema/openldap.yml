@@ -28,6 +28,7 @@ objects:
             password: userPassword
             username: cn
             uid: uniqueIdentifier
+            groups: memberOf
         attributes_to_select:
             - 'email'
             - 'name'

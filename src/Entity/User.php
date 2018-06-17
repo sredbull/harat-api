@@ -79,7 +79,7 @@ class User extends BaseUser implements UserInterface
     protected $email;
 
     /**
-     * The
+     * The user groups.
      *
      * @var GroupInterface[]|Collection $groups
      *

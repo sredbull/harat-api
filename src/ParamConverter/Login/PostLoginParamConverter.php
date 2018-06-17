@@ -25,6 +25,9 @@ class PostLoginParamConverter
      * @var string $username
      *
      * @Assert\NotBlank
+     * @Assert\GreaterThan(
+     *     value = 3
+     * )
      *
      * @JMSSerializer\Type("string")
      */

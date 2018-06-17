@@ -5,12 +5,20 @@
     <rule ref="Generic.PHP.LowerCaseConstant"/>
     <rule ref="Generic.PHP.DisallowShortOpenTag"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
-    <rule ref="Generic.Commenting.DocComment"/>
+    <rule ref="Generic.Commenting.DocComment">
+        <exclude name="Generic.Commenting.DocComment.ContentAfterOpen" />
+        <exclude name="Generic.Commenting.DocComment.MissingShort" />
+        <exclude name="Generic.Commenting.DocComment.SpacingBeforeTags" />
+        <exclude name="Generic.Commenting.DocComment.WrongStart" />
+        <exclude name="Generic.Commenting.DocComment.ContentBeforeClose" />
+        <exclude name="Generic.Commenting.BlockComment.WrongStart" />
+    </rule>
     <rule ref="Squiz.Commenting.BlockComment">
         <exclude name="Squiz.Commenting.BlockComment.FirstLineIndent" />
         <exclude name="Squiz.Commenting.BlockComment.LastLineIndent" />
         <exclude name="Squiz.Commenting.BlockComment.LineIndent" />
         <exclude name="Squiz.Commenting.BlockComment.NoEmptyLineAfter" />
+        <exclude name="Squiz.Commenting.BlockComment.WrongStart" />
     </rule>
     <rule ref="Squiz.Commenting.ClassComment">
         <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" />
@@ -18,12 +26,16 @@
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
     <rule ref="Squiz.Commenting.EmptyCatchComment" />
     <rule ref="Squiz.Commenting.FunctionComment" />
-    <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
-    <rule ref="Squiz.Commenting.InlineComment" />
+    <rule ref="Squiz.Commenting.FunctionCommentThrowTag">
+        <exclude name="Squiz.Commenting.FunctionCommentThrowTag.WrongNumber" />
+    </rule>
+    <rule ref="Squiz.Commenting.InlineComment">
+        <exclude name="Squiz.Commenting.InlineComment.SpacingBefore" />
+        <exclude name="Squiz.Commenting.InlineComment.DocBlock" />
+    </rule>
     <rule ref="Squiz.Commenting.VariableComment">
         <exclude name="Squiz.Commenting.VariableComment.TagNotAllowed" />
     </rule>
-    <rule ref="Squiz.Strings.DoubleQuoteUsage" />
     <rule ref="Squiz.Strings.DoubleQuoteUsage" />
 
     <!--Symfony Coding Standard-->
@@ -47,6 +59,7 @@
         <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification" />
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix" />
         <exclude name="SlevomatCodingStandard.TypeHints.LongTypeHints.UsedLongTypeHint" />
+        <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed" />
         <properties>
             <property name="searchAnnotations" value="true" />
         </properties>

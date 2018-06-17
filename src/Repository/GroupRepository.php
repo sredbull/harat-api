@@ -40,7 +40,7 @@ class GroupRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function findAllGroupNames (): array
+    public function findAllGroupNames(): array
     {
         $groupNames = [];
         foreach ($this->findAll() as $group) {

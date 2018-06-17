@@ -10,9 +10,9 @@
  */
 namespace App\ParamConverter\Registration;
 
+use App\Validator\Constraints as AppAssert;
 use JMS\Serializer\Annotation as JMSSerializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\Constraints as AppAssert;
 
 /**
  * Class RegisterUserRequest.

@@ -1,11 +1,12 @@
-users:
-    type:     rest
-    resource: App\Controller\UserController
-
-login:
-    type: rest
-    resource: App\Controller\LoginController
-
 registration:
     type: rest
     resource: App\Controller\RegistrationController
+login:
+    type: rest
+    resource: App\Controller\LoginController
+users:
+    type:     rest
+    resource: App\Controller\UserController
+profile:
+    type:     rest
+    resource: App\Controller\ProfileController

@@ -99,18 +99,18 @@ class LoginEventListener
 
         $ldapUser = $event->getToken()->getUser();
         $user = $this->userRepository->findOneBy([
-            'username' => $ldapUser->get('username'),
+            'username' => $ldapUser->getUsername(),
         ]);
 
         if ($user === null) {
             $user = new User();
-            $user->setEmail($ldapUser->get('mail'));
-            $user->setUsername($ldapUser->get('username'));
-            $user->setPassword($this->encoder->encodePassword($user, $event->getRequest()->get('password')));
+            $user->setEmail($ldapUser->getMail());
+            $user->setUsername($ldapUser->getUsername());
+            $user->setPassword($this->encoder->encodePassword($user, $event->getRequest()->getPassword()));
             $user->setEnabled(true);
         }
 
-        $ldapGroups = $ldapUser->get('groups') ? $ldapUser->get('groups') : [];
+        $ldapGroups = $ldapUser->getGroups() ? $ldapUser->getGroups() : [];
         $userGroups = $this->groupRepository->findAllGroupNames();
         $diffGroups = array_diff($ldapGroups, $userGroups);
 
