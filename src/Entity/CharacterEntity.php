@@ -15,12 +15,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Character.
+ * Class CharacterEntity.
  *
  * @ORM\Entity
  * @ORM\Table(name="`character`")
  */
-class Character
+class CharacterEntity
 {
 
     /**
@@ -100,11 +100,20 @@ class Character
     /**
      * The user where the character belongs to.
      *
-     * @var User $user
+     * @var UserEntity $user
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="characters")
+     * @ORM\ManyToOne(targetEntity="App\Entity\UserEntity", inversedBy="characters")
      */
     private $user;
+
+    /**
+     * The avatar url of the member.
+     *
+     * @var string $avatar
+     *
+     * @ORM\Column(type="string", length=2048, nullable=true)
+     */
+    private $avatar;
 
     /**
      * Get the id of the character.
@@ -273,9 +282,9 @@ class Character
     /**
      * Get the user where the character belongs to.
      *
-     * @return User|null
+     * @return UserEntity|null
      */
-    public function getUserId(): ?User
+    public function getUserId(): ?UserEntity
     {
         return $this->user;
     }
@@ -283,13 +292,35 @@ class Character
     /**
      * Set the user where the character belongs to.
      *
-     * @param User|null $user The user where the character belongs to.
+     * @param UserEntity|null $user The user where the character belongs to.
      *
      * @return void
      */
-    public function setUserId(?User $user): void
+    public function setUserId(?UserEntity $user): void
     {
         $this->user = $user;
+    }
+
+    /**
+     * Get the avatar.
+     *
+     * @return null|string
+     */
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * Set the avatar.
+     *
+     * @param null|string $avatar The url of the avatar.
+     *
+     * @return void
+     */
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
     }
 
 }

@@ -18,14 +18,14 @@ use FOS\UserBundle\Model\GroupInterface;
 use JMS\Serializer\Annotation as JMSSerializer;
 
 /**
- * Class Group.
+ * Class GroupEntity.
  *
  * @ORM\Entity
  * @ORM\Table(name="groups")
  *
  * @JMSSerializer\ExclusionPolicy("all")
  */
-class Group extends BaseGroup implements GroupInterface
+class GroupEntity extends BaseGroup implements GroupInterface
 {
 
     /**

@@ -10,17 +10,18 @@
  */
 namespace App\Repository;
 
-use App\Entity\Character;
+use App\Entity\CharacterEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class CharacterRepository
  *
- * @method Character|null find($id, $lockMode = null, $lockVersion = null)
- * @method Character|null findOneBy(array $criteria, array $orderBy = null)
- * @method Character[]    findAll()
- * @method Character[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CharacterEntity|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CharacterEntity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CharacterEntity[]    findAll()
+ * @method CharacterEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CharacterRepository extends ServiceEntityRepository
 {
@@ -32,7 +33,22 @@ class CharacterRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Character::class);
+        parent::__construct($registry, CharacterEntity::class);
+    }
+
+    /**
+     * Save changes to the database.
+     *
+     * @param CharacterEntity $entity Entity to persist.
+     *
+     * @throws ORMInvalidArgumentException Throws an ORMInvalidArgumentException when an incorrect argument was provided.
+     *
+     * @return void
+     */
+    public function save(CharacterEntity $entity): void
+    {
+        $this->_em->persist($entity);
+        $this->_em->flush();
     }
 
 }

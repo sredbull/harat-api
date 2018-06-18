@@ -12,8 +12,8 @@
  */
 namespace App\Event\Listener;
 
-use App\Entity\Group;
-use App\Entity\User;
+use App\Entity\GroupEntity;
+use App\Entity\UserEntity;
 use App\Repository\GroupRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -103,7 +103,7 @@ class LoginEventListener
         ]);
 
         if ($user === null) {
-            $user = new User();
+            $user = new UserEntity();
             $user->setEmail($ldapUser->getMail());
             $user->setUsername($ldapUser->getUsername());
             $user->setPassword($this->encoder->encodePassword($user, $event->getRequest()->getPassword()));
@@ -116,7 +116,7 @@ class LoginEventListener
 
         if (count($diffGroups) > 0) {
             foreach ($diffGroups as $group) {
-                $newGroup = new Group($group);
+                $newGroup = new GroupEntity($group);
                 $this->entityManager->persist($newGroup);
             }
             $this->entityManager->flush();
@@ -132,8 +132,7 @@ class LoginEventListener
         $token = $this->jwtTokenManager->create($user);
         $user->setLastLogin(new \DateTime('now'));
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->userRepository->save($user);
 
         $response = new Response(
             json_encode(

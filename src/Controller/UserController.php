@@ -10,7 +10,7 @@
  */
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Entity\UserEntity;
 use App\Exception\UserNotFoundException;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -107,7 +107,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function postAction(Request $request): View
     {
-        $form = $this->createForm(UserType::class, new User());
+        $form = $this->createForm(UserType::class, new UserEntity());
         $form->submit($request->request->all());
 
         if ($form->isValid() === false) {

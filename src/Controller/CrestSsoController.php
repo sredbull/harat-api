@@ -10,14 +10,13 @@
  */
 namespace App\Controller;
 
-use App\Entity\Character;
+use App\Entity\CharacterEntity;
 use App\Exception\CrestSsoApiException;
 use App\Exception\InvalidStateException;
 use App\Exception\UserNotFoundException;
 use App\Repository\CharacterRepository;
 use App\Repository\UserRepository;
 use App\Service\Eve\CrestSsoService;
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -31,13 +30,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CrestSsoController extends FOSRestController implements ClassResourceInterface
 {
-
-    /**
-     * The Doctrine entity manager.
-     *
-     * @var EntityManagerInterface $entityManager
-     */
-    private $entityManager;
 
     /**
      * The CharacterRepository.
@@ -56,16 +48,13 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
     /**
      * UserController constructor.
      *
-     * @param EntityManagerInterface $entityManager       The Doctrine entity manager.
-     * @param CharacterRepository    $characterRepository The characterRepository.
-     * @param UserRepository         $userRepository      The userRepository.
+     * @param CharacterRepository $characterRepository The characterRepository.
+     * @param UserRepository      $userRepository      The userRepository.
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
         CharacterRepository $characterRepository,
         UserRepository $userRepository
     ){
-        $this->entityManager = $entityManager;
         $this->characterRepository = $characterRepository;
         $this->userRepository = $userRepository;
     }
@@ -131,7 +120,7 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
         ]);
 
         if ($character === null) {
-            $character = new Character();
+            $character = new CharacterEntity();
             $character->setCharacterId($callback['characterId']);
             $character->setCharacterName($callback['characterName']);
             $character->setScopes($callback['scopes']);
@@ -139,16 +128,17 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
             $character->setOwnerHash($callback['ownerHash']);
             $character->setRefreshToken($callback['refreshToken']);
             $character->setAccessToken($callback['accessToken']);
+            $character->setAvatar('https://image.eveonline.com/Character/' . $callback['characterId'] . '_128.jpg');
             $character->setUserId($user);
 
-            $this->entityManager->persist($character);
+            $user->addCharacter($character);
+            $this->userRepository->save($user);
         }
 
         if ($character !== null) {
             $character->setUserId($user);
+            $this->characterRepository->save($character);
         }
-
-        $this->entityManager->flush();
 
         return $this->view(
             $callback,

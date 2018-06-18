@@ -27,13 +27,6 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
 {
 
     /**
-     * The Doctrine entity manager.
-     *
-     * @var EntityManagerInterface $entityManager
-     */
-    private $entityManager;
-
-    /**
      * The userRepository.
      *
      * @var UserRepository $userRepository
@@ -43,14 +36,11 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * UserController constructor.
      *
-     * @param EntityManagerInterface $entityManager  The Doctrine entity manager.
-     * @param UserRepository         $userRepository The userRepository.
+     * @param UserRepository $userRepository The userRepository.
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
         UserRepository $userRepository
     ){
-        $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
     }
 
