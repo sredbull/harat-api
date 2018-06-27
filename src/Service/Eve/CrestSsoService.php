@@ -60,23 +60,30 @@ class CrestSsoService
     /**
      * The login url.
      *
-     * @var string $loginURL
+     * @var string $loginUrl
      */
     private $loginUrl = 'https://login.eveonline.com/oauth/authorize';
 
     /**
      * The token url.
      *
-     * @var string $tokenURL
+     * @var string $tokenUrl
      */
     private $tokenUrl = 'https://login.eveonline.com/oauth/token';
 
     /**
      * The verify url.
      *
-     * @var string $verifyURL
+     * @var string $verifyUrl
      */
     private $verifyUrl = 'https://login.eveonline.com/oauth/verify';
+
+    /**
+     * The front url.
+     *
+     * @var string $frontUrl
+     */
+    private $frontUrl;
 
     /**
      * CrestSSO constructor.
@@ -97,12 +104,14 @@ class CrestSsoService
             $this->clientId = 'f071a6b9fa704850aae4bff6b1b06ce9';
             $this->secretKey = 'ZNW0waxeLIeHjyQQrVg99M1z0ciYSblXi21Tn0f6';
             $this->callbackUrl = 'http://api.housearatus.local:8000/sso/callback';
+            $this->frontUrl = 'http://www.housearatus.local:4000';
         }
 
         if (getenv('APP_ENV') === 'prod') {
             $this->clientId = 'f071a6b9fa704850aae4bff6b1b06ce9';
             $this->secretKey = 'ZNW0waxeLIeHjyQQrVg99M1z0ciYSblXi21Tn0f6';
             $this->callbackUrl = 'http://api.housearatus.local:8000/sso/callback';
+            $this->frontUrl = 'http://www.housearatus.local:4000';
         }
     }
 
@@ -126,6 +135,16 @@ class CrestSsoService
     public function setState(string $state): void
     {
         $this->state = $state;
+    }
+
+    /**
+     * Get the front url.
+     *
+     * @return string
+     */
+    public function getFrontUrl(): string
+    {
+        return $this->frontUrl;
     }
 
     /**

@@ -51,4 +51,19 @@ class CharacterRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    /**
+     * Delete from the database.
+     *
+     * @param CharacterEntity $entity Entity to delete.
+     *
+     * @throws ORMInvalidArgumentException Throws an ORMInvalidArgumentException when an incorrect argument was provided.
+     *
+     * @return void
+     */
+    public function delete(CharacterEntity $entity): void
+    {
+        $this->_em->remove($entity);
+        $this->_em->flush();
+    }
+
 }

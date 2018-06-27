@@ -82,7 +82,10 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
 
         $sso = new CrestSsoService();
 
-        return $this->redirect($sso->getLoginUrl($request->getSession(), 'userId=' . $userId), Response::HTTP_SEE_OTHER);
+        $redirect = 'userId=' . $userId;
+        $redirect = $request->get('redirect') ? $redirect . '&redirect=' . $request->get('redirect') : $redirect;
+
+        return $this->redirect($sso->getLoginUrl($request->getSession(), $redirect), Response::HTTP_SEE_OTHER);
     }
 
     /**
@@ -92,13 +95,13 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
      *
      * @Rest\Get("sso/callback")
      *
-     * @return View
+     * @return RedirectResponse
      *
      * @throws InvalidStateException Thrown when the state seems invalid.
      * @throws UserNotFoundException Thrown when the user was not found.
      * @throws CrestSsoApiException  Thrown when the CrestSsoService failed to initialize or the callback fails.
      */
-    public function getCallbackAction(Request $request): View
+    public function getCallbackAction(Request $request): RedirectResponse
     {
         $user = $this->userRepository->find($request->get('userId'));
 
@@ -128,7 +131,7 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
             $character->setOwnerHash($callback['ownerHash']);
             $character->setRefreshToken($callback['refreshToken']);
             $character->setAccessToken($callback['accessToken']);
-            $character->setAvatar('https://image.eveonline.com/Character/' . $callback['characterId'] . '_128.jpg');
+            $character->setAvatar('https://image.eveonline.com/Character/' . $callback['characterId'] . '_512.jpg');
             $character->setUserId($user);
 
             $user->addCharacter($character);
@@ -136,14 +139,18 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
         }
 
         if ($character !== null) {
+            $character->setScopes($callback['scopes']);
+            $character->setTokenType($callback['tokenType']);
+            $character->setOwnerHash($callback['ownerHash']);
+            $character->setRefreshToken($callback['refreshToken']);
+            $character->setAccessToken($callback['accessToken']);
             $character->setUserId($user);
             $this->characterRepository->save($character);
         }
 
-        return $this->view(
-            $callback,
-            Response::HTTP_CREATED
-        );
+        $redirect = $request->get('redirect') ? '/' . $request->get('redirect') : '';
+
+        return $this->redirect($sso->getFrontUrl() . $redirect, Response::HTTP_SEE_OTHER);
     }
 
 }
