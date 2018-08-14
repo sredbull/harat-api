@@ -106,7 +106,7 @@ class LoginEventListener
             $user = new UserEntity();
             $user->setEmail($ldapUser->getMail());
             $user->setUsername($ldapUser->getUsername());
-            $user->setPassword($this->encoder->encodePassword($user, $event->getRequest()->getPassword()));
+            $user->setPassword($this->encoder->encodePassword($user, $event->getRequest()->get('password')));
             $user->setEnabled(true);
         }
 
