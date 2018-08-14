@@ -39,6 +39,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev openldap-dev \
 ADD .env.production /var/www/html/.env
 
 COPY --from=backend /app /var/www/html/
+RUN mkdir /var/www/html/var
 RUN chgrp -R www-data /var/www/html/var && chmod -R ug+rwx /var/www/html/var
 
 # RUN php /var/www/html/bin/console doctrine:migrations:migrate --no-interaction
