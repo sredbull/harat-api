@@ -7,4 +7,4 @@ nelmio_cors:
         max_age: 3600
     paths:
         '^/':
-            allow_origin: ['http://www.housearatus.local:4000', 'https://api.housearatus.space']
+            allow_origin: ['http://www.housearatus.local:4000', 'https://www.housearatus.space']
