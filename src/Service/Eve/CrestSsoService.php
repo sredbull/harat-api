@@ -108,10 +108,10 @@ class CrestSsoService
         }
 
         if (getenv('APP_ENV') === 'prod') {
-            $this->clientId = 'f071a6b9fa704850aae4bff6b1b06ce9';
-            $this->secretKey = 'ZNW0waxeLIeHjyQQrVg99M1z0ciYSblXi21Tn0f6';
-            $this->callbackUrl = 'http://api.housearatus.local:8000/sso/callback';
-            $this->frontUrl = 'http://www.housearatus.local:4000';
+            $this->clientId = '31c2e99186fe4f6db13c7d670ee1fd02';
+            $this->secretKey = 'eJkWuADRSJhYmUSfYydKTG1N8qQdGPmxbgPj2CXT';
+            $this->callbackUrl = 'https://api.housearatus.space/sso/callback';
+            $this->frontUrl = 'https://www.housearatus.space';
         }
     }
 
