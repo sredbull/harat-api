@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @JMSSerializer\ExclusionPolicy("all")
  */
-class UserEntity extends BaseUser implements UserInterface
+class UserEntity extends BaseUser
 {
 
     /**
@@ -110,7 +110,7 @@ class UserEntity extends BaseUser implements UserInterface
     /**
      * The characters of this user.
      *
-     * @var string $character
+     * @var array $character
      *
      * @ORM\OneToMany(targetEntity="App\Entity\CharacterEntity", mappedBy="user", cascade={"persist"})
      *

@@ -4,9 +4,3 @@ registration:
 login:
     type: rest
     resource: App\Controller\LoginController
-users:
-    type:     rest
-    resource: App\Controller\UserController
-profile:
-    type:     rest
-    resource: App\Controller\ProfileController

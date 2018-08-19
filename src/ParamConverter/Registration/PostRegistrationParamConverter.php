@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class RegisterUserRequest.
+ *
+ * @Assert\GroupSequence({"PostRegistrationParamConverter", "Strict"})
  */
 class PostRegistrationParamConverter
 {
@@ -25,14 +27,14 @@ class PostRegistrationParamConverter
      *
      * @var string $email
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @Assert\Email(
      *     strict = true,
      *     checkMX = true,
      *     checkHost = true
      * )
      *
-     * @AppAssert\ExistingLdapUser()
+     * @AppAssert\ExistingLdapUser(groups={"Strict"})
      *
      * @JMSSerializer\Type("string")
      */
@@ -43,9 +45,9 @@ class PostRegistrationParamConverter
      *
      * @var string $username
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
-     * @AppAssert\ExistingLdapUser()
+     * @AppAssert\ExistingLdapUser(groups={"Strict"})
      *
      * @JMSSerializer\Type("string")
      */
@@ -56,7 +58,7 @@ class PostRegistrationParamConverter
      *
      * @var array $password
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @Assert\Collection(
      *     fields = {
      *         "first" = {@Assert\NotBlank, @Assert\IdenticalTo(propertyPath="password[second]")},
