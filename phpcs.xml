@@ -60,6 +60,7 @@
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix" />
         <exclude name="SlevomatCodingStandard.TypeHints.LongTypeHints.UsedLongTypeHint" />
         <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed" />
+        <exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses" />
         <properties>
             <property name="searchAnnotations" value="true" />
         </properties>

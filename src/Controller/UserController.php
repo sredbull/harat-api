@@ -10,71 +10,49 @@
  */
 namespace App\Controller;
 
-use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class UserController.
  */
-class UserController extends FOSRestController
+class UserController extends BaseController
 {
-
-    /**
-     * The userRepository.
-     *
-     * @var UserRepository $userRepository
-     */
-    private $userRepository;
-
-    /**
-     * UserController constructor.
-     *
-     * @param UserRepository $userRepository The userRepository.
-     */
-    public function __construct(
-        UserRepository $userRepository
-    ){
-        $this->userRepository = $userRepository;
-    }
 
     /**
      * List all users.
      *
      * @Rest\Get("user")
      *
-     * @return View
+     * @return JsonResponse
      */
-    public function getUsers(): View
+    public function getUsers(): JsonResponse
     {
-        $users = $this->userRepository->findAll();
+        $users = $this->getRepository() !== null ? $this->getRepository()->findAll() : null;
 
-        return $this->view(
-            $users,
-            Response::HTTP_OK
-        );
+        return $this->getView($users, Response::HTTP_OK);
     }
 
     /**
-     * List all users.
+     * List current profile.
      *
      * @Rest\Get("user/profile")
      *
-     * @return View
+     * @return JsonResponse
      */
-    public function getProfile(): View
+    public function getProfile(): JsonResponse
     {
         $user = $this->getUser();
-        $userDetails = $this->userRepository->findOneBy([
-            'username' => $user->getUsername(),
-        ]);
+        $userDetails = null;
 
-        return $this->view(
-            $userDetails,
-            Response::HTTP_OK
-        );
+        if ($this->getRepository() !== null) {
+            $userDetails = $this->getRepository()->findOneBy([
+                'username' => $user->getUsername(),
+            ]);
+        }
+
+        return $this->getView($userDetails, Response::HTTP_OK);
     }
 
 }

@@ -1,22 +1,9 @@
 fos_user:
     db_driver: orm
     firewall_name: api
-    user_class: App\Entity\User
+    user_class: App\Entity\UserEntity
     group:
-        group_class: App\Entity\Group
+        group_class: App\Entity\GroupEntity
     from_email:
         address: info@housearatus.space
         sender_name: House Aratus
-    use_flash_notifications: false
-    registration:
-        confirmation:
-            enabled: true
-    resetting:
-        email:
-            from_email:
-                address: info@housearatus.space
-                sender_name: House Aratus
-services:
-    registration_form:
-        alias: fos_user.registration.form.factory
-        public: true

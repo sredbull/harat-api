@@ -40,6 +40,8 @@ ADD .env.production /var/www/html/.env
 
 COPY --from=backend /app /var/www/html/
 RUN mkdir /var/www/html/var
+
+ARG CACHEBUST=1
 RUN chgrp -R nginx /var/www/html/var && chmod -R 777 /var/www/html/var
 
 # RUN php /var/www/html/bin/console doctrine:migrations:migrate --no-interaction

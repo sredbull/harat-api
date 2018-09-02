@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\Group as BaseGroup;
-use FOS\UserBundle\Model\GroupInterface;
 use JMS\Serializer\Annotation as JMSSerializer;
 
 /**
@@ -25,7 +24,7 @@ use JMS\Serializer\Annotation as JMSSerializer;
  *
  * @JMSSerializer\ExclusionPolicy("all")
  */
-class GroupEntity extends BaseGroup implements GroupInterface
+class GroupEntity extends BaseGroup
 {
 
     /**

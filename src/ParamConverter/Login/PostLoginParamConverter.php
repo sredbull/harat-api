@@ -55,18 +55,6 @@ class PostLoginParamConverter
     }
 
     /**
-     * Set the username.
-     *
-     * @param string $username The username.
-     *
-     * @return void
-     */
-    public function setUsername(string $username): void
-    {
-        $this->username = $username;
-    }
-
-    /**
      * Get the password.
      *
      * @return array
@@ -74,18 +62,6 @@ class PostLoginParamConverter
     public function getPassword(): array
     {
         return $this->password;
-    }
-
-    /**
-     * Set the password.
-     *
-     * @param array $password The password.
-     *
-     * @return void
-     */
-    public function setPassword(array $password): void
-    {
-        $this->password = $password;
     }
 
 }

@@ -46,7 +46,7 @@ class CharacterController extends FOSRestController implements ClassResourceInte
      * List an character.
      *
      * @param string $characterId The id of the character to retrieve.
-     *                            
+     *
      * @Rest\Get("character/{characterId}")
      *
      * @return View

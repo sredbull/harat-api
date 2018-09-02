@@ -81,18 +81,6 @@ class PostRegistrationParamConverter
     }
 
     /**
-     * Set the email.
-     *
-     * @param string $email The email.
-     *
-     * @return void
-     */
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
      * Get the username.
      *
      * @return string
@@ -103,18 +91,6 @@ class PostRegistrationParamConverter
     }
 
     /**
-     * Set the username.
-     *
-     * @param string $username The username.
-     *
-     * @return void
-     */
-    public function setUsername(string $username): void
-    {
-        $this->username = $username;
-    }
-
-    /**
      * Get the password.
      *
      * @return array
@@ -122,18 +98,6 @@ class PostRegistrationParamConverter
     public function getPassword(): array
     {
         return $this->password;
-    }
-
-    /**
-     * Set the password.
-     *
-     * @param array $password The password.
-     *
-     * @return void
-     */
-    public function setPassword(array $password): void
-    {
-        $this->password = $password;
     }
 
 }

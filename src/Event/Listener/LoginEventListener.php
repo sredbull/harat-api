@@ -17,7 +17,12 @@ use App\Entity\UserEntity;
 use App\Repository\GroupRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use LdapTools\Bundle\LdapToolsBundle\Event\AuthenticationHandlerEvent;
+use LdapTools\Exception\EmptyResultException;
+use LdapTools\Exception\MultiResultException;
+use LdapTools\LdapManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -57,6 +62,13 @@ class LoginEventListener
     private $jwtTokenManager;
 
     /**
+     * The ldap manager.
+     *
+     * @var LdapManager $ldapManager
+     */
+    private $ldapManager;
+
+    /**
      * The userRepository.
      *
      * @var UserRepository $userRepository
@@ -69,6 +81,7 @@ class LoginEventListener
      * @param EntityManagerInterface       $entityManager   The Doctrine entity manager.
      * @param GroupRepository              $groupRepository The GroupRepository.
      * @param JWTTokenManagerInterface     $jwtTokenManager The JWT token manager.
+     * @param LdapManager                  $ldapManager     The LDAP manager.
      * @param UserPasswordEncoderInterface $encoder         The password encoder manager.
      * @param UserRepository               $userRepository  The UserRepository.
      */
@@ -76,12 +89,14 @@ class LoginEventListener
         EntityManagerInterface $entityManager,
         GroupRepository $groupRepository,
         JWTTokenManagerInterface $jwtTokenManager,
+        LdapManager $ldapManager,
         UserPasswordEncoderInterface $encoder,
         UserRepository $userRepository
     ) {
         $this->entityManager = $entityManager;
         $this->encoder = $encoder;
         $this->jwtTokenManager = $jwtTokenManager;
+        $this->ldapManager = $ldapManager;
         $this->userRepository = $userRepository;
         $this->groupRepository = $groupRepository;
     }
@@ -93,6 +108,11 @@ class LoginEventListener
      * @param AuthenticationHandlerEvent $event The event with the authentication data.
      *
      * @return AuthenticationHandlerEvent
+     *
+     * @throws ORMException            Thrown when something fails.
+     * @throws OptimisticLockException Thrown when a version check on an object that uses optimistic locking through a version field fails.
+     * @throws EmptyResultException    Thrown when the result seems to be empty.
+     * @throws MultiResultException    Thrown when the result seems to have more than one result.
      */
     public function onLoginSuccess(AuthenticationHandlerEvent $event): AuthenticationHandlerEvent
     {
@@ -101,6 +121,22 @@ class LoginEventListener
         $user = $this->userRepository->findOneBy([
             'username' => $ldapUser->getUsername(),
         ]);
+
+        $group = $this->ldapManager->buildLdapQuery()
+            ->select('uniqueMember')
+            ->where([
+                'cn' => 'harat-users',
+                'objectClass' => 'groupOfUniqueNames',
+            ])
+            ->getLdapQuery()
+            ->getSingleResult();
+
+        $newGroup = 'uniqueIdentifier=' . $ldapUser->getUsername() . ',ou=people,dc=housearatus,dc=space';
+
+        if (in_array($newGroup, $group->getUniqueMember()) === false) {
+            $group->addUniqueMember($newGroup);
+            $this->ldapManager->persist($group);
+        }
 
         if ($user === null) {
             $user = new UserEntity();

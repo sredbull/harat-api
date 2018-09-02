@@ -1,5 +1,6 @@
 jms_serializer:
     metadata:
+        auto_detection: true
         directories:
             FOSUserBundle:
                 path: "%kernel.root_dir%/Resources/FOSUserBundle/serializer"

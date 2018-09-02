@@ -19,7 +19,6 @@ use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMSSerializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -90,7 +89,7 @@ class UserEntity extends BaseUser
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      *
-     * @JMSSerializer\Expose
+     * @JMSSerializer\Expose(if="isIncluded('groups')")
      * @JMSSerializer\Type("array")
      */
     protected $groups;
@@ -114,10 +113,22 @@ class UserEntity extends BaseUser
      *
      * @ORM\OneToMany(targetEntity="App\Entity\CharacterEntity", mappedBy="user", cascade={"persist"})
      *
-     * @JMSSerializer\Expose
+     * @JMSSerializer\Expose(if="isIncluded('users')")
      * @JMSSerializer\Type("array")
      */
     private $characters;
+
+    /**
+     * The recruitments of this user.
+     *
+     * @var array $recruitments
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\RecruitmentEntity", mappedBy="user")
+     *
+     * @JMSSerializer\Expose(if="isIncluded('recruitments')")
+     * @JMSSerializer\Type("array")
+     */
+    private $recruitments;
 
     /**
      * UserEntity constructor.
@@ -126,12 +137,13 @@ class UserEntity extends BaseUser
     {
         parent::__construct();
         $this->characters = new ArrayCollection();
+        $this->recruitments = new ArrayCollection();
     }
 
     /**
      * Get the avatar.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getAvatar(): ?string
     {
@@ -141,7 +153,7 @@ class UserEntity extends BaseUser
     /**
      * Set the avatar.
      *
-     * @param null|string $avatar The url of the avatar.
+     * @param string|null $avatar The url of the avatar.
      *
      * @return void
      */
@@ -171,12 +183,12 @@ class UserEntity extends BaseUser
     {
         if (!$this->characters->contains($character)) {
             $this->characters[] = $character;
-            $character->setUserId($this);
+            $character->setUser($this);
         }
     }
 
     /**
-     * Removes a character.
+     * Remove a character from this user.
      *
      * @param CharacterEntity $character The character to be removed.
      *
@@ -186,8 +198,51 @@ class UserEntity extends BaseUser
     {
         if ($this->characters->contains($character)) {
             $this->characters->removeElement($character);
-            if ($character->getUserId() === $this) {
-                $character->setUserId(null);
+            if ($character->getUser() === $this) {
+                $character->setUser(null);
+            }
+        }
+    }
+
+    /**
+     * Get the recruitment's for this user.
+     *
+     * @return Collection|RecruitmentEntity[]
+     */
+    public function getRecruitments(): Collection
+    {
+        return $this->recruitments;
+    }
+
+
+    /**
+     * Add a recruitment to this user.
+     *
+     * @param RecruitmentEntity $recruitment The recruitment.
+     *
+     * @return void
+     */
+    public function addRecruitment(RecruitmentEntity $recruitment): void
+    {
+        if (!$this->recruitments->contains($recruitment)) {
+            $this->recruitments[] = $recruitment;
+            $recruitment->setUser($this);
+        }
+    }
+
+    /**
+     * Remove a recruitment from this user.
+     *
+     * @param RecruitmentEntity $recruitment The recruitment.
+     *
+     * @return void
+     */
+    public function removeRecruitment(RecruitmentEntity $recruitment): void
+    {
+        if ($this->recruitments->contains($recruitment)) {
+            $this->recruitments->removeElement($recruitment);
+            if ($recruitment->getUser() === $this) {
+                $recruitment->setUser(null);
             }
         }
     }

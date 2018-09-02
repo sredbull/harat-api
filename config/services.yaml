@@ -32,3 +32,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: ldap_tools_bundle.guard.login.success, method: onLoginSuccess }
             - { name: kernel.event_listener, event: ldap_tools_bundle.guard.login.failure, method: onLoginFailure }
+
+    App\Controller\BaseController:
+        arguments: ['@doctrine.orm.entity_manager', ['@request_stack']]

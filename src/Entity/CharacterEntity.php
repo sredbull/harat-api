@@ -13,12 +13,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMSSerializer;
 
 /**
  * Class CharacterEntity.
  *
  * @ORM\Entity
  * @ORM\Table(name="`character`")
+ *
+ * @JMSSerializer\ExclusionPolicy("all")
  */
 class CharacterEntity
 {
@@ -31,6 +34,9 @@ class CharacterEntity
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("integer")
      */
     private $id;
 
@@ -40,6 +46,9 @@ class CharacterEntity
      * @var int $characterId
      *
      * @ORM\Column(type="integer")
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("integer")
      */
     private $characterId;
 
@@ -49,6 +58,9 @@ class CharacterEntity
      * @var string $characterName
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     private $characterName;
 
@@ -58,6 +70,9 @@ class CharacterEntity
      * @var array $scopes
      *
      * @ORM\Column(type="array")
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("array")
      */
     private $scopes;
 
@@ -67,6 +82,9 @@ class CharacterEntity
      * @var string $tokenType
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     private $tokenType;
 
@@ -76,6 +94,9 @@ class CharacterEntity
      * @var string $ownerHash
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     private $ownerHash;
 
@@ -84,7 +105,10 @@ class CharacterEntity
      *
      * @var string $refreshToken
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=16777216)
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     private $refreshToken;
 
@@ -94,6 +118,9 @@ class CharacterEntity
      * @var string $accessToken
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     private $accessToken;
 
@@ -103,6 +130,10 @@ class CharacterEntity
      * @var UserEntity $user
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\UserEntity", inversedBy="characters")
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("integer")
+     * @JMSSerializer\Accessor(getter="getUserId")
      */
     private $user;
 
@@ -112,6 +143,9 @@ class CharacterEntity
      * @var string $avatar
      *
      * @ORM\Column(type="string", length=2048, nullable=true)
+     *
+     * @JMSSerializer\Expose
+     * @JMSSerializer\Type("string")
      */
     private $avatar;
 
@@ -282,21 +316,31 @@ class CharacterEntity
     /**
      * Get the user where the character belongs to.
      *
-     * @return UserEntity|null
+     * @return UserEntity
      */
-    public function getUserId(): ?UserEntity
+    public function getUser(): UserEntity
     {
         return $this->user;
     }
 
     /**
+     * Get the user id where this recruitment belongs to.
+     *
+     * @return integer
+     */
+    public function getUserId(): int
+    {
+        return $this->getUser()->getId();
+    }
+
+    /**
      * Set the user where the character belongs to.
      *
-     * @param UserEntity|null $user The user where the character belongs to.
+     * @param UserEntity $user The user where the character belongs to.
      *
      * @return void
      */
-    public function setUserId(?UserEntity $user): void
+    public function setUser(UserEntity $user): void
     {
         $this->user = $user;
     }
@@ -324,4 +368,3 @@ class CharacterEntity
     }
 
 }
-
