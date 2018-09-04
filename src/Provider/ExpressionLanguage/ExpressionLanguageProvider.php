@@ -30,9 +30,9 @@ class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
     /**
      * ExpressionLanguageProvider constructor.
      *
-     * @param array|null $includes The includes.
+     * @param array $includes The includes.
      */
-    public function __construct(?array $includes)
+    public function __construct(array $includes)
     {
         $this->includes = $includes;
     }
@@ -74,9 +74,9 @@ class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
     /**
      * Get the includes.
      *
-     * @return array|null
+     * @return array
      */
-    public function getIncludes(): ?array
+    public function getIncludes(): array
     {
         return $this->includes;
     }

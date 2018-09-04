@@ -10,6 +10,7 @@
  */
 namespace App\Controller;
 
+use App\Exception\ApiException;
 use App\Provider\ExpressionLanguage\ExpressionLanguageProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -31,6 +32,13 @@ class BaseController extends FOSRestController
      * @var EntityManagerInterface $entityManager
      */
     private $entityManager;
+
+    /**
+     * The includes.
+     *
+     * @var array $includes
+     */
+    private $includes;
 
     /**
      * The repository.
@@ -58,12 +66,15 @@ class BaseController extends FOSRestController
      *
      * @param EntityManagerInterface $entityManager The Doctrine entity manager.
      * @param RequestStack           $requestStack  The request stack.
+     *
+     * @throws ApiException Thrown when setting the includes fails.
      */
     public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
     {
         $this->entityManager = $entityManager;
         $this->requestStack = $requestStack;
         $this->setRepository();
+        $this->setIncludes();
         $this->setSerializer();
     }
 
@@ -92,6 +103,44 @@ class BaseController extends FOSRestController
     }
 
     /**
+     * Get the includes
+     *
+     * @return array
+     */
+    public function getIncludes(): array
+    {
+        return $this->includes;
+    }
+
+    /**
+     * Set the includes.
+     *
+     * @return void
+     *
+     * @throws ApiException When the includes passed are not array values.
+     */
+    public function setIncludes(): void
+    {
+        $includes = null;
+
+        if ($this->getRequestStack()->getCurrentRequest() !== null) {
+            $includes = $this->getRequestStack()->getCurrentRequest()->get('includes');
+        }
+
+        if ($includes === null) {
+            $this->includes = [];
+
+            return;
+        }
+
+        if (\is_array($includes) === false) {
+            throw new ApiException('Includes should always be passed as array values. e.g. ?includes[]=default');
+        }
+
+        $this->includes = $includes;
+    }
+
+    /**
      * Get the serializer.
      *
      * @return Serializer
@@ -108,14 +157,7 @@ class BaseController extends FOSRestController
      */
     public function setSerializer(): void
     {
-        $includes = null;
-        if ($this->getRequestStack()->getCurrentRequest() !== null) {
-            $includes = $this->getRequestStack()->getCurrentRequest()->get('includes');
-        }
-        if ($includes !== null) {
-            $includes = json_decode($includes);
-        }
-        $expressionLanguageProvider = new ExpressionLanguageProvider($includes);
+        $expressionLanguageProvider = new ExpressionLanguageProvider($this->getIncludes());
         $expressionEvaluator = $expressionLanguageProvider->getExpressionEvaluator();
         $serializer = SerializerBuilder::create()
             ->setExpressionEvaluator($expressionEvaluator)

@@ -4,8 +4,8 @@ services:
         build: docker/php-fpm
         container_name: harat-php-fpm
         volumes:
-            - ./:/var/www/symfony
-            - ./docker/logs/symfony:/var/www/symfony/var/log
+            - ./:/var/www/symfony:cached
+            - ./docker/logs/symfony:/var/www/symfony/var/log:cached
 
     nginx:
           image: nginx:alpine
@@ -18,17 +18,17 @@ services:
           volumes_from:
               - php-fpm
           volumes:
-              - ./docker/logs/nginx/:/var/log/nginx
-              - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+              - ./docker/logs/nginx/:/var/log/nginx:cached
+              - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:cached
 
-    elk:
-        image: willdurand/elk
-        container_name: harat-elk
-        ports:
-            - "8001:80"
-        volumes:
-            - ./docker/elk/logstash:/etc/logstash:cached
-            - ./docker/elk/logstash/patterns:/opt/logstash/patterns:cached
-        volumes_from:
-            - php-fpm
-            - nginx
+#    elk:
+#        image: willdurand/elk
+#        container_name: harat-elk
+#        ports:
+#            - "8001:80"
+#        volumes:
+#            - ./docker/elk/logstash:/etc/logstash:cached
+#            - ./docker/elk/logstash/patterns:/opt/logstash/patterns:cached
+#        volumes_from:
+#            - php-fpm
+#            - nginx
