@@ -133,7 +133,7 @@ class LoginEventListener
 
         $newGroup = 'uniqueIdentifier=' . $ldapUser->getUsername() . ',ou=people,dc=housearatus,dc=space';
 
-        if (in_array($newGroup, $group->getUniqueMember()) === false) {
+        if (\in_array($newGroup, $group->getUniqueMember(), true) === false) {
             $group->addUniqueMember($newGroup);
             $this->ldapManager->persist($group);
         }
@@ -146,7 +146,7 @@ class LoginEventListener
             $user->setEnabled(true);
         }
 
-        $ldapGroups = $ldapUser->getGroups() ? $ldapUser->getGroups() : [];
+        $ldapGroups = $ldapUser->getGroups() ?: [];
         $userGroups = $this->groupRepository->findAllGroupNames();
         $diffGroups = array_diff($ldapGroups, $userGroups);
 

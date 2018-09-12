@@ -184,7 +184,7 @@ class CharacterEntity
     /**
      * Get he character name.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getCharacterName(): ?string
     {
@@ -228,7 +228,7 @@ class CharacterEntity
     /**
      * Get the token type.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTokenType(): ?string
     {
@@ -250,7 +250,7 @@ class CharacterEntity
     /**
      * Get the character owner hash.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getOwnerHash(): ?string
     {
@@ -272,7 +272,7 @@ class CharacterEntity
     /**
      * Get the refresh token.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getRefreshToken(): ?string
     {
@@ -294,7 +294,7 @@ class CharacterEntity
     /**
      * Get the access token.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getAccessToken(): ?string
     {
@@ -348,7 +348,7 @@ class CharacterEntity
     /**
      * Get the avatar.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getAvatar(): ?string
     {
@@ -358,7 +358,7 @@ class CharacterEntity
     /**
      * Set the avatar.
      *
-     * @param null|string $avatar The url of the avatar.
+     * @param string|null $avatar The url of the avatar.
      *
      * @return void
      */

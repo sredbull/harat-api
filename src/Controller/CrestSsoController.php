@@ -144,7 +144,7 @@ class CrestSsoController extends FOSRestController implements ClassResourceInter
             $character->setOwnerHash($callback['ownerHash']);
             $character->setRefreshToken($callback['refreshToken']);
             $character->setAccessToken($callback['accessToken']);
-            $character->setUserId($user);
+            $character->setUser($user);
             $this->characterRepository->save($character);
         }
 

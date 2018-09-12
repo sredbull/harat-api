@@ -11,12 +11,12 @@
 namespace App\Controller;
 
 use App\Exception\ApiException;
+use App\Interfaces\RepositoryInterface;
 use App\Provider\ExpressionLanguage\ExpressionLanguageProvider;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -27,11 +27,11 @@ class BaseController extends FOSRestController
 {
 
     /**
-     * The Doctrine entity manager.
+     * The Doctrine registry manager.
      *
-     * @var EntityManagerInterface $entityManager
+     * @var RegistryInterface $registryManager
      */
-    private $entityManager;
+    private $registryManager;
 
     /**
      * The includes.
@@ -43,7 +43,7 @@ class BaseController extends FOSRestController
     /**
      * The repository.
      *
-     * @var EntityRepository $repository
+     * @var RepositoryInterface $repository
      */
     private $repository;
 
@@ -64,14 +64,14 @@ class BaseController extends FOSRestController
     /**
      * BaseController constructor.
      *
-     * @param EntityManagerInterface $entityManager The Doctrine entity manager.
-     * @param RequestStack           $requestStack  The request stack.
+     * @param RegistryInterface $registryManager The Doctrine registry manager.
+     * @param RequestStack      $requestStack    The request stack.
      *
      * @throws ApiException Thrown when setting the includes fails.
      */
-    public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
+    public function __construct(RegistryInterface $registryManager, RequestStack $requestStack)
     {
-        $this->entityManager = $entityManager;
+        $this->registryManager = $registryManager;
         $this->requestStack = $requestStack;
         $this->setRepository();
         $this->setIncludes();
@@ -81,9 +81,9 @@ class BaseController extends FOSRestController
     /**
      * Get the repository based on the controller class name.
      *
-     * @return EntityRepository|null
+     * @return RepositoryInterface|null
      */
-    public function getRepository(): ?EntityRepository
+    public function getRepository(): ?RepositoryInterface
     {
         return $this->repository;
     }
@@ -96,9 +96,9 @@ class BaseController extends FOSRestController
     public function setRepository(): void
     {
         $this->repository = null;
-        $className = str_replace('Controller', 'Entity', static::class);
+        $className = str_replace('Controller', 'Repository', static::class);
         if (class_exists($className) === true) {
-            $this->repository = $this->entityManager->getRepository($className);
+            $this->repository = new $className($this->registryManager);
         }
     }
 

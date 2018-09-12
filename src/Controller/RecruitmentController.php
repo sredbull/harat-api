@@ -16,38 +16,18 @@ use App\Exception\RecruitmentNotFoundException;
 use App\Exception\UserNotFoundException;
 use App\Exception\ValidationException;
 use App\ParamConverter\Recruitment\PostRecruitmentParamConverter;
-use App\Repository\RecruitmentRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * The RecruitmentController Class.
  */
-class RecruitmentController extends FOSRestController
+class RecruitmentController extends BaseController
 {
-    /**
-     * The recruitmentRepository.
-     *
-     * @var RecruitmentRepository $recruitmentRepository
-     */
-    private $recruitmentRepository;
-
-    /**
-     * RecruitmentController constructor.
-     *
-     * @param RecruitmentRepository $recruitmentRepository The recruitmentRepository.
-     */
-    public function __construct(
-        RecruitmentRepository $recruitmentRepository
-    ){
-        $this->recruitmentRepository = $recruitmentRepository;
-    }
 
     /**
      * Get all recruitments.
@@ -100,14 +80,12 @@ class RecruitmentController extends FOSRestController
      *
      * @ParamConverter("params", converter="fos_rest.request_body")
      *
-     * @return View
+     * @return JsonResponse
      *
      * @throws UserNotFoundException Thrown when the user could not be found.
      * @throws ValidationException   Thrown when the registration validation fails.
-     * @throws ORMException            Thrown when something fails saving the entity.
-     * @throws OptimisticLockException Thrown when a version check on an object that uses optimistic locking through a version field fails.
      */
-    public function postRecruitment(?UserEntity $user, PostRecruitmentParamConverter $params, ConstraintViolationListInterface $validationErrors): View
+    public function postRecruitment(?UserEntity $user, PostRecruitmentParamConverter $params, ConstraintViolationListInterface $validationErrors): JsonResponse
     {
         if ($user === null) {
             throw new UserNotFoundException();
@@ -117,12 +95,19 @@ class RecruitmentController extends FOSRestController
             throw new ValidationException($validationErrors);
         }
 
+        if (count($user->getRecruitments()->toArray())) {
+            foreach($user->getRecruitments() as $recruitment) {
+                $this->getRepository()->remove($recruitment);
+            }
+        }
+
         $recruitment = new RecruitmentEntity();
         $recruitment->setUser($user);
         $recruitment->setForm($params->getForm());
-        $this->recruitmentRepository->save($recruitment);
 
-        return $this->view(
+        $this->getRepository()->save($recruitment);
+
+        return $this->getView(
             [
                 'code' => Response::HTTP_CREATED,
                 'status' => 'ok',

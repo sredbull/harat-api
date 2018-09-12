@@ -34,4 +34,8 @@ services:
             - { name: kernel.event_listener, event: ldap_tools_bundle.guard.login.failure, method: onLoginFailure }
 
     App\Controller\BaseController:
-        arguments: ['@doctrine.orm.entity_manager', ['@request_stack']]
+        arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface', ['@request_stack']]
+
+    App\Repository\BaseRepository:
+        autowire: false
+        arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface']
