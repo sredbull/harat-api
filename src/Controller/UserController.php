@@ -10,9 +10,10 @@
  */
 namespace App\Controller;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
+use App\Features\User\GetProfileFeature;
+use App\Features\User\GetUsersFeature;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class UserController.
@@ -23,36 +24,25 @@ class UserController extends BaseController
     /**
      * List all users.
      *
-     * @Rest\Get("user")
+     * @Route("/user", methods={"GET"})
      *
      * @return JsonResponse
      */
     public function getUsers(): JsonResponse
     {
-        $users = $this->getRepository() !== null ? $this->getRepository()->findAll() : null;
-
-        return $this->getView($users, Response::HTTP_OK);
+        return $this->serve(new GetUsersFeature());
     }
 
     /**
      * List current profile.
      *
-     * @Rest\Get("user/profile")
+     * @Route("/user/profile", methods={"GET"})
      *
      * @return JsonResponse
      */
     public function getProfile(): JsonResponse
     {
-        $user = $this->getUser();
-        $userDetails = null;
-
-        if ($this->getRepository() !== null) {
-            $userDetails = $this->getRepository()->findOneBy([
-                'username' => $user->getUsername(),
-            ]);
-        }
-
-        return $this->getView($userDetails, Response::HTTP_OK);
+        return $this->serve(new GetProfileFeature());
     }
 
 }
