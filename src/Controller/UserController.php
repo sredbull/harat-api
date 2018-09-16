@@ -22,7 +22,7 @@ class UserController extends BaseController
 {
 
     /**
-     * List all users.
+     * Get all users.
      *
      * @Route("/user", methods={"GET"})
      *
@@ -34,7 +34,7 @@ class UserController extends BaseController
     }
 
     /**
-     * List current profile.
+     * Get current profile.
      *
      * @Route("/user/profile", methods={"GET"})
      *
