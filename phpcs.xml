@@ -42,6 +42,7 @@
     <rule ref="vendor/escapestudios/symfony2-coding-standard">
         <exclude name="Symfony.ControlStructure.YodaConditions.Invalid" />
         <exclude name="Symfony.Functions.Arguments.Invalid" />
+        <exclude name="Symfony.NamingConventions.ValidClassName.InvalidAbstractName" />
     </rule>
 
     <!--Slevomat Coding Standard-->
@@ -61,6 +62,9 @@
         <exclude name="SlevomatCodingStandard.TypeHints.LongTypeHints.UsedLongTypeHint" />
         <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed" />
         <exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses" />
+        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator.DisallowedShortTernaryOperator" />
+        <exclude name="SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators.DisallowedPreIncrementOperator" />
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix" />
         <properties>
             <property name="searchAnnotations" value="true" />
         </properties>

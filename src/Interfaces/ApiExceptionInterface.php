@@ -11,9 +11,10 @@
 namespace App\Interfaces;
 
 /**
- * Interface EntityInterface.
+ * Interface ApiExceptionInterface
  */
-interface EntityInterface
+interface ApiExceptionInterface
 {
 
 }
+

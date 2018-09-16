@@ -74,6 +74,9 @@
     "escapestudios/symfony2-coding-standard": {
         "version": "3.x-dev"
     },
+    "fesor/request-objects": {
+        "version": "v0.3.0"
+    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {

@@ -11,6 +11,3 @@ fos_rest:
     routing_loader:
         default_format: json
         include_format: false
-    exception:
-        enabled: true
-        exception_controller: 'App\Controller\ExceptionController::showAction'

@@ -15,18 +15,18 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ValidationException.
  */
-class UserNotFoundException extends ApiException
+class DatabaseException extends ApiException
 {
 
     /**
-     * UserNotFoundException constructor.
+     * DatabaseException constructor.
      *
      * @param string  $message The Exception message(s).
      * @param integer $code    The exception code.
      */
     public function __construct(
-        string $message = 'User not found',
-        int $code = Response::HTTP_NOT_FOUND
+        string $message = 'Database action failed',
+        int $code = Response::HTTP_INTERNAL_SERVER_ERROR
     ) {
         parent::__construct($message, $code);
     }

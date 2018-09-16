@@ -13,20 +13,20 @@ namespace App\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ValidationException.
+ * Class InvalidClassInstanceException.
  */
-class UserNotFoundException extends ApiException
+class InvalidClassInstanceException extends ApiException
 {
 
     /**
-     * UserNotFoundException constructor.
+     * InvalidClassException constructor.
      *
      * @param string  $message The Exception message(s).
      * @param integer $code    The exception code.
      */
     public function __construct(
-        string $message = 'User not found',
-        int $code = Response::HTTP_NOT_FOUND
+        string $message = 'Invalid class instance',
+        int $code = Response::HTTP_METHOD_NOT_ALLOWED
     ) {
         parent::__construct($message, $code);
     }

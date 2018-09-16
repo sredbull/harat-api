@@ -10,10 +10,19 @@
  */
 namespace App\Interfaces;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
- * Interface EntityInterface.
+ * Interface RequestObjectInterface.
  */
-interface EntityInterface
+interface RequestObjectInterface
 {
+
+    /**
+     * Set the rules for this request.
+     *
+     * @return Assert\Collection
+     */
+    public function rules(): Assert\Collection;
 
 }

@@ -31,24 +31,22 @@ class ValidationException extends ApiException
      *
      * @param ConstraintViolationListInterface $validationErrors The validation errors.
      */
-    public function __construct(ConstraintViolationListInterface $validationErrors)
+    public function __construct(
+        ConstraintViolationListInterface $validationErrors
+    )
     {
         $this->validationErrors = $validationErrors;
+        parent::__construct(Response::$statusTexts[422], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
-     * Get the exception details.
+     * Get the validation erros
      *
-     * @return array
+     * @return ConstraintViolationListInterface
      */
-    public function getErrorDetails(): array
+    public function getValidationErrors(): ConstraintViolationListInterface
     {
-        return [
-            'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-            'status' => 'error',
-            'message' => Response::$statusTexts[422],
-            'errors' => $this->validationErrors,
-        ];
+        return $this->validationErrors;
     }
 
 }

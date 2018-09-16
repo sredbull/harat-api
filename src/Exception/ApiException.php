@@ -10,24 +10,23 @@
  */
 namespace App\Exception;
 
+use App\Interfaces\ApiExceptionInterface;
+
 /**
  * Class ApiException.
  */
-class ApiException extends \Exception
+class ApiException extends \Exception implements ApiExceptionInterface
 {
 
     /**
-     * Get the exception details.
+     * ApiException constructor.
      *
-     * @return array
+     * @param string  $message The exception message.
+     * @param integer $code    The HTTP error code.
      */
-    public function getErrorDetails(): array
+    public function __construct(string $message, int $code)
     {
-        return [
-            'code' => $this->getCode() ? $this->getCode() : 500,
-            'status' => 'error',
-            'message' => $this->getMessage() ? $this->getMessage() : 'API Exception',
-        ];
+        parent::__construct($message, $code);
     }
 
 }

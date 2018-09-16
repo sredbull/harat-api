@@ -10,11 +10,10 @@
  */
 namespace App\Repository;
 
+use App\Exception\DatabaseException;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -41,13 +40,16 @@ class BaseRepository extends ServiceEntityRepository implements RepositoryInterf
      *
      * @return void
      *
-     * @throws ORMException            Thrown when something fails saving the entity.
-     * @throws OptimisticLockException Thrown when a version check on an object that uses optimistic locking through a version field fails.
+     * @throws DatabaseException When removing the entity fails.
      */
     public function remove(EntityInterface $entity): void
     {
-        $this->_em->remove($entity);
-        $this->_em->flush();
+        try {
+            $this->_em->remove($entity);
+            $this->_em->flush();
+        } catch (\Throwable $e) {
+            throw new DatabaseException(sprintf('Removing the %s failed', \get_class($entity)));
+        }
     }
 
     /**
@@ -57,13 +59,17 @@ class BaseRepository extends ServiceEntityRepository implements RepositoryInterf
      *
      * @return void
      *
-     * @throws ORMException            Thrown when something fails saving the entity.
-     * @throws OptimisticLockException Thrown when a version check on an object that uses optimistic locking through a version field fails.
+     * @throws DatabaseException When saving the entity fails.
      */
     public function save(EntityInterface $entity): void
     {
-        $this->_em->persist($entity);
-        $this->_em->flush();
+        try {
+            $this->_em->persist($entity);
+            $this->_em->flush();
+        } catch (\Throwable $e) {
+            throw new DatabaseException(sprintf('Saving the %s failed', \get_class($entity)));
+        }
+
     }
 
 }
