@@ -11,8 +11,12 @@
 namespace App\Controller;
 
 use App\Entity\UserEntity;
-use App\Features\Recruitment\PostRecruitmentFeature;
+use App\Exception\DatabaseException;
+use App\Exception\UserNotFoundException;
 use App\ParamConverter\Recruitment\PostRecruitmentRequest;
+use App\Service\RecruitmentService;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,16 +28,27 @@ class RecruitmentController extends BaseController
     /**
      * Post a recruitment.
      *
-     * @param UserEntity|null        $user    The user the recruitment belongs to.
-     * @param PostRecruitmentRequest $request The validated recruitment request.
+     * @param UserEntity|null        $user               The user the recruitment belongs to.
+     * @param PostRecruitmentRequest $request            The validated recruitment request.
+     * @param RecruitmentService     $recruitmentService The recruitment service.
      *
      * @Route("/recruitment/{id}", methods={"POST"})
      *
      * @return mixed
+     *
+     * @throws DatabaseException     When saving or removing a recruitment fails.
+     * @throws UserNotFoundException When the user could not be found.
      */
-    public function postRecruitment(?UserEntity $user, PostRecruitmentRequest $request)
+    public function postRecruitment(?UserEntity $user, PostRecruitmentRequest $request, RecruitmentService $recruitmentService): JsonResponse
     {
-        return $this->serve(new PostRecruitmentFeature($user, $request));
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        $recruitmentService->deleteRecruitmentsFromUser($user);
+        $recruitmentService->newRecruitmentForUser($user, $request->getForm());
+
+        return $this->json(['message' => 'Recruitment posted'], Response::HTTP_CREATED);
     }
 
 }

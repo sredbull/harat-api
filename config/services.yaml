@@ -24,3 +24,5 @@ services:
     App\Repository\BaseRepository:
         autowire: false
         arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface']
+    App\Controller\BaseController:
+        arguments: ['@request_stack']
