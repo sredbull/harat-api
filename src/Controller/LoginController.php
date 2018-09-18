@@ -10,58 +10,31 @@
  */
 namespace App\Controller;
 
-use App\Exception\ValidationException;
-use App\ParamConverter\Login\PostLoginParamConverter;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
+use App\Exception\ApiException;
+use App\ParamConverter\Login\PostLoginRequest;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The LoginController Class.
- *
- * @Rest\RouteResource("Login", pluralize=false)
  */
-class LoginController extends FOSRestController implements ClassResourceInterface
+class LoginController extends BaseController
 {
 
     /**
      * Login route.
      *
-     * @param PostLoginParamConverter          $params           The validated login fields.
-     * @param ConstraintViolationListInterface $validationErrors The validation validation errors.
+     * @param PostLoginRequest $request The request.
      *
-     * @Rest\Post("login")
-     *
-     * @ParamConverter("params", converter="fos_rest.request_body")
+     * @Route("/login", methods={"POST, GET"})
      *
      * @return void
      *
-     * @throws ValidationException Thrown when the registration login fails.
-     * @throws \DomainException    Should never be thrown because the response is handled by the LDAP service.
+     * @throws ApiException When Something is wrong with the ldap server.
      */
-    public function postAction(PostLoginParamConverter $params, ConstraintViolationListInterface $validationErrors): void
+    public function postAction(PostLoginRequest $request): void
     {
-        if (count($validationErrors) > 0) {
-            throw new ValidationException($validationErrors);
-        }
-
-        throw new \DomainException(sprintf('%s, this should be handled by LDAP', $params->getUsername()));
-    }
-
-    /**
-     * Login route.
-     *
-     * @Rest\Get("login", name="login")
-     *
-     * @return void
-     *
-     * @throws \DomainException Should never be thrown because the response is handled by the LDAP service.
-     */
-    public function loginAction(): void
-    {
-        throw new \DomainException('Handled by LDAP');
+        throw new ApiException(sprintf('%s, this should be handled by LDAP', $request->getUsername()), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
 }

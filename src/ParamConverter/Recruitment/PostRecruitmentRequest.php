@@ -56,16 +56,4 @@ class PostRecruitmentRequest extends RequestObject implements RequestObjectInter
         return $this->get('form');
     }
 
-    /**
-     * Set the form.
-     *
-     * @param array $form The form.
-     *
-     * @return void
-     */
-    public function setForm(array $form): void
-    {
-        $this->form = $form;
-    }
-
 }

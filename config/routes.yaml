@@ -1,6 +1,3 @@
 registration:
     type: rest
     resource: App\Controller\RegistrationController
-login:
-    type: rest
-    resource: App\Controller\LoginController
