@@ -38,6 +38,16 @@ class RecruitmentService
     }
 
     /**
+     * Get all recruitments.
+     *
+     * @return array
+     */
+    public function getAllRecruitments(): array
+    {
+        return $this->recruitmentRepository->findAll();
+    }
+
+    /**
      * Delete all recruitments for this user.
      *
      * @param UserEntity $user The user.

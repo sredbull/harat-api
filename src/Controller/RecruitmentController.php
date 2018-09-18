@@ -10,8 +10,10 @@
  */
 namespace App\Controller;
 
+use App\Entity\RecruitmentEntity;
 use App\Entity\UserEntity;
 use App\Exception\DatabaseException;
+use App\Exception\RecruitmentNotFoundException;
 use App\Exception\UserNotFoundException;
 use App\ParamConverter\Recruitment\PostRecruitmentRequest;
 use App\Service\RecruitmentService;
@@ -26,6 +28,40 @@ class RecruitmentController extends BaseController
 {
 
     /**
+     * Get a recruitment.
+     *
+     * @param RecruitmentEntity|null $recruitment The user the recruitment belongs to.
+     *
+     * @Route("/recruitment/{id}", methods={"GET"})
+     *
+     * @return JsonResponse
+     *
+     * @throws RecruitmentNotFoundException When the recruitment could not be found.
+     */
+    public function getRecruitment(?RecruitmentEntity $recruitment): JsonResponse
+    {
+        if ($recruitment === null) {
+            throw new RecruitmentNotFoundException();
+        }
+
+        return $this->view($recruitment, Response::HTTP_OK);
+    }
+
+    /**
+     * Get all recruitments.
+     *
+     * @param RecruitmentService $recruitmentService The recruitment service.
+     *
+     * @Route("/recruitment", methods={"GET"})
+     *
+     * @return JsonResponse
+     */
+    public function getRecruitments(RecruitmentService $recruitmentService): JsonResponse
+    {
+        return $this->view($recruitmentService->getAllRecruitments(), Response::HTTP_OK);
+    }
+
+    /**
      * Post a recruitment.
      *
      * @param UserEntity|null        $user               The user the recruitment belongs to.
@@ -34,7 +70,7 @@ class RecruitmentController extends BaseController
      *
      * @Route("/recruitment/{id}", methods={"POST"})
      *
-     * @return mixed
+     * @return JsonResponse
      *
      * @throws DatabaseException     When saving or removing a recruitment fails.
      * @throws UserNotFoundException When the user could not be found.
@@ -48,7 +84,7 @@ class RecruitmentController extends BaseController
         $recruitmentService->deleteRecruitmentsFromUser($user);
         $recruitmentService->newRecruitmentForUser($user, $request->getForm());
 
-        return $this->json(['message' => 'Recruitment posted'], Response::HTTP_CREATED);
+        return $this->view(['message' => 'Recruitment posted'], Response::HTTP_OK);
     }
 
 }

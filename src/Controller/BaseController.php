@@ -108,7 +108,7 @@ class BaseController extends Controller
      *
      * @return JsonResponse
      */
-    public function json($data, int $status, string $format = 'json'): JsonResponse
+    public function view($data, int $status, string $format = 'json'): JsonResponse
     {
         $json = $this->serializer->serialize($data, $format);
 
