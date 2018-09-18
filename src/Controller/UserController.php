@@ -12,7 +12,9 @@ namespace App\Controller;
 
 use App\Features\User\GetProfileFeature;
 use App\Features\User\GetUsersFeature;
+use App\Service\UserService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,25 +26,29 @@ class UserController extends BaseController
     /**
      * Get all users.
      *
+     * @param UserService $userService The user service.
+     *
      * @Route("/user", methods={"GET"})
      *
      * @return JsonResponse
      */
-    public function getUsers(): JsonResponse
+    public function getUsers(UserService $userService): JsonResponse
     {
-        return $this->serve(new GetUsersFeature());
+        return $this->view($userService->getAllUsers(), Response::HTTP_OK);
     }
 
     /**
      * Get current profile.
      *
+     * @param UserService $userService The user service.
+     *
      * @Route("/user/profile", methods={"GET"})
      *
      * @return JsonResponse
      */
-    public function getProfile(): JsonResponse
+    public function getProfile(UserService $userService): JsonResponse
     {
-        return $this->serve(new GetProfileFeature());
+        return $this->view($userService->getProfile(), Response::HTTP_OK);
     }
 
 }
