@@ -64,6 +64,7 @@ class BaseController extends Controller
     public function setIncludes(RequestStack $request): void
     {
         $includes = null;
+
         if ($request->getCurrentRequest() !== null) {
             $includes = $request->getCurrentRequest()->get('includes');
         }

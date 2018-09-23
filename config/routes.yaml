@@ -1,3 +1,0 @@
-registration:
-    type: rest
-    resource: App\Controller\RegistrationController
