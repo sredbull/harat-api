@@ -20,6 +20,7 @@ use App\Repository\RecruitmentRepository;
  */
 class RecruitmentService
 {
+
     /**
      * The recruitment repository.
      *
@@ -80,4 +81,5 @@ class RecruitmentService
         $recruitment->setForm($form);
         $this->recruitmentRepository->save($recruitment);
     }
+
 }

@@ -14,11 +14,10 @@ namespace App\Event\Listener;
 
 use App\Entity\GroupEntity;
 use App\Entity\UserEntity;
+use App\Exception\DatabaseException;
 use App\Repository\GroupRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use LdapTools\Bundle\LdapToolsBundle\Event\AuthenticationHandlerEvent;
 use LdapTools\Exception\EmptyResultException;
 use LdapTools\Exception\MultiResultException;
@@ -109,10 +108,9 @@ class LoginEventListener
      *
      * @return AuthenticationHandlerEvent
      *
-     * @throws ORMException            Thrown when something fails.
-     * @throws OptimisticLockException Thrown when a version check on an object that uses optimistic locking through a version field fails.
-     * @throws EmptyResultException    Thrown when the result seems to be empty.
-     * @throws MultiResultException    Thrown when the result seems to have more than one result.
+     * @throws EmptyResultException When the result seems to be empty.
+     * @throws MultiResultException When the result seems to have more than one result.
+     * @throws DatabaseException    When Something fails with saving or deleting from the database.
      */
     public function onLoginSuccess(AuthenticationHandlerEvent $event): AuthenticationHandlerEvent
     {

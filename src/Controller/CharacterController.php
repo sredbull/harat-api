@@ -12,6 +12,7 @@ namespace App\Controller;
 
 use App\Entity\CharacterEntity;
 use App\Exception\CharacterNotFoundException;
+use App\Exception\DatabaseException;
 use App\Service\CharacterService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,6 +55,7 @@ class CharacterController extends BaseController
      * @return JsonResponse
      *
      * @throws CharacterNotFoundException When the character could not be found.
+     * @throws DatabaseException          When the character could not be removed.
      */
     public function deleteCharacter(CharacterService $characterService, ?CharacterEntity $character): JsonResponse
     {
@@ -61,7 +63,7 @@ class CharacterController extends BaseController
             throw new CharacterNotFoundException();
         }
 
-        $characterService->delete($character);
+        $characterService->remove($character);
 
         return $this->view(
             null,

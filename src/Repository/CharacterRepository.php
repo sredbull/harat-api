@@ -11,8 +11,6 @@
 namespace App\Repository;
 
 use App\Entity\CharacterEntity;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\ORMInvalidArgumentException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**

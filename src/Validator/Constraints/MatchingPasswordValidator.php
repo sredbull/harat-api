@@ -10,9 +10,6 @@
  */
 namespace App\Validator\Constraints;
 
-use LdapTools\Exception\EmptyResultException;
-use LdapTools\Exception\MultiResultException;
-use LdapTools\LdapManager;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

@@ -40,7 +40,7 @@ class ValidationException extends ApiException
     }
 
     /**
-     * Get the validation erros
+     * Get the validation errors.
      *
      * @return ConstraintViolationListInterface
      */

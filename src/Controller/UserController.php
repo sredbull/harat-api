@@ -10,8 +10,6 @@
  */
 namespace App\Controller;
 
-use App\Features\User\GetProfileFeature;
-use App\Features\User\GetUsersFeature;
 use App\Service\UserService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

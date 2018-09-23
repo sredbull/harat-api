@@ -11,9 +11,7 @@
 namespace App\Repository;
 
 use App\Entity\GroupEntity;
-use App\Entity\UserEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\ORMInvalidArgumentException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**

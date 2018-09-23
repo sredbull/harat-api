@@ -19,13 +19,17 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class UserService
 {
+
     /**
      * The user repository.
      *
      * @var UserRepository $userRepository
      */
     private $userRepository;
+
     /**
+     * The token storage.
+     *
      * @var TokenStorageInterface
      */
     private $tokenStorage;

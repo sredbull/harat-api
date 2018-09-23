@@ -11,6 +11,7 @@
 namespace App\Service;
 
 use App\Entity\CharacterEntity;
+use App\Exception\DatabaseException;
 use App\Repository\CharacterRepository;
 
 /**
@@ -39,15 +40,17 @@ class CharacterService
     }
 
     /**
-     * Delete the character.
+     * Remove the character.
      *
      * @param CharacterEntity $character The character.
      *
      * @return void
+     *
+     * @throws DatabaseException When removing the entity fails.
      */
-    public function delete(CharacterEntity $character): void
+    public function remove(CharacterEntity $character): void
     {
-        $this->characterRepository->delete($character);
+        $this->characterRepository->remove($character);
     }
 
 }
