@@ -52,19 +52,4 @@ class GroupRepository extends ServiceEntityRepository
         return $groupNames;
     }
 
-    /**
-     * Save changes to the database.
-     *
-     * @param UserEntity $entity Entity to persist.
-     *
-     * @throws ORMInvalidArgumentException Throws an ORMInvalidArgumentException when an incorrect argument was provided.
-     *
-     * @return void
-     */
-    public function save(UserEntity $entity): void
-    {
-        $this->_em->persist($entity);
-        $this->_em->flush();
-    }
-
 }

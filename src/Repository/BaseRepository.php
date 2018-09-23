@@ -18,6 +18,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class BaseRepository.
+ *
+ * @method EntityInterface|null find($id, $lockMode = null, $lockVersion = null)
+ * @method EntityInterface|null findOneBy(array $criteria, array $orderBy = null)
+ * @method EntityInterface[]    findAll()
+ * @method EntityInterface[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class BaseRepository extends ServiceEntityRepository implements RepositoryInterface
 {

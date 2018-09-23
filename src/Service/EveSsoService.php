@@ -8,10 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Service\Eve;
+namespace App\Service;
 
-use App\Exception\CrestSsoApiException;
+use App\Entity\CharacterEntity;
+use App\Exception\DatabaseException;
+use App\Exception\EveSsoException;
 use App\Exception\InvalidStateException;
+use App\Exception\UserNotFoundException;
+use App\Repository\CharacterRepository;
+use App\Repository\UserRepository;
 use GuzzleHttp\Client;
 use Psr\Http\Message\MessageInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -19,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Class CrestSso.
  */
-class CrestSsoService
+class EveSsoService
 {
 
     /**
@@ -86,14 +91,46 @@ class CrestSsoService
     private $frontUrl;
 
     /**
+     * The session.
+     *
+     * @var SessionInterface $session
+     */
+    private $session;
+
+    /**
+     * The character repository.
+     *
+     * @var CharacterRepository $characterRepository
+     */
+
+    private $characterRepository;
+
+    /**
+     * The user repository.
+     *
+     * @var UserRepository $userRepository
+     */
+    private $userRepository;
+
+    /**
      * CrestSSO constructor.
      *
-     * @param array|null $scopes The scopes.
+     * @param SessionInterface    $session             The session.
+     * @param CharacterRepository $characterRepository The character repository.
+     * @param UserRepository      $userRepository      The user repository.
+     * @param array|null          $scopes              The scopes.
      *
-     * @throws CrestSsoApiException Thrown when the scopes could not be set on initialize.
+     * @throws EveSsoException Thrown when the scopes could not be set on initialize.
      */
-    public function __construct(?array $scopes = null)
-    {
+    public function __construct(
+        SessionInterface $session,
+        CharacterRepository $characterRepository,
+        UserRepository $userRepository,
+        ?array $scopes = null
+    ) {
+        $this->session = $session;
+        $this->characterRepository = $characterRepository;
+        $this->userRepository = $userRepository;
         $this->scopes = $scopes;
 
         if ($this->scopes === null) {
@@ -104,14 +141,14 @@ class CrestSsoService
             $this->clientId = 'f071a6b9fa704850aae4bff6b1b06ce9';
             $this->secretKey = 'ZNW0waxeLIeHjyQQrVg99M1z0ciYSblXi21Tn0f6';
             $this->callbackUrl = 'http://api.housearatus.local:8000/sso/callback';
-            $this->frontUrl = 'http://www.housearatus.local:4000';
+            $this->frontUrl = 'http://www.housearatus.local:4000/';
         }
 
         if (getenv('APP_ENV') === 'prod') {
             $this->clientId = '31c2e99186fe4f6db13c7d670ee1fd02';
             $this->secretKey = 'eJkWuADRSJhYmUSfYydKTG1N8qQdGPmxbgPj2CXT';
             $this->callbackUrl = 'https://api.housearatus.space/sso/callback';
-            $this->frontUrl = 'https://www.housearatus.space';
+            $this->frontUrl = 'https://www.housearatus.space/';
         }
     }
 
@@ -150,54 +187,56 @@ class CrestSsoService
     /**
      * Get the login url.
      *
-     * @param SessionInterface $session        The current session.
-     * @param null|string      $redirectParams The params sent with the redirect.
+     * @param integer     $userId   The user id.
+     * @param string|null $redirect The params sent with the redirect.
      *
      * @return string
      */
-    public function getLoginUrl(SessionInterface $session, ?string $redirectParams = null): string
+    public function getLoginUrl(int $userId, ?string $redirect = null): string
     {
-        if ($session->isStarted() === false ) {
-            $session->start();
+        if ($this->session->isStarted() === false ) {
+            $this->session->start();
         }
+        $this->setState($this->session->getId());
+        $this->session->set('state', $this->getState());
 
-        $this->setState($session->getId());
-        $session->set('state', $session->getId());
+        $redirectParams = [
+            'userId' => $userId,
+            'redirect' => $redirect,
+        ];
 
         $fields = [
             'response_type' => 'code',
             'client_id' => $this->clientId,
-            'redirect_uri' => $redirectParams !== null ? $this->callbackUrl . '?' . $redirectParams : $this->callbackUrl,
+            'redirect_uri' => $this->callbackUrl . '?' . http_build_query($redirectParams),
             'scope' => implode(' ', $this->scopes),
             'state' => $this->getState(),
         ];
 
-        $url = $this->loginUrl . '?' . http_build_query($fields);
-
-        return $url;
+        return $this->loginUrl . '?' . http_build_query($fields);
     }
 
     /**
      * Handle the callback after logging into the sso provider.
      *
-     * @param string $code         The code returned by the sso.
-     * @param string $state        The state returned by the sso.
-     * @param string $sessionState The current session state.
+     * @param string $code  The code returned by the sso.
+     * @param string $state The state returned by the sso.
      *
      * @return array
      *
      * @throws InvalidStateException Thrown when the state seems to be invalid.
-     * @throws CrestSsoApiException  Thrown when the callback for some reason fails.
+     * @throws EveSsoException  Thrown when the callback for some reason fails.
      */
-    public function handleCallback(string $code, string $state, ?string $sessionState): array
+    public function handleCallback(string $code, string $state): array
     {
-        $this->validateState($state, $sessionState);
+        $this->validateState($state, $this->session->get('state'));
         $fields = ['grant_type' => 'authorization_code', 'code' => $code];
         $tokenData = $this->doRequest($this->tokenUrl, $fields, null, 'post');
         $accessToken = $tokenData->access_token;
         $refreshToken = $tokenData->refresh_token;
         $verifyData = $this->doRequest($this->verifyUrl, [], $accessToken, 'get');
-        $returnData = [
+
+        return [
             'characterId' => $verifyData->CharacterID,
             'characterName' => $verifyData->CharacterName,
             'scopes' => explode(' ', $verifyData->Scopes),
@@ -206,8 +245,6 @@ class CrestSsoService
             'refreshToken' => $refreshToken,
             'accessToken' => $accessToken,
         ];
-
-        return $returnData;
     }
 
     /**
@@ -220,7 +257,7 @@ class CrestSsoService
      *
      * @return mixed
      *
-     * @throws CrestSsoApiException Thrown when the request failed.
+     * @throws EveSsoException Thrown when the request failed.
      */
     public function doRequest(string $url, array $fields, ?string $accessToken = null, string $callType = 'get')
     {
@@ -238,11 +275,9 @@ class CrestSsoService
                 'connect_timeout' => 2,
             ]);
 
-            $responseData = json_decode($response->getBody()->getContents());
-
-            return $responseData;
+            return json_decode($response->getBody()->getContents());
         } catch (\Throwable $exception) {
-            throw new CrestSsoApiException(sprintf('Failed accessing %s', $url));
+            throw new EveSsoException(sprintf('Failed accessing %s', $url));
         }
     }
 //    @todo get token from refresh token.
@@ -258,14 +293,60 @@ class CrestSsoService
 //
 //        return $accessJson['access_token'];
 //    }
+
+    /**
+     * Set a character for a user.
+     *
+     * @param string $userId        The user id.
+     * @param array  $characterData The character data.
+     *
+     * @throws DatabaseException     When setting the character fails.
+     * @throws UserNotFoundException When the user could not be found.
+     *
+     * @return void
+     */
+    public function setCharacterForUser(string $userId, array $characterData): void
+    {
+        $user = $this->userRepository->find($userId);
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        $character = $this->characterRepository->findOneByCharacterId($characterData['characterId']);
+
+        if ($character === null) {
+            $character = new CharacterEntity();
+            $character->setCharacterId($characterData['characterId']);
+            $character->setCharacterName($characterData['characterName']);
+            $character->setScopes($characterData['scopes']);
+            $character->setTokenType($characterData['tokenType']);
+            $character->setOwnerHash($characterData['ownerHash']);
+            $character->setRefreshToken($characterData['refreshToken']);
+            $character->setAccessToken($characterData['accessToken']);
+            $character->setAvatar('https://image.eveonline.com/Character/' . $characterData['characterId'] . '_512.jpg');
+            $character->setUser($user);
+
+            $user->addCharacter($character);
+            $this->userRepository->save($user);
+        }
+
+        if ($character !== null) {
+            $character->setScopes($characterData['scopes']);
+            $character->setTokenType($characterData['tokenType']);
+            $character->setOwnerHash($characterData['ownerHash']);
+            $character->setRefreshToken($characterData['refreshToken']);
+            $character->setAccessToken($characterData['accessToken']);
+            $character->setUser($user);
+            $this->characterRepository->save($character);
+        }
+    }
+
     /**
      * Get the security definition scopes.
      *
      * @return array|null
      *
-     * @throws CrestSsoApiException Thrown when fetching the security definition scopes fails.
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @throws EveSsoException Thrown when fetching the security definition scopes fails.
      */
     private function getScopes(): ?array
     {
@@ -277,17 +358,11 @@ class CrestSsoService
             ]);
 
             $responseData = json_decode($response->getBody()->getContents());
-
-            $scopes = [];
-            foreach ($responseData->securityDefinitions->evesso->scopes as $scope => $value) {
-                $scopes[] = $scope;
-            }
-
-            $this->setScopes($scopes);
+            $this->setScopes(\array_keys(\get_object_vars($responseData->securityDefinitions->evesso->scopes)));
 
             return $this->scopes;
         } catch (\Throwable $exception) {
-            throw new CrestSsoApiException('Failed fetching the security definition scopes from: https://esi.evetech.net/latest/swagger.json');
+            throw new EveSsoException('Failed fetching the security definition scopes from: https://esi.evetech.net/latest/swagger.json');
         }
     }
 
@@ -315,6 +390,7 @@ class CrestSsoService
      */
     private function validateState(string $state, ?string $sessionState): void
     {
+        $this->session->remove('state');
         if ($state !== $sessionState) {
             throw new InvalidStateException();
         }

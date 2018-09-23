@@ -13,20 +13,20 @@ namespace App\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class InvalidStateException.
+ * Class EveSsoException.
  */
-class InvalidStateException extends ApiException
+class EveSsoException extends ApiException
 {
 
     /**
-     * InvalidStateException constructor.
+     * EveSsoException constructor.
      *
      * @param string  $message The Exception message(s).
      * @param integer $code    The exception code.
      */
     public function __construct(
-        string $message = 'Invalid state returned',
-        int $code = Response::HTTP_NOT_FOUND
+        string $message = 'Eve Sso error',
+        int $code = Response::HTTP_INTERNAL_SERVER_ERROR
     ) {
         parent::__construct($message, $code);
     }

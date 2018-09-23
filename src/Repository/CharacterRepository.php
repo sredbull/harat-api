@@ -23,7 +23,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method CharacterEntity[]    findAll()
  * @method CharacterEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CharacterRepository extends ServiceEntityRepository
+class CharacterRepository extends BaseRepository
 {
 
     /**
@@ -37,33 +37,17 @@ class CharacterRepository extends ServiceEntityRepository
     }
 
     /**
-     * Save changes to the database.
+     * Find a character by its character id.
      *
-     * @param CharacterEntity $entity Entity to persist.
+     * @param integer $characterId The character id.
      *
-     * @throws ORMInvalidArgumentException Throws an ORMInvalidArgumentException when an incorrect argument was provided.
-     *
-     * @return void
+     * @return CharacterEntity|null
      */
-    public function save(CharacterEntity $entity): void
+    public function findOneByCharacterId (int $characterId): ?CharacterEntity
     {
-        $this->_em->persist($entity);
-        $this->_em->flush();
-    }
-
-    /**
-     * Delete from the database.
-     *
-     * @param CharacterEntity $entity Entity to delete.
-     *
-     * @throws ORMInvalidArgumentException Throws an ORMInvalidArgumentException when an incorrect argument was provided.
-     *
-     * @return void
-     */
-    public function delete(CharacterEntity $entity): void
-    {
-        $this->_em->remove($entity);
-        $this->_em->flush();
+        return $this->findOneBy([
+            'characterId' => $characterId,
+        ]);
     }
 
 }

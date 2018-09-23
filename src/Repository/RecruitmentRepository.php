@@ -15,6 +15,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class RecruitmentRepository.
+ *
+ * @method RecruitmentEntity|null find($id, $lockMode = null, $lockVersion = null)
+ * @method RecruitmentEntity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method RecruitmentEntity[]    findAll()
+ * @method RecruitmentEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class RecruitmentRepository extends BaseRepository
 {
