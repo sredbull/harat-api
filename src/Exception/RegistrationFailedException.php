@@ -19,7 +19,7 @@ class RegistrationFailedException extends ApiException
 {
 
     /**
-     * UserNotFoundException constructor.
+     * RegistrationFailedException constructor.
      *
      * @param string  $message The Exception message(s).
      * @param integer $code    The exception code.

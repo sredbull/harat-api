@@ -10,83 +10,58 @@
  */
 namespace App\Controller;
 
+use App\Entity\CharacterEntity;
 use App\Exception\CharacterNotFoundException;
-use App\Repository\CharacterRepository;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\View\View;
+use App\Service\CharacterService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class CharacterController.
  */
-class CharacterController extends FOSRestController implements ClassResourceInterface
+class CharacterController extends BaseController
 {
 
     /**
-     * The characterRepository.
+     * Get a character.
      *
-     * @var CharacterRepository $characterRepository
+     * @param CharacterEntity|null $character The character.
+     *
+     * @Route("/character/{id}", methods={"GET"})
+     *
+     * @return JsonResponse
+     *
+     * @throws CharacterNotFoundException When the character could not be found.
      */
-    private $characterRepository;
-
-    /**
-     * CharacterController constructor.
-     *
-     * @param CharacterRepository $characterRepository The characterRepository.
-     */
-    public function __construct(
-        CharacterRepository $characterRepository
-    ){
-        $this->characterRepository = $characterRepository;
-    }
-
-    /**
-     * List an character.
-     *
-     * @param string $characterId The id of the character to retrieve.
-     *
-     * @Rest\Get("character/{characterId}")
-     *
-     * @return View
-     *
-     * @throws CharacterNotFoundException Thrown when the character could not be found.
-     */
-    public function getAction(string $characterId): View
+    public function getCharacter(?CharacterEntity $character): JsonResponse
     {
-        $character = $this->characterRepository->find($characterId);
-
         if ($character === null) {
             throw new CharacterNotFoundException();
         }
 
-        return $this->view(
-            $character,
-            Response::HTTP_OK
-        );
+        return $this->view($character, Response::HTTP_OK);
     }
 
     /**
-     * Deletes an character.
+     * Delete a character.
      *
-     * @param string $characterId The character id to delete.
+     * @param CharacterService     $characterService The character service.
+     * @param CharacterEntity|null $character        The character.
      *
-     * @Rest\Delete("character/{characterId}")
+     * @Route("/character/{id}", methods={"DELETE"})
      *
-     * @return View
+     * @return JsonResponse
      *
-     * @throws CharacterNotFoundException Thrown when the character could not be found.
+     * @throws CharacterNotFoundException When the character could not be found.
      */
-    public function deleteAction(string $characterId): View
+    public function deleteCharacter(CharacterService $characterService, ?CharacterEntity $character): JsonResponse
     {
-        $existingCharacter = $this->characterRepository->find($characterId);
-
-        if ($existingCharacter === null) {
+        if ($character === null) {
             throw new CharacterNotFoundException();
         }
 
-        $this->characterRepository->delete($existingCharacter);
+        $characterService->delete($character);
 
         return $this->view(
             null,

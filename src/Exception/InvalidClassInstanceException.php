@@ -19,7 +19,7 @@ class InvalidClassInstanceException extends ApiException
 {
 
     /**
-     * InvalidClassException constructor.
+     * InvalidClassInstanceException constructor.
      *
      * @param string  $message The Exception message(s).
      * @param integer $code    The exception code.

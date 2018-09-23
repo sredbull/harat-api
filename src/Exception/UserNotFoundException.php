@@ -13,7 +13,7 @@ namespace App\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ValidationException.
+ * Class UserNotFoundException.
  */
 class UserNotFoundException extends ApiException
 {

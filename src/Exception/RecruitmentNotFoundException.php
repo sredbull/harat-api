@@ -13,13 +13,13 @@ namespace App\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ValidationException.
+ * Class RecruitmentNotFoundException.
  */
 class RecruitmentNotFoundException extends ApiException
 {
 
     /**
-     * Get the exception details.
+     * RecruitmentNotFoundException constructor.
      *
      * @param string  $message The Exception message(s).
      * @param integer $code    The exception code.

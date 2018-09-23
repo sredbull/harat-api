@@ -26,7 +26,7 @@ class LoginController extends BaseController
      *
      * @param PostLoginRequest $request The request.
      *
-     * @Route("/login", methods={"POST, GET"})
+     * @Route("/login", methods={"POST"})
      *
      * @return void
      *

@@ -58,22 +58,22 @@ class PostRegisterRequest extends RequestObject implements RequestObjectInterfac
             ],
             'username' => [
                 new Assert\NotBlank(['groups' => 'first']),
-                new Assert\Type(['type' => 'string', 'groups' => 'first']),
+                new Assert\Type(['type' => 'string', 'groups' => 'second']),
                 new Assert\Length(['min' => 3, 'groups' => 'second']),
                 new AppAssert\ExistingLdapUser(['type' => 'username', 'groups' => 'third']),
             ],
             'password' => [
                 new Assert\NotBlank(['groups' => 'first']),
-                new Assert\Type(['type' => 'array', 'groups' => 'first']),
+                new Assert\Type(['type' => 'array', 'groups' => 'second']),
                 new Assert\Collection([
                     'first' => [
-                        new Assert\NotBlank(['groups' => 'first']),
-                        new Assert\Type(['type' => 'string', 'groups' => 'first']),
-                        new AppAssert\MatchingPassword(['groups' => 'second', 'propertyPath' => '[password][second]']),
+                        new Assert\NotBlank(['groups' => 'third']),
+                        new Assert\Type(['type' => 'string', 'groups' => 'third']),
+                        new AppAssert\MatchingPassword(['groups' => 'fourth', 'propertyPath' => '[password][second]']),
                     ],
                     'second' => [
-                        new Assert\NotBlank(['groups' => 'first']),
-                        new Assert\Type(['type' => 'string', 'groups' => 'first']),
+                        new Assert\NotBlank(['groups' => 'third']),
+                        new Assert\Type(['type' => 'string', 'groups' => 'third']),
                     ],
                 ]),
             ],
@@ -89,7 +89,7 @@ class PostRegisterRequest extends RequestObject implements RequestObjectInterfac
      */
     public function validationGroup(array $payload): Assert\GroupSequence
     {
-        return new Assert\GroupSequence(['first', 'second', 'third']);
+        return new Assert\GroupSequence(['first', 'second', 'third', 'fourth']);
     }
 
     /**

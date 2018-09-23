@@ -13,23 +13,22 @@ namespace App\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ValidationException.
+ * Class CharacterNotFoundException.
  */
 class CharacterNotFoundException extends ApiException
 {
 
     /**
-     * Get the exception details.
+     * CharacterNotFoundException constructor.
      *
-     * @return array
+     * @param string  $message The Exception message(s).
+     * @param integer $code    The exception code.
      */
-    public function getErrorDetails(): array
-    {
-        return [
-            'code' => Response::HTTP_NOT_FOUND,
-            'status' => 'error',
-            'message' => 'Character not found',
-        ];
+    public function __construct(
+        string $message = 'Character not found',
+        int $code = Response::HTTP_NOT_FOUND
+    ) {
+        parent::__construct($message, $code);
     }
 
 }
