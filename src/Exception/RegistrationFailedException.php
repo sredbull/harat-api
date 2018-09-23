@@ -19,17 +19,16 @@ class RegistrationFailedException extends ApiException
 {
 
     /**
-     * Get the exception details.
+     * UserNotFoundException constructor.
      *
-     * @return array
+     * @param string  $message The Exception message(s).
+     * @param integer $code    The exception code.
      */
-    public function getErrorDetails(): array
-    {
-        return [
-            'code' => Response::HTTP_NOT_FOUND,
-            'status' => 'error',
-            'message' => 'Registration failed: ' . $this->getMessage(),
-        ];
+    public function __construct(
+        string $message = 'Registration failed',
+        int $code = Response::HTTP_BAD_REQUEST
+    ) {
+        parent::__construct($message, $code);
     }
 
 }

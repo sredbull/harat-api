@@ -49,11 +49,7 @@ class PostRecruitmentRequest extends RequestObject implements RequestObjectInter
      */
     public function getForm(): array
     {
-        if ($this->form !== null) {
-            return $this->form;
-        }
-
-        return $this->get('form');
+        return $this->form;
     }
 
 }

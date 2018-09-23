@@ -64,9 +64,9 @@ class RecruitmentController extends BaseController
     /**
      * Post a recruitment.
      *
+     * @param RecruitmentService     $recruitmentService The recruitment service.
      * @param UserEntity|null        $user               The user the recruitment belongs to.
      * @param PostRecruitmentRequest $request            The validated recruitment request.
-     * @param RecruitmentService     $recruitmentService The recruitment service.
      *
      * @Route("/recruitment/{id}", methods={"POST"})
      *
@@ -75,7 +75,7 @@ class RecruitmentController extends BaseController
      * @throws DatabaseException     When saving or removing a recruitment fails.
      * @throws UserNotFoundException When the user could not be found.
      */
-    public function postRecruitment(?UserEntity $user, PostRecruitmentRequest $request, RecruitmentService $recruitmentService): JsonResponse
+    public function postRecruitment(RecruitmentService $recruitmentService, ?UserEntity $user, PostRecruitmentRequest $request): JsonResponse
     {
         if ($user === null) {
             throw new UserNotFoundException();

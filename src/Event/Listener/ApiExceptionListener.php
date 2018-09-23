@@ -13,6 +13,7 @@ namespace App\Event\Listener;
 use Fesor\RequestObject\InvalidRequestPayloadException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 /**
@@ -40,8 +41,6 @@ class ApiExceptionListener
 
         $traceObject = $this->getTrace($event->getException());
         $errorDetails = [
-            'code' => $event->getException()->getCode() ?: 500,
-            'status' => 'error',
             'message' => $event->getException()->getMessage(),
             'errors' => $errors,
             'trace' => [
@@ -59,7 +58,7 @@ class ApiExceptionListener
             unset($errorDetails['trace'], $errorDetails['trace_details']);
         }
 
-        $response = new JsonResponse(json_encode($errorDetails), $event->getException()->getCode() ?: 500, [], true);
+        $response = new JsonResponse(json_encode($errorDetails), $this->getErrorCode($event->getException()), [], true);
         $event->setResponse($response);
     }
 
@@ -158,6 +157,22 @@ class ApiExceptionListener
         }
 
         return $object;
+    }
+
+    /**
+     * Get the error code for this exception.
+     *
+     * @param \Throwable $exception The exception.
+     *
+     * @return integer
+     */
+    public function getErrorCode (\Throwable $exception): int
+    {
+        if ($exception instanceof InvalidRequestPayloadException) {
+            return Response::HTTP_UNPROCESSABLE_ENTITY;
+        }
+
+        return $exception->getCode() ?: Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
 }

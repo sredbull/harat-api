@@ -11,90 +11,39 @@
 namespace App\Controller;
 
 use App\Exception\RegistrationFailedException;
-use App\Exception\ValidationException;
-use App\ParamConverter\Registration\PostRegistrationParamConverter;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\View\View;
-use LdapTools\Exception\LdapConnectionException;
-use LdapTools\LdapManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\ParamConverter\Registration\PostRegisterRequest;
+use App\Service\AuthenticationService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class RegistrationController.
- *
- * @Rest\RouteResource("Register", pluralize=false)
  */
-class RegistrationController extends FOSRestController implements ClassResourceInterface
+class RegistrationController extends BaseController
 {
-
-    /**
-     * The ldap manager.
-     *
-     * @var LdapManager $ldapManager
-     */
-    private $ldapManager;
-
-    /**
-     * RegistrationController constructor.
-     *
-     * @param LdapManager $ldapManager The LDAP manager.
-     */
-    public function __construct(
-        LdapManager $ldapManager
-    ){
-        $this->ldapManager = $ldapManager;
-    }
 
     /**
      * Register a new user.
      *
-     * @param PostRegistrationParamConverter   $params           The validated registration fields.
-     * @param ConstraintViolationListInterface $validationErrors The validation validation errors.
+     * @param AuthenticationService $authenticationService The authentication service.
+     * @param PostRegisterRequest   $request               The request.
      *
-     * @Rest\Post("register")
+     * @Route("/register", methods={"POST"})
      *
-     * @ParamConverter("params", converter="fos_rest.request_body")
+     * @return JsonResponse
      *
-     * @return View
-     *
-     * @throws ValidationException         Thrown when the registration validation fails.
-     * @throws RegistrationFailedException Thrown when the registration fails for some reason.
+     * @throws RegistrationFailedException When registration fails.
      */
-    public function postAction(PostRegistrationParamConverter $params, ConstraintViolationListInterface $validationErrors): View
+    public function postRegistration(AuthenticationService $authenticationService, PostRegisterRequest $request): JsonResponse
     {
-        if (count($validationErrors) > 0) {
-            throw new ValidationException($validationErrors);
-        }
-
-        try {
-            $this->ldapManager
-                ->createLdapObject()
-                ->createUser()
-                ->in('ou=people,dc=housearatus,dc=space')
-                ->with([
-                    'email' => $params->getEmail(),
-                    'name' => $params->getUsername(),
-                    'password' => $params->getPassword()['first'],
-                    'username' => $params->getUsername(),
-                    'uid' => $params->getUsername(),
-                ])
-                ->execute();
-        } catch (LdapConnectionException $exception) {
-            throw new RegistrationFailedException($exception->getMessage());
-        }
-
-        return $this->view(
-            [
-                'code' => Response::HTTP_CREATED,
-                'status' => 'ok',
-                'message' => 'User registered',
-            ],
-            Response::HTTP_CREATED
+        $authenticationService->register(
+            $request->getEmail(),
+            $request->getUsername(),
+            $request->getPassword()
         );
+
+        return $this->view(['message' => 'User registered'], Response::HTTP_OK);
     }
 
 }

@@ -13,40 +13,27 @@ namespace App\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * ExistingLdapUser Class.
+ * MatchingPassword Class.
  */
-class ExistingLdapUser extends Constraint
+class MatchingPassword extends Constraint
 {
-
-    public const TYPE_EMAIL = 'email';
-    public const TYPE_USERNAME = 'username';
 
     /**
      * The error message.
      *
      * @var string $message
      */
-    public $message;
+    public $message = 'The passwords do not match';
 
     /**
-     * The validation type.
+     * The property path
      *
-     * @var string $type
+     * @var string $propertyPath
      */
-    public $type;
+    public $propertyPath;
 
     /**
-     * The allowed validation types.
-     *
-     * @var array $allowedTypes
-     */
-    public static $allowedTypes = [
-        self::TYPE_EMAIL,
-        self::TYPE_USERNAME,
-    ];
-
-    /**
-     * ExistingLdapUser constructor.
+     * MatchingPassword constructor.
      *
      * @param array|null $options The options.
      *
@@ -56,14 +43,11 @@ class ExistingLdapUser extends Constraint
     {
         if (
             \is_array($options) === false ||
-            array_key_exists('type', $options) === false ||
-            \in_array($options['type'], self::$allowedTypes, true) === false
-
+            array_key_exists('propertyPath', $options) === false ||
+            \is_string($options['propertyPath']) === false
         ) {
-            throw new \InvalidArgumentException('The "type" parameter value is not valid.');
+            throw new \InvalidArgumentException('The "propertyPath" parameter is invalid or missing.');
         }
-
-        $this->message = sprintf('The %s {{ string }} already exists.', $options['type']);
 
         parent::__construct($options);
     }
