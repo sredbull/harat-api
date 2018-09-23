@@ -1,0 +1,7 @@
+fos_rest:
+    body_converter:
+        enabled: true
+    format_listener:
+        rules:
+            prefer_extension: false
+            fallback_format: json

@@ -12,6 +12,7 @@ namespace App\Service;
 
 use App\Exception\RegistrationFailedException;
 use LdapTools\LdapManager;
+use LdapTools\Operation\AuthenticationOperation;
 
 /**
  * Class RegistrationController.

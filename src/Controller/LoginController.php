@@ -32,7 +32,7 @@ class LoginController extends BaseController
      *
      * @throws ApiException When Something is wrong with the ldap server.
      */
-    public function postAction(PostLoginRequest $request): void
+    public function postLogin(PostLoginRequest $request): void
     {
         throw new ApiException(sprintf('%s, this should be handled by LDAP', $request->getUsername()), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
