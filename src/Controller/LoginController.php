@@ -10,8 +10,10 @@
  */
 namespace App\Controller;
 
-use App\Exception\ApiException;
+use App\Exception\AuthenticationFailedException;
 use App\ParamConverter\Login\PostLoginRequest;
+use App\Service\AuthenticationService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -24,17 +26,20 @@ class LoginController extends BaseController
     /**
      * Login route.
      *
-     * @param PostLoginRequest $request The request.
+     * @param PostLoginRequest      $request               The request.
+     * @param AuthenticationService $authenticationService The authentication service.
      *
      * @Route("/login", methods={"POST"})
      *
-     * @return void
+     * @return JsonResponse
      *
-     * @throws ApiException When Something is wrong with the ldap server.
+     * @throws AuthenticationFailedException When authentication fails.
      */
-    public function postLogin(PostLoginRequest $request): void
+    public function postLogin(PostLoginRequest $request, AuthenticationService $authenticationService): JsonResponse
     {
-        throw new ApiException(sprintf('%s, this should be handled by LDAP', $request->getUsername()), Response::HTTP_INTERNAL_SERVER_ERROR);
+        $token = $authenticationService->login($request->getUsername(), $request->getPassword());
+
+        return $this->view(['message' => 'Login successful', 'token' => $token], Response::HTTP_OK);
     }
 
 }

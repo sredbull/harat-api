@@ -5,8 +5,6 @@ security:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
     providers:
-        ldap:
-            id: ldap_tools.security.user.ldap_user_provider
         fos_userbundle:
             id: fos_user.user_provider.username
     firewalls:
@@ -17,10 +15,6 @@ security:
           pattern:  ^/login
           stateless: true
           anonymous: true
-          provider: ldap
-          guard:
-              authenticators:
-                  - ldap_tools.security.ldap_guard_authenticator
         api_register:
             pattern: ^/register
             anonymous: true

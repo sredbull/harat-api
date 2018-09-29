@@ -22,7 +22,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method GroupEntity[]    findAll()
  * @method GroupEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GroupRepository extends ServiceEntityRepository
+class GroupRepository extends BaseRepository
 {
 
     /**

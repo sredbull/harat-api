@@ -58,6 +58,42 @@ class BaseRepository extends ServiceEntityRepository implements RepositoryInterf
     }
 
     /**
+     * Persist changes to the database.
+     *
+     * @param EntityInterface $entity Entity to persist.
+     *
+     * @return void
+     *
+     * @throws DatabaseException When persisting the entity fails.
+     */
+    public function persist(EntityInterface $entity): void
+    {
+        try {
+            $this->_em->persist($entity);
+        } catch (\Throwable $e) {
+            throw new DatabaseException(sprintf('persisting the %s failed', \get_class($entity)));
+        }
+
+    }
+
+    /**
+     * Flush changes to the database.
+     *
+     * @return void
+     *
+     * @throws DatabaseException When persisting the entity fails.
+     */
+    public function flush(): void
+    {
+        try {
+            $this->_em->flush();
+        } catch (\Throwable $e) {
+            throw new DatabaseException('Flushing failed');
+        }
+
+    }
+
+    /**
      * Save changes to the database.
      *
      * @param EntityInterface $entity Entity to persist.

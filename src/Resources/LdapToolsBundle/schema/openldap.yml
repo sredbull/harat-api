@@ -1,8 +1,6 @@
 objects:
     user:
-        # This is a LdapTools specific to refer to this object type overall.
         type: user
-        # The LDAP objectClass
         class: ['extensibleObject', 'organizationalPerson', 'person', 'PostfixBookMailAccount' ,'top']
         rdn: uniqueIdentifier
         default_values:
@@ -15,7 +13,6 @@ objects:
                     attribute: cn
                     filter:
                         objectClass: groupOfUniqueNames
-        # These are converters to be applied for going both to and from LDAP.
         converters:
              generalized_time:
                  - 'created'
@@ -34,6 +31,7 @@ objects:
             - 'name'
             - 'password'
             - 'username'
+            - 'groups'
         multivalued_attributes:
             - 'groups'
     group:

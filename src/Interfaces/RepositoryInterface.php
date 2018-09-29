@@ -28,6 +28,18 @@ interface RepositoryInterface
      *
      * @return void
      */
+    public function persist(EntityInterface $entity): void;
+
+    /**
+     * @return void
+     */
+    public function flush(): void;
+
+    /**
+     * @param EntityInterface $entity The entityInterface.
+     *
+     * @return void
+     */
     public function save(EntityInterface $entity): void;
 
 }

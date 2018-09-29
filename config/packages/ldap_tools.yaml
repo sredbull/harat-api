@@ -11,21 +11,3 @@ ldap_tools:
             ldap_type: openldap
             use_ssl: true
             port: 636
-    security:
-        ldap_object_type: user
-        default_role: ROLE_USER
-        refresh_user_attributes: true
-        refresh_user_roles: true
-        additional_attributes: ["mail"]
-        guard:
-            default_target_path: /login
-            username_parameter: username
-            password_parameter: password
-        roles:
-            SUPER_ADMIN: 'CN=harat-admins,OU=housearatus,OU=services,DC=housearatus,DC=space'
-            ROLE_APP_USER: 'cn=harat-users,ou=housearatus,ou=services,dc=housearatus,dc=space'
-            ROLE_APP_RECRUITER: 'cn=harat-recruiters,ou=housearatus,ou=services,dc=housearatus,dc=space'
-        role_attributes:
-            name: name
-            sid: cn
-            members: uniqueMember

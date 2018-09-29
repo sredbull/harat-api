@@ -34,4 +34,18 @@ class UserRepository extends BaseRepository
         parent::__construct($registry, UserEntity::class);
     }
 
+    /**
+     * Find an user by username.
+     *
+     * @param string $username The suername.
+     *
+     * @return UserEntity|null
+     */
+    public function findByUsername(string $username): ?UserEntity
+    {
+        return $this->findOneBy([
+            'username' => $username,
+        ]);
+    }
+
 }
