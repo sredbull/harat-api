@@ -9,17 +9,21 @@ declare (strict_types = 1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\ParamConverter\Registration;
+namespace App\ArgumentResolver\Registration;
 
-use App\Interfaces\RequestObjectInterface;
+use App\ArgumentResolver\BaseArgumentResolver;
+use App\Exception\InvalidContentException;
+use App\Exception\InvalidContentTypeException;
+use App\Exception\ValidationException;
 use App\Validator\Constraints as AppAssert;
-use Fesor\RequestObject\RequestObject;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class PostLoginRequest.
  */
-class PostRegisterRequest extends RequestObject implements RequestObjectInterface
+class PostRegisterArgumentResolver extends BaseArgumentResolver
 {
 
     /**
@@ -42,6 +46,43 @@ class PostRegisterRequest extends RequestObject implements RequestObjectInterfac
      * @var array $password
      */
     private $password;
+
+    /**
+     * Checks if the class supports to resolve its arguments.
+     *
+     * @param Request          $request  The request.
+     * @param ArgumentMetadata $argument The argument meta data.
+     *
+     * @return boolean
+     */
+    public function supports(Request $request, ArgumentMetadata $argument): bool
+    {
+        return $argument->getType() === PostRegisterArgumentResolver::class;
+    }
+
+    /**
+     * Resolve the request.
+     *
+     * @param Request          $request  The request.
+     * @param ArgumentMetadata $argument The argument meta data.
+     *
+     * @return \Generator
+     *
+     * @throws InvalidContentException     When invalid content is detected.
+     * @throws InvalidContentTypeException When the content type is invlaid.
+     * @throws ValidationException         When validation fails.
+     */
+    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
+    {
+        $content = $this->getRequestContent($request);
+        $this->validate($content);
+
+        $this->email = $content['email'];
+        $this->username = $content['username'];
+        $this->password = $content['password'];
+
+        yield $this;
+    }
 
     /**
      * Set the rules for this request.
@@ -84,11 +125,9 @@ class PostRegisterRequest extends RequestObject implements RequestObjectInterfac
     /**
      * Set the validation sequence.
      *
-     * @param array|null $payload The payload.
-     *
      * @return Assert\GroupSequence
      */
-    public function validationGroup(array $payload): Assert\GroupSequence
+    public function validationGroup(): Assert\GroupSequence
     {
         return new Assert\GroupSequence(['first', 'second', 'third', 'fourth']);
     }

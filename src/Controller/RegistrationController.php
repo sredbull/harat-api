@@ -10,8 +10,8 @@
  */
 namespace App\Controller;
 
+use App\ArgumentResolver\Registration\PostRegisterArgumentResolver;
 use App\Exception\RegistrationFailedException;
-use App\ParamConverter\Registration\PostRegisterRequest;
 use App\Service\AuthenticationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,8 +26,8 @@ class RegistrationController extends BaseController
     /**
      * Register a new user.
      *
-     * @param AuthenticationService $authenticationService The authentication service.
-     * @param PostRegisterRequest   $request               The request.
+     * @param AuthenticationService        $authenticationService The authentication service.
+     * @param PostRegisterArgumentResolver $request               The request.
      *
      * @Route("/register", methods={"POST"})
      *
@@ -35,7 +35,7 @@ class RegistrationController extends BaseController
      *
      * @throws RegistrationFailedException When registration fails.
      */
-    public function postRegistration(AuthenticationService $authenticationService, PostRegisterRequest $request): JsonResponse
+    public function postRegistration(AuthenticationService $authenticationService, PostRegisterArgumentResolver $request): JsonResponse
     {
         $authenticationService->register(
             $request->getEmail(),

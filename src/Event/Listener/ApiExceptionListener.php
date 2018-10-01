@@ -10,7 +10,7 @@
  */
 namespace App\Event\Listener;
 
-use Fesor\RequestObject\InvalidRequestPayloadException;
+use App\Exception\ValidationException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,8 +32,10 @@ class ApiExceptionListener
     public function onKernelException(GetResponseForExceptionEvent $event): void
     {
         $errors = [];
-        if ($event->getException() instanceof InvalidRequestPayloadException) {
-            foreach($event->getException()->getErrors() as $error)
+        if ($event->getException() instanceof ValidationException) {
+            /** @var ValidationException $exception */
+            $exception = $event->getException();
+            foreach($exception->getValidationErrors() as $error)
             {
                 $errors[$error->getPropertyPath()] = $error->getMessage();
             }
@@ -168,7 +170,7 @@ class ApiExceptionListener
      */
     public function getErrorCode (\Throwable $exception): int
     {
-        if ($exception instanceof InvalidRequestPayloadException) {
+        if ($exception instanceof ValidationException) {
             return Response::HTTP_UNPROCESSABLE_ENTITY;
         }
 

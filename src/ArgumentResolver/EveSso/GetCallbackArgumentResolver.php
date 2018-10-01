@@ -8,16 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\ParamConverter\EveSso;
+namespace App\ArgumentResolver\EveSso;
 
-use App\Interfaces\RequestObjectInterface;
-use Fesor\RequestObject\RequestObject;
+use App\ArgumentResolver\BaseArgumentResolver;
+use App\Exception\InvalidContentException;
+use App\Exception\InvalidContentTypeException;
+use App\Exception\ValidationException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class PostLoginRequest.
+ * Class GetCallbackArgumentResolver.
  */
-class GetCallbackRequest extends RequestObject implements RequestObjectInterface
+class GetCallbackArgumentResolver extends BaseArgumentResolver
 {
 
     /**
@@ -47,6 +51,44 @@ class GetCallbackRequest extends RequestObject implements RequestObjectInterface
      * @var string $userId
      */
     private $userId;
+
+    /**
+     * Checks if the class supports to resolve its arguments.
+     *
+     * @param Request          $request  The request.
+     * @param ArgumentMetadata $argument The argument meta data.
+     *
+     * @return boolean
+     */
+    public function supports(Request $request, ArgumentMetadata $argument): bool
+    {
+        return $argument->getType() === GetCallbackArgumentResolver::class;
+    }
+
+    /**
+     * Resolve the request.
+     *
+     * @param Request          $request  The request.
+     * @param ArgumentMetadata $argument The argument meta data.
+     *
+     * @return \Generator
+     *
+     * @throws InvalidContentException     When invalid content is detected.
+     * @throws InvalidContentTypeException When the content type is invlaid.
+     * @throws ValidationException         When validation fails.
+     */
+    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
+    {
+        $content = $this->getRequestContent($request);
+        $this->validate($content);
+
+        $this->code = $content['code'];
+        $this->redirect = $content['redirect'];
+        $this->state = $content['state'];
+        $this->userId = $content['userId'];
+
+        yield $this;
+    }
 
     /**
      * Set the rules for this request.

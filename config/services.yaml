@@ -15,14 +15,11 @@ services:
         class: App\Event\Listener\ApiExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
-    app.event.login_listener:
-        class: App\Event\Listener\LoginEventListener
-        arguments: ['@doctrine.orm.entity_manager']
-        tags:
-            - { name: kernel.event_listener, event: ldap_tools_bundle.guard.login.success, method: onLoginSuccess }
-            - { name: kernel.event_listener, event: ldap_tools_bundle.guard.login.failure, method: onLoginFailure }
     App\Repository\BaseRepository:
         autowire: false
         arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface']
     App\Controller\BaseController:
         arguments: ['@request_stack']
+    App\ArgumentResolver\BaseArgumentResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 50 }

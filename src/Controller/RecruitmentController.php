@@ -10,12 +10,12 @@
  */
 namespace App\Controller;
 
+use App\ArgumentResolver\Recruitment\PostRecruitmentArgumentResolver;
 use App\Entity\RecruitmentEntity;
 use App\Entity\UserEntity;
 use App\Exception\DatabaseException;
 use App\Exception\RecruitmentNotFoundException;
 use App\Exception\UserNotFoundException;
-use App\ParamConverter\Recruitment\PostRecruitmentRequest;
 use App\Service\RecruitmentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,9 +64,9 @@ class RecruitmentController extends BaseController
     /**
      * Post a recruitment.
      *
-     * @param RecruitmentService     $recruitmentService The recruitment service.
-     * @param UserEntity|null        $user               The user the recruitment belongs to.
-     * @param PostRecruitmentRequest $request            The validated recruitment request.
+     * @param RecruitmentService              $recruitmentService The recruitment service.
+     * @param UserEntity|null                 $user               The user the recruitment belongs to.
+     * @param PostRecruitmentArgumentResolver $request            The validated recruitment request.
      *
      * @Route("/recruitment/{id}", methods={"POST"})
      *
@@ -75,7 +75,7 @@ class RecruitmentController extends BaseController
      * @throws DatabaseException     When saving or removing a recruitment fails.
      * @throws UserNotFoundException When the user could not be found.
      */
-    public function postRecruitment(RecruitmentService $recruitmentService, ?UserEntity $user, PostRecruitmentRequest $request): JsonResponse
+    public function postRecruitment(RecruitmentService $recruitmentService, ?UserEntity $user, PostRecruitmentArgumentResolver $request): JsonResponse
     {
         if ($user === null) {
             throw new UserNotFoundException();

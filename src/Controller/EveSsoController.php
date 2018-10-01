@@ -15,8 +15,8 @@ use App\Exception\DatabaseException;
 use App\Exception\EveSsoException;
 use App\Exception\InvalidStateException;
 use App\Exception\UserNotFoundException;
-use App\ParamConverter\EveSso\GetCallbackRequest;
-use App\ParamConverter\EveSso\GetRedirectRequest;
+use App\ArgumentResolver\EveSso\GetCallbackArgumentResolver;
+use App\ArgumentResolver\EveSso\GetRedirectArgumentResolver;
 use App\Service\EveSsoService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,9 +31,9 @@ class EveSsoController extends BaseController
     /**
      * Redirect to the Eve Sso provider.
      *
-     * @param EveSsoService      $eveSsoService The Eve Sso service.
-     * @param UserEntity|null    $user          The user.
-     * @param GetRedirectRequest $request       The request.
+     * @param EveSsoService               $eveSsoService The Eve Sso service.
+     * @param UserEntity|null             $user          The user.
+     * @param GetRedirectArgumentResolver $request       The request.
      *
      * @return RedirectResponse
      *
@@ -41,7 +41,7 @@ class EveSsoController extends BaseController
      *
      * @throws UserNotFoundException When the user was not found.
      */
-    public function getRedirect(EveSsoService $eveSsoService, ?UserEntity $user, GetRedirectRequest $request): RedirectResponse
+    public function getRedirect(EveSsoService $eveSsoService, ?UserEntity $user, GetRedirectArgumentResolver $request): RedirectResponse
     {
         if ($user === null) {
             throw new UserNotFoundException();
@@ -53,8 +53,8 @@ class EveSsoController extends BaseController
     /**
      * Get the profile of the current logged in user.
      *
-     * @param EveSsoService      $eveSsoService The Eve Sso service.
-     * @param GetCallbackRequest $request       The request.
+     * @param EveSsoService               $eveSsoService The Eve Sso service.
+     * @param GetCallbackArgumentResolver $request       The request.
      *
      * @Route("/sso/callback", methods={"GET"})
      *
@@ -65,7 +65,7 @@ class EveSsoController extends BaseController
      * @throws InvalidStateException When the state seems invalid.
      * @throws UserNotFoundException When the user could not be found.
      */
-    public function getCallback(EveSsoService $eveSsoService, GetCallbackRequest $request): RedirectResponse
+    public function getCallback(EveSsoService $eveSsoService, GetCallbackArgumentResolver $request): RedirectResponse
     {
         $characterData = $eveSsoService->handleCallback($request->getCode(), $request->getState());
         $eveSsoService->setCharacterForUser($request->getUserId(), $characterData);

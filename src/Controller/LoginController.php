@@ -10,8 +10,8 @@
  */
 namespace App\Controller;
 
+use App\ArgumentResolver\Login\PostLoginArgumentResolver;
 use App\Exception\AuthenticationFailedException;
-use App\ParamConverter\Login\PostLoginRequest;
 use App\Service\AuthenticationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,8 +26,8 @@ class LoginController extends BaseController
     /**
      * Login route.
      *
-     * @param PostLoginRequest      $request               The request.
-     * @param AuthenticationService $authenticationService The authentication service.
+     * @param PostLoginArgumentResolver $request               The request.
+     * @param AuthenticationService     $authenticationService The authentication service.
      *
      * @Route("/login", methods={"POST"})
      *
@@ -35,7 +35,7 @@ class LoginController extends BaseController
      *
      * @throws AuthenticationFailedException When authentication fails.
      */
-    public function postLogin(PostLoginRequest $request, AuthenticationService $authenticationService): JsonResponse
+    public function postLogin(PostLoginArgumentResolver $request, AuthenticationService $authenticationService): JsonResponse
     {
         $token = $authenticationService->login($request->getUsername(), $request->getPassword());
 
