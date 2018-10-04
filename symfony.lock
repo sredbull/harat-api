@@ -74,18 +74,6 @@
     "escapestudios/symfony2-coding-standard": {
         "version": "3.x-dev"
     },
-    "fesor/request-objects": {
-        "version": "v0.3.0"
-    },
-    "friendsofsymfony/rest-bundle": {
-        "version": "2.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.2",
-            "ref": "258300d52be6ad59b32a888d5ddafbf9638540ff"
-        }
-    },
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
     },
@@ -182,6 +170,9 @@
     "phpoption/phpoption": {
         "version": "1.5.0"
     },
+    "predis/predis": {
+        "version": "v1.1.1"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -201,12 +192,12 @@
         "version": "3.7.3"
     },
     "sensio/framework-extra-bundle": {
-        "version": "4.0",
+        "version": "5.2",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.0",
-            "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
     },
     "slevomat/coding-standard": {
@@ -424,12 +415,6 @@
     },
     "twig/twig": {
         "version": "v2.4.8"
-    },
-    "willdurand/jsonp-callback-validator": {
-        "version": "v1.1.0"
-    },
-    "willdurand/negotiation": {
-        "version": "v2.3.1"
     },
     "zendframework/zend-code": {
         "version": "3.3.0"

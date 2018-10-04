@@ -20,7 +20,6 @@ use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMSSerializer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class UserEntity.
@@ -55,8 +54,6 @@ class UserEntity extends BaseUser implements EntityInterface
      *
      * @var string $username
      *
-     * @Assert\NotBlank()
-     *
      * @JMSSerializer\Expose
      * @JMSSerializer\Type("string")
      */
@@ -66,13 +63,6 @@ class UserEntity extends BaseUser implements EntityInterface
      * The email of the user.
      *
      * @var string $email
-     *
-     * @Assert\Email(
-     *     strict = true,
-     *     message = "The email '{{ value }}' is not a valid email.",
-     *     checkMX = true,
-     *     checkHost = true
-     * )
      *
      * @JMSSerializer\Expose
      * @JMSSerializer\Type("string")
