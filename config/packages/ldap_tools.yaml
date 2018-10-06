@@ -1,5 +1,6 @@
 ldap_tools:
     general:
+        cache_type: doctrine
         schema_folder: "%kernel.root_dir%/Resources/LdapToolsBundle/schema"
     domains:
         housearatus:
