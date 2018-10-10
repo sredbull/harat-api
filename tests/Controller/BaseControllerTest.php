@@ -141,8 +141,8 @@ class BaseControllerTest extends BaseTestCase
         $requestStack = new RequestStack();
         $controller = new BaseController($requestStack);
         $view = $controller->view(['data' => 'test'], 201);
-        $this->assertEquals(200, $view->getStatusCode());
-        $this->assertEquals('{"test": "data"}', $view->getContent());
+        $this->assertEquals(201, $view->getStatusCode());
+        $this->assertEquals('{"data":"test"}', $view->getContent());
     }
 
 }

@@ -159,7 +159,7 @@ class PostRegisterArgumentResolver extends BaseArgumentResolver
      */
     public function getPassword(): string
     {
-        return $this->password[0];
+        return $this->password['first'];
     }
 
 }

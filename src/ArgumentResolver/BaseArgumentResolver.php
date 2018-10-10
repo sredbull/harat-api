@@ -18,13 +18,30 @@ use App\Interfaces\ArgumentResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * The BaseArgumentResolver Class.
  */
 class BaseArgumentResolver implements ArgumentResolverInterface
 {
+
+    /**
+     * The validator interafce.
+     *
+     * @var ValidatorInterface $validator
+     */
+    private $validator;
+
+    /**
+     * BaseArgumentResolver constructor.
+     *
+     * @param ValidatorInterface $validator The validation interface.
+     */
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
 
     /**
      * Checks if the class supports to resolve its arguments.
@@ -91,14 +108,13 @@ class BaseArgumentResolver implements ArgumentResolverInterface
      *
      * @param array $data The data to validate.
      *
-     * @throws ValidationException When vlidation fails.
+     * @throws ValidationException When validation fails.
      *
      * @return void
      */
     public function validate(array $data): void
     {
-        $validator = Validation::createValidator();
-        $validationErrors = $validator->validate($data, $this->rules(), $this->validationGroup());
+        $validationErrors = $this->validator->validate($data, $this->rules(), $this->validationGroup());
 
         if (count($validationErrors) !== 0) {
             throw new ValidationException($validationErrors);

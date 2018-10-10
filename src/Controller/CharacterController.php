@@ -45,7 +45,7 @@ class CharacterController extends BaseController
     }
 
     /**
-     * Delete a character.
+     * Remove a character.
      *
      * @param CharacterService     $characterService The character service.
      * @param CharacterEntity|null $character        The character.
@@ -57,7 +57,7 @@ class CharacterController extends BaseController
      * @throws CharacterNotFoundException When the character could not be found.
      * @throws DatabaseException          When the character could not be removed.
      */
-    public function deleteCharacter(CharacterService $characterService, ?CharacterEntity $character): JsonResponse
+    public function removeCharacter(CharacterService $characterService, ?CharacterEntity $character): JsonResponse
     {
         if ($character === null) {
             throw new CharacterNotFoundException();
