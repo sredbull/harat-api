@@ -14,6 +14,7 @@ use App\Entity\CharacterEntity;
 use App\Exception\CharacterNotFoundException;
 use App\Exception\DatabaseException;
 use App\Service\CharacterService;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +31,11 @@ class CharacterController extends BaseController
      * @param CharacterEntity|null $character The character.
      *
      * @Route("/character/{id}", methods={"GET"})
+     *
+     * @OA\Get(
+     *     path="/character/{id}",
+     *     @OA\Response(response="200", description="OK response")
+     * )
      *
      * @return JsonResponse
      *

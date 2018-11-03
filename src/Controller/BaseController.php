@@ -14,13 +14,19 @@ use App\Exception\ApiException;
 use App\Provider\ExpressionLanguage\ExpressionLanguageProvider;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class UserController.
+ * @OA\Info(
+ *     title="Harat Api",
+ *     version="0.1"
+ * )
+ *
+ * Class BaseController.
  */
 class BaseController extends Controller
 {
