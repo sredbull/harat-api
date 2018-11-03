@@ -39,7 +39,7 @@ class BaseArgumentResolver implements ArgumentResolverInterface
      * @var array $allowedContentTypes
      */
     public static $allowedContentTypes = [
-        '',
+        null,
         'json',
     ];
 
@@ -101,8 +101,8 @@ class BaseArgumentResolver implements ArgumentResolverInterface
      */
     public function getRequestContent(Request $request): array
     {
-        if (\in_array($request->getContentType(), self::$allowedContentTypes, true) === true) {
-            throw new InvalidContentTypeException(sprintf('Invalid content type: "%s" posted, expected: "json"', $request->getContentType()));
+        if (\in_array($request->getContentType(), self::$allowedContentTypes, true) === false) {
+            throw new InvalidContentTypeException(sprintf('Invalid content type: "%s" posted, expected: "json" or "null"', $request->getContentType()));
         }
 
         $data = [];
