@@ -34,6 +34,16 @@ class BaseArgumentResolver implements ArgumentResolverInterface
     private $validator;
 
     /**
+     * The allowed content types.
+     *
+     * @var array $allowedContentTypes
+     */
+    public static $allowedContentTypes = [
+        '',
+        'json',
+    ];
+
+    /**
      * BaseArgumentResolver constructor.
      *
      * @param ValidatorInterface $validator The validation interface.
@@ -91,16 +101,23 @@ class BaseArgumentResolver implements ArgumentResolverInterface
      */
     public function getRequestContent(Request $request): array
     {
-        if ($request->getContentType() !== 'json') {
+        if (\in_array($request->getContentType(), self::$allowedContentTypes, true) === true) {
             throw new InvalidContentTypeException(sprintf('Invalid content type: "%s" posted, expected: "json"', $request->getContentType()));
         }
 
-        $json = json_decode($request->getContent(), true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new InvalidContentException(sprintf('Invalid content: %s', json_last_error_msg()));
+        $data = [];
+        if ($request->getContentType() === 'json') {
+            $data = json_decode($request->getContent(), true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new InvalidContentException(sprintf('Invalid content: %s', json_last_error_msg()));
+            }
         }
 
-        return $json;
+        if ($request->getContentType() === null) {
+            $data = $request->query->all();
+        }
+
+        return $data;
     }
 
     /**
