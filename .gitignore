@@ -16,3 +16,8 @@
 
 /.idea
 .DS_Store
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+/coverage
+###< symfony/phpunit-bridge ###

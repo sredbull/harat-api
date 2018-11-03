@@ -26,7 +26,7 @@ class AuthenticationFailedException extends ApiException
      */
     public function __construct(
         string $message = 'Authentication failed.',
-        int $code = Response::HTTP_NOT_FOUND
+        int $code = Response::HTTP_FORBIDDEN
     ) {
         parent::__construct($message, $code);
     }

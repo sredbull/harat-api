@@ -317,9 +317,9 @@ class CharacterEntity implements EntityInterface
     /**
      * Get the user where the character belongs to.
      *
-     * @return UserEntity
+     * @return UserEntity|null
      */
-    public function getUser(): UserEntity
+    public function getUser(): ?UserEntity
     {
         return $this->user;
     }
@@ -329,9 +329,9 @@ class CharacterEntity implements EntityInterface
      *
      * @return integer
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
-        return $this->getUser()->getId();
+        return $this->getUser() ? $this->getUser()->getId() : null;
     }
 
     /**

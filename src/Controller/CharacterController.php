@@ -14,6 +14,7 @@ use App\Entity\CharacterEntity;
 use App\Exception\CharacterNotFoundException;
 use App\Exception\DatabaseException;
 use App\Service\CharacterService;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,6 +32,11 @@ class CharacterController extends BaseController
      *
      * @Route("/character/{id}", methods={"GET"})
      *
+     * @OA\Get(
+     *     path="/character/{id}",
+     *     @OA\Response(response="200", description="OK response")
+     * )
+     *
      * @return JsonResponse
      *
      * @throws CharacterNotFoundException When the character could not be found.
@@ -45,7 +51,7 @@ class CharacterController extends BaseController
     }
 
     /**
-     * Delete a character.
+     * Remove a character.
      *
      * @param CharacterService     $characterService The character service.
      * @param CharacterEntity|null $character        The character.
@@ -57,7 +63,7 @@ class CharacterController extends BaseController
      * @throws CharacterNotFoundException When the character could not be found.
      * @throws DatabaseException          When the character could not be removed.
      */
-    public function deleteCharacter(CharacterService $characterService, ?CharacterEntity $character): JsonResponse
+    public function removeCharacter(CharacterService $characterService, ?CharacterEntity $character): JsonResponse
     {
         if ($character === null) {
             throw new CharacterNotFoundException();
