@@ -19,6 +19,9 @@
         <exclude name="Squiz.Commenting.BlockComment.LineIndent" />
         <exclude name="Squiz.Commenting.BlockComment.NoEmptyLineAfter" />
         <exclude name="Squiz.Commenting.BlockComment.WrongStart" />
+        <exclude name="Squiz.Commenting.VariableComment.IncorrectVarType" />
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName" />
+        <exclude name="Squiz.Commenting.FunctionComment.InvalidReturn" />
     </rule>
     <rule ref="Squiz.Commenting.ClassComment">
         <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" />

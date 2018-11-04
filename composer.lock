@@ -5967,21 +5967,21 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "4.8.5",
+            "version": "4.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "057f3f154cf4888b60eb4cdffadc509a3ae9dccd"
+                "reference": "af0c0c99e84106525484ef25f15144b9831522bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/057f3f154cf4888b60eb4cdffadc509a3ae9dccd",
-                "reference": "057f3f154cf4888b60eb4cdffadc509a3ae9dccd",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/af0c0c99e84106525484ef25f15144b9831522bb",
+                "reference": "af0c0c99e84106525484ef25f15144b9831522bb",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1",
-                "squizlabs/php_codesniffer": "^3.3.0"
+                "squizlabs/php_codesniffer": "^3.3.1"
             },
             "require-dev": {
                 "jakub-onderka/php-parallel-lint": "1.0.0",
@@ -6002,7 +6002,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2018-10-05T12:10:21+00:00"
+            "time": "2018-11-03T21:28:29+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -6057,16 +6057,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.8.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "26643943fe19b5b47d620744907f09d1d6b3f06f"
+                "reference": "e873047b6022a0343c9354f65d5d47b9e351dd53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/26643943fe19b5b47d620744907f09d1d6b3f06f",
-                "reference": "26643943fe19b5b47d620744907f09d1d6b3f06f",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/e873047b6022a0343c9354f65d5d47b9e351dd53",
+                "reference": "e873047b6022a0343c9354f65d5d47b9e351dd53",
                 "shasum": ""
             },
             "require": {
@@ -6119,7 +6119,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2018-10-13T19:56:32+00:00"
+            "time": "2018-11-03T18:25:11+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
