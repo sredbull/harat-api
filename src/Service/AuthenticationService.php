@@ -18,11 +18,13 @@ use App\Exception\LdapGroupNotFoundException;
 use App\Exception\LdapUserNotFoundException;
 use App\Exception\RegistrationFailedException;
 use App\Repository\GroupRepository;
+use App\Repository\RefreshTokenRepository;
 use App\Repository\UserRepository;
 use LdapTools\LdapManager;
 use LdapTools\Object\LdapObject;
 use LdapTools\Operation\AuthenticationOperation;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -72,17 +74,19 @@ class AuthenticationService
     /**
      * RegistrationController constructor.
      *
-     * @param GroupRepository              $groupRepository The group repository.
-     * @param JWTTokenManagerInterface     $jwtTokenManager The JWT token manager.
-     * @param LdapManager                  $ldapManager     The LDAP manager.
-     * @param UserPasswordEncoderInterface $encoder         The password encoder.
-     * @param UserRepository               $userRepository  The user repository.
+     * @param GroupRepository              $groupRepository        The group repository.
+     * @param JWTTokenManagerInterface     $jwtTokenManager        The JWT token manager.
+     * @param LdapManager                  $ldapManager            The LDAP manager.
+     * @param UserPasswordEncoderInterface $encoder                The password encoder.
+     * @param RefreshTokenRepository       $refreshTokenRepository The refresh token repository.
+     * @param UserRepository               $userRepository         The user repository.
      */
     public function __construct(
         GroupRepository $groupRepository,
         JWTTokenManagerInterface $jwtTokenManager,
         LdapManager $ldapManager,
         UserPasswordEncoderInterface $encoder,
+        RefreshTokenRepository $refreshTokenRepository,
         UserRepository $userRepository
     )
     {
@@ -90,6 +94,7 @@ class AuthenticationService
         $this->groupRepository = $groupRepository;
         $this->jwtTokenManager = $jwtTokenManager;
         $this->ldapManager = $ldapManager;
+        $this->refreshTokenRepository = $refreshTokenRepository;
         $this->userRepository = $userRepository;
     }
 
@@ -131,6 +136,22 @@ class AuthenticationService
         } catch (\Throwable $e) {
             throw new AuthenticationFailedException();
         }
+    }
+
+    /**
+     * Refresh the login.
+     *
+     * @param string $token The token.
+     *
+     * @return string
+     */
+    public function refresh(string $token): string
+    {
+        $currentToken = $this->refreshTokenRepository->findByToken($token);
+
+        dump($currentToken);
+
+        return $token;
     }
 
     /**
