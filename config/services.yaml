@@ -12,9 +12,13 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
     app.event.api_exception_listener:
-        class: App\Event\Listener\ApiExceptionListener
+        class: App\EventListener\ApiExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+    app.event.jwt_listener:
+        class: App\EventListener\JWTListener
+        tags:
+          - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
     App\Repository\BaseRepository:
         autowire: false
         arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface']

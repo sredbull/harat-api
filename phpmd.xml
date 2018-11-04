@@ -19,7 +19,6 @@
         <exclude name="ShortVariable" />
         <exclude name="LongVariable" />
     </rule>
-    <rule ref="rulesets/unusedcode.xml" />
 
     <rule ref="rulesets/naming.xml/LongVariable"
           since="0.2"

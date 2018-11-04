@@ -37,7 +37,7 @@ class UserRepository extends BaseRepository
     /**
      * Find an user by username.
      *
-     * @param string $username The suername.
+     * @param string $username The username.
      *
      * @return UserEntity|null
      */
