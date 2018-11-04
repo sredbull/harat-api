@@ -106,7 +106,7 @@ class CharacterEntity implements EntityInterface
      *
      * @var string $refreshToken
      *
-     * @ORM\Column(type="string", length=16777216)
+     * @ORM\Column(type="text", length=16777215)
      *
      * @JMSSerializer\Expose
      * @JMSSerializer\Type("string")

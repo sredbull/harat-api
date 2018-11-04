@@ -122,6 +122,15 @@ class UserEntity extends BaseUser implements EntityInterface
     private $recruitments;
 
     /**
+     * The refresh token.
+     *
+     * @var RefreshTokenEntity $refreshToken
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\RefreshTokenEntity", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $refreshToken;
+
+    /**
      * UserEntity constructor.
      */
     public function __construct()
@@ -232,6 +241,32 @@ class UserEntity extends BaseUser implements EntityInterface
     {
         if ($this->recruitments->contains($recruitment)) {
             $this->recruitments->removeElement($recruitment);
+        }
+    }
+
+    /**
+     * Get the refresh token.
+     *
+     * @return RefreshTokenEntity|null
+     */
+    public function getRefreshToken(): ?RefreshTokenEntity
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * Set the refresh token.
+     *
+     * @param RefreshTokenEntity $refreshToken The refresh token.
+     *
+     * @return void
+     */
+    public function setRefreshToken(RefreshTokenEntity $refreshToken): void
+    {
+        $this->refreshToken = $refreshToken;
+
+        if ($this !== $refreshToken->getUser()) {
+            $refreshToken->setUser($this);
         }
     }
 
