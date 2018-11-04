@@ -40,7 +40,7 @@ class RefreshTokenEntity implements EntityInterface
      *
      * @var string $refreshToken
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", length=16777215)
      */
     private $refreshToken;
 
@@ -120,11 +120,11 @@ class RefreshTokenEntity implements EntityInterface
     /**
      * Set the valid state of the token.
      *
-     * @param string $valid The state.
+     * @param \Datetime $valid The state.
      *
      * @return void
      */
-    public function setValid(string $valid): void
+    public function setValid(\Datetime $valid): void
     {
         $this->valid = $valid;
     }
