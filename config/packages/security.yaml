@@ -34,6 +34,7 @@ security:
     access_control:
         - { path: ^/register,      role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login,         role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login/refresh, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/sso/login,     role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/sso/callback,  role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/,              role: IS_AUTHENTICATED_FULLY }

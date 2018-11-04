@@ -11,6 +11,7 @@
 namespace App\Controller;
 
 use App\ArgumentResolver\Login\PostLoginArgumentResolver;
+use App\ArgumentResolver\Login\PostRefreshArgumentResolver;
 use App\Exception\AuthenticationFailedException;
 use App\Service\AuthenticationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,6 +41,23 @@ class LoginController extends BaseController
         $token = $authenticationService->login($request->getUsername(), $request->getPassword());
 
         return $this->view(['message' => 'Login successful', 'token' => $token], Response::HTTP_OK);
+    }
+
+    /**
+     * Refresh route.
+     *
+     * @param PostRefreshArgumentResolver $request               The request.
+     * @param AuthenticationService       $authenticationService The authentication service.
+     *
+     * @Route("/login/refresh", methods={"POST"})
+     *
+     * @return JsonResponse
+     */
+    public function postRefresh(PostRefreshArgumentResolver $request, AuthenticationService $authenticationService): JsonResponse
+    {
+        $token = $authenticationService->refresh($request->getToken());
+
+        return $this->view(['message' => 'Refresh successful', 'token' => $token], Response::HTTP_OK);
     }
 
 }
