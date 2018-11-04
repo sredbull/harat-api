@@ -11,10 +11,13 @@
 namespace App\Controller;
 
 use App\ArgumentResolver\Login\PostLoginArgumentResolver;
-use App\ArgumentResolver\Login\PostRefreshArgumentResolver;
 use App\Exception\AuthenticationFailedException;
+use App\Exception\DatabaseException;
+use App\Exception\InvalidTokenException;
+use App\Exception\TokenNotFoundException;
 use App\Service\AuthenticationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,6 +26,32 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LoginController extends BaseController
 {
+
+    /**
+     * Refresh route.
+     *
+     * @param Request               $request               The request.
+     * @param AuthenticationService $authenticationService The authentication service.
+     *
+     * @Route("/login/refresh", methods={"POST"})
+     *
+     * @return JsonResponse
+     *
+     * @throws TokenNotFoundException When the token was not found in the Authorization header.
+     * @throws DatabaseException      When the refresh token could not be saved.
+     * @throws InvalidTokenException  When the token appears to be invalid or expired.
+     */
+    public function postRefresh(Request $request, AuthenticationService $authenticationService): JsonResponse
+    {
+        $currentToken = str_replace('Bearer ', '', $request->headers->get('Authorization'));
+        if($currentToken === null) {
+            throw new TokenNotFoundException();
+        }
+
+        $token = $authenticationService->refresh($currentToken);
+
+        return $this->view(['message' => 'Refresh successful', 'token' => $token], Response::HTTP_OK);
+    }
 
     /**
      * Login route.
@@ -41,23 +70,6 @@ class LoginController extends BaseController
         $token = $authenticationService->login($request->getUsername(), $request->getPassword());
 
         return $this->view(['message' => 'Login successful', 'token' => $token], Response::HTTP_OK);
-    }
-
-    /**
-     * Refresh route.
-     *
-     * @param PostRefreshArgumentResolver $request               The request.
-     * @param AuthenticationService       $authenticationService The authentication service.
-     *
-     * @Route("/login/refresh", methods={"POST"})
-     *
-     * @return JsonResponse
-     */
-    public function postRefresh(PostRefreshArgumentResolver $request, AuthenticationService $authenticationService): JsonResponse
-    {
-        $token = $authenticationService->refresh($request->getToken());
-
-        return $this->view(['message' => 'Refresh successful', 'token' => $token], Response::HTTP_OK);
     }
 
 }
