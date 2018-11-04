@@ -11,9 +11,11 @@
 namespace App\Service;
 
 use App\Entity\GroupEntity;
+use App\Entity\RefreshTokenEntity;
 use App\Entity\UserEntity;
 use App\Exception\AuthenticationFailedException;
 use App\Exception\DatabaseException;
+use App\Exception\InvalidTokenException;
 use App\Exception\LdapGroupNotFoundException;
 use App\Exception\LdapUserNotFoundException;
 use App\Exception\RegistrationFailedException;
@@ -49,6 +51,13 @@ class AuthenticationService
      * @var UserRepository $userRepository
      */
     private $userRepository;
+
+    /**
+     * The user repository.
+     *
+     * @var RefreshTokenRepository $refreshTokenRepository
+     */
+    private $refreshTokenRepository;
 
     /**
      * The password encoder.
@@ -131,8 +140,10 @@ class AuthenticationService
             $systemUser = $this->setSystemUserGroups($this->getSystemUser($ldapUser, $password), $ldapGroups);
             $systemUser->setLastLogin(new \DateTime('now'));
             $this->userRepository->save($systemUser);
+            $token = $this->jwtTokenManager->create($systemUser);
+            $this->generateRefreshToken($systemUser, $token);
 
-            return $this->jwtTokenManager->create($systemUser);
+            return $token;
         } catch (\Throwable $e) {
             throw new AuthenticationFailedException();
         }
@@ -144,12 +155,23 @@ class AuthenticationService
      * @param string $token The token.
      *
      * @return string
+     *
+     * @throws InvalidTokenException When the token is invalid or expired.
+     * @throws DatabaseException     When the refresh token could not be saved.
      */
     public function refresh(string $token): string
     {
         $currentToken = $this->refreshTokenRepository->findByToken($token);
+        if ($currentToken === null) {
+            throw new InvalidTokenException();
+        }
 
-        dump($currentToken);
+        if (new \Datetime('now') > $currentToken->getValid() === true) {
+            throw new InvalidTokenException('Token is expired');
+        }
+
+        $token = $this->jwtTokenManager->create($currentToken->getUser());
+        $this->generateRefreshToken($currentToken->getUser(), $token);
 
         return $token;
     }
@@ -330,6 +352,32 @@ class AuthenticationService
         } catch (\Throwable $exception) {
             throw new RegistrationFailedException(sprintf('Registration failed: %s', $exception->getMessage()));
         }
+    }
+
+    /**
+     * Generate the refresh token for this user.
+     *
+     * @param UserEntity $systemUser The user.
+     * @param string     $token      The token.
+     *
+     * @throws DatabaseException When storing the refresh token fails.
+     *
+     * @return RefreshTokenEntity
+     */
+    public function generateRefreshToken(UserEntity $systemUser, string $token): RefreshTokenEntity
+    {
+        $refreshToken = $systemUser->getRefreshToken();
+        if ($refreshToken === null) {
+            $refreshToken = new RefreshTokenEntity();
+        }
+
+        $refreshToken->setUser($systemUser);
+        $refreshToken->setRefreshToken($token);
+        $refreshToken->setValid(new \Datetime('+1 months'));
+
+        $this->refreshTokenRepository->save($refreshToken);
+
+        return $refreshToken;
     }
 
 }
