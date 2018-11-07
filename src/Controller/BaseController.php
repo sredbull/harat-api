@@ -101,7 +101,10 @@ class BaseController extends Controller
         $serializer = SerializerBuilder::create()
             ->setExpressionEvaluator($expressionEvaluator)
             ->addMetadataDir(str_replace('Controller', '', __DIR__) . 'Resources/FOSUserBundle/serializer', 'FOS\\UserBundle')
-            ->build();
+            ->setCacheDir(str_replace('/src/Controller', '', __DIR__) . '/var/cache/' . getenv('APP_ENV') . '/jms_serializer')
+            ->setDebug(getenv('APP_ENV') === 'dev')
+            ->build()
+        ;
 
         $this->serializer = $serializer;
     }

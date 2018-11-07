@@ -23,6 +23,7 @@
         "symfony/monolog-bundle": "^3.2",
         "symfony/orm-pack": "^1.0",
         "symfony/property-access": "^4.1",
+        "symfony/serializer": "^4.1",
         "symfony/swiftmailer-bundle": "^3.2",
         "symfony/templating": "^4.0",
         "symfony/validator": "^4.1",
