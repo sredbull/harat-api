@@ -33,7 +33,7 @@ class LoginController extends BaseController
      * @param Request               $request               The request.
      * @param AuthenticationService $authenticationService The authentication service.
      *
-     * @Route("/login/refresh", methods={"POST"})
+     * @Route("/login/refresh", methods={"GET"})
      *
      * @return JsonResponse
      *
