@@ -14,6 +14,7 @@
         "nelmio/cors-bundle": "^1.5",
         "predis/predis": "^1.1",
         "sensio/framework-extra-bundle": "^5.2",
+        "sredbull/api-doc-bundle": "^0.0.2",
         "symfony/cache": "^4.1",
         "symfony/console": "^4.0",
         "symfony/dotenv": "^4.0",
@@ -27,8 +28,7 @@
         "symfony/swiftmailer-bundle": "^3.2",
         "symfony/templating": "^4.0",
         "symfony/validator": "^4.1",
-        "symfony/yaml": "^4.0",
-        "zircote/swagger-php": "^3.0"
+        "symfony/yaml": "^4.0"
     },
     "require-dev": {
         "escapestudios/symfony2-coding-standard": "3.x-dev",
@@ -82,5 +82,9 @@
         "symfony": {
             "allow-contrib": true
         }
-    }
+    },
+    "repositories": [{
+        "type": "composer",
+        "url": "https://satis.housearatus.space"
+    }]
 }

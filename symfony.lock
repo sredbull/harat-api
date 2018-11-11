@@ -206,8 +206,14 @@
     "squizlabs/php_codesniffer": {
         "version": "3.2.3"
     },
+    "sredbull/api-doc-bundle": {
+        "version": "v0.0.2"
+    },
     "swiftmailer/swiftmailer": {
         "version": "v6.0.2"
+    },
+    "symfony/asset": {
+        "version": "v4.1.7"
     },
     "symfony/cache": {
         "version": "v4.0.11"
@@ -334,6 +340,9 @@
     },
     "symfony/property-access": {
         "version": "v4.0.11"
+    },
+    "symfony/property-info": {
+        "version": "v4.1.7"
     },
     "symfony/routing": {
         "version": "4.0",

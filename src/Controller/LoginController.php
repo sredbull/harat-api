@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * The LoginController Class.
+ * Class LoginController.
  */
 class LoginController extends BaseController
 {
