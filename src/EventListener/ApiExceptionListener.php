@@ -11,7 +11,6 @@
 namespace App\EventListener;
 
 use App\Exception\ValidationException;
-use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -23,7 +22,7 @@ class ApiExceptionListener
 {
 
     /**
-     * Fired on
+     * Fired on the kernel exception event.
      *
      * @param GetResponseForExceptionEvent $event The event with the exception.
      *
@@ -43,13 +42,14 @@ class ApiExceptionListener
 
         $traceObject = $this->getTrace($event->getException());
         $errorDetails = [
+            'exception' => \get_class($event->getException()),
             'message' => $event->getException()->getMessage(),
             'errors' => $errors,
             'trace' => [
                 'file' => $event->getException()->getFile(),
                 'line' => $event->getException()->getLine(),
             ],
-            'trace_details' => json_decode(json_encode($traceObject), true),
+            'trace_details' => \json_decode(\json_encode($traceObject), true),
         ];
 
         if (count($errors) === 0) {
@@ -113,7 +113,7 @@ class ApiExceptionListener
 
         if (\is_object($arguments) === true) {
             try {
-                $argumentsReflectionClass = new ReflectionClass($arguments);
+                $argumentsReflectionClass = new \ReflectionClass($arguments);
                 foreach ($argumentsReflectionClass->getProperties() as $property) {
                     $property->setAccessible(true);
                     $values = $property->getValue($arguments);

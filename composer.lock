@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff08273eb7b9f2de15eb899871b45980",
+    "content-hash": "cbdd25bd2afd3c6227629ae8f3fcb322",
     "packages": [
         {
             "name": "chadsikorra/php-simple-enum",
@@ -3140,11 +3140,11 @@
         },
         {
             "name": "sredbull/api-doc-bundle",
-            "version": "v0.0.2",
+            "version": "v0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://Swerrie:blister@bitbucket.housearatus.space/scm/harat/openapidocbundle.git",
-                "reference": "ecae2fa41395d433e84fb67a33be05d9228b25a3"
+                "reference": "cd585cb056be3c2d0cb065beeae91eb46f027377"
             },
             "require": {
                 "php": "^7.0",
@@ -3176,7 +3176,7 @@
                 "documentation",
                 "open api"
             ],
-            "time": "2018-11-10T19:51:37+00:00"
+            "time": "2018-11-14T19:56:48+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

@@ -1,4 +1,4 @@
 app.swagger_ui:
-  path: /doc
+  path: /
   methods: GET
-  defaults: { _controller: sredbull_api_doc.controller.swagger_ui }
+  defaults: { _controller: s_redbull_api_doc.controller.swagger_ui_controller }

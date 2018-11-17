@@ -1,0 +1,15 @@
+s_redbull_api_doc:
+  documentation:
+    info:
+      title: House Aratus API
+      description: |
+        RESTfull webservice that provides you a central point to access gathered data from multiple services such as, Eve Online, Goonswarm, Dotlan, Eve Who, zKillboard etc.
+      termsOfService: https://www.housearatus.space
+      contact:
+        name: Sven Roodbol
+        url: https://www.housearatus.space
+        email: roodbol.sven@gmail.com
+      license:
+        name: (c) Sven Roodbol
+        url: https://www.housearatus.space
+      version: 0.0.1
