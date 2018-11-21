@@ -16,10 +16,12 @@ use App\Entity\UserEntity;
 use App\Exception\DatabaseException;
 use App\Exception\RecruitmentNotFoundException;
 use App\Exception\UserNotFoundException;
+use App\Response\Recruitment\RecruitmentResponse;
 use App\Service\RecruitmentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 /**
  * The RecruitmentController Class.
@@ -30,21 +32,30 @@ class RecruitmentController extends BaseController
     /**
      * Get a recruitment.
      *
-     * @param RecruitmentEntity|null $recruitment The user the recruitment belongs to.
+     * Dit is een description wat meestal wat langer is.
      *
-     * @Route("/recruitment/{id}", methods={"GET"})
+     * @param RecruitmentEntity $recruitment The recruitment id.
      *
-     * @return JsonResponse
+     * @Route("/recruitment/{recruitment}", methods={"GET"})
+     *
+     * @return RecruitmentResponse
      *
      * @throws RecruitmentNotFoundException When the recruitment could not be found.
+     *
+     * @OA\SecurityScheme(
+     *     securityScheme="api_key",
+     *     type="http",
+     *     scheme="bearer",
+     *     bearerFormat="JWT"
+     * )
      */
-    public function getRecruitment(?RecruitmentEntity $recruitment): JsonResponse
+    public function getRecruitment(?RecruitmentEntity $recruitment, RecruitmentResponse $response): RecruitmentResponse
     {
         if ($recruitment === null) {
             throw new RecruitmentNotFoundException();
         }
 
-        return $this->view($recruitment, Response::HTTP_OK);
+        return $response->getResponse($recruitment);
     }
 
     /**
@@ -68,7 +79,7 @@ class RecruitmentController extends BaseController
      * @param UserEntity|null                 $user               The user the recruitment belongs to.
      * @param PostRecruitmentArgumentResolver $request            The validated recruitment request.
      *
-     * @Route("/recruitment/{id}", methods={"POST"})
+     * @Route("/recruitment/{$user}", methods={"POST"})
      *
      * @return JsonResponse
      *

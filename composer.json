@@ -12,6 +12,7 @@
         "ldaptools/ldaptools-bundle": "^0.9.1",
         "lexik/jwt-authentication-bundle": "^2.4",
         "nelmio/cors-bundle": "^1.5",
+        "phpdocumentor/reflection-docblock": "^4.3",
         "predis/predis": "^1.1",
         "sensio/framework-extra-bundle": "^5.2",
         "sredbull/api-doc-bundle": "^0.0.4",

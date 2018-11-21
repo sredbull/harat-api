@@ -21,8 +21,10 @@ services:
           - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
     App\Repository\BaseRepository:
         autowire: false
-        arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface']
+        arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface', 'BaseRepository']
     App\Controller\BaseController:
+        arguments: ['@request_stack']
+    App\Response\BaseResponse:
         arguments: ['@request_stack']
     App\ArgumentResolver\BaseArgumentResolver:
         tags:
