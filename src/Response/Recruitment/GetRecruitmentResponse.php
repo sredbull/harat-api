@@ -12,25 +12,17 @@ namespace App\Response\Recruitment;
 
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RecruitmentResponse
+ * Class GetRecruitmentResponse
  *
  * @OA\Response(
- *     response="RecruitmentResponse",
+ *     response="GetRecruitmentResponse",
  *     description="successful operation"
  * )
  */
-class RecruitmentResponse extends BaseResponse
+class GetRecruitmentResponse extends BaseResponse
 {
-
-    /**
-     * The response code.
-     *
-     * @var int $httpCode
-     */
-    static public $httpCode = Response::HTTP_OK;
 
     /**
      * Get the response.
@@ -41,7 +33,6 @@ class RecruitmentResponse extends BaseResponse
      */
     public function getResponse($data): self
     {
-        $this->setStatusCode(self::$httpCode);
         $this->setData($data);
 
         return $this;
