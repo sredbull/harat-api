@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class InvalidContentTypeException.
+ *
+ * @OA\Response(
+ *     response="InvalidContentTypeException",
+ *     description="error operation"
+ * )
  */
 class InvalidContentTypeException extends ApiException
 {

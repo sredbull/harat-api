@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ValidationException.
+ * Class RegistrationFailedException.
+ *
+ * @OA\Response(
+ *     response="RegistrationFailedException",
+ *     description="error operation"
+ * )
  */
 class RegistrationFailedException extends ApiException
 {

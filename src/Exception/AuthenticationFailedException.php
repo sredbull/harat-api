@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AuthenticationFailedException.
+ *
+ * @OA\Response(
+ *     response="AuthenticationFailedException",
+ *     description="error operation"
+ * )
  */
 class AuthenticationFailedException extends ApiException
 {

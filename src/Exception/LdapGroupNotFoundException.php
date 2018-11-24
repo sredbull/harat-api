@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class LdapGroupNotFoundException.
+ *
+ * @OA\Response(
+ *     response="LdapGroupNotFoundException",
+ *     description="error operation"
+ * )
  */
 class LdapGroupNotFoundException extends ApiException
 {

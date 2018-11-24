@@ -1,0 +1,400 @@
+"getUsers"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#401
+    -path: "/user"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"getProfile"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#400
+    -path: "/user/profile"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"__construct"
+"setIncludes"
+"setSerializer"
+"view"
+"getParameter"
+"setContainer"
+"has"
+"get"
+"generateUrl"
+"forward"
+"redirect"
+"redirectToRoute"
+"json"
+"file"
+"addFlash"
+"isGranted"
+"denyAccessUnlessGranted"
+"renderView"
+"render"
+"stream"
+"createNotFoundException"
+"createAccessDeniedException"
+"createForm"
+"createFormBuilder"
+"getDoctrine"
+"getUser"
+"isCsrfTokenValid"
+"dispatchMessage"
+"postRefresh"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#381
+    -path: "/login/refresh"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"postLogin"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#355
+    -path: "/login"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "POST"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"__construct"
+"setIncludes"
+"setSerializer"
+"view"
+"getParameter"
+"setContainer"
+"has"
+"get"
+"generateUrl"
+"forward"
+"redirect"
+"redirectToRoute"
+"json"
+"file"
+"addFlash"
+"isGranted"
+"denyAccessUnlessGranted"
+"renderView"
+"render"
+"stream"
+"createNotFoundException"
+"createAccessDeniedException"
+"createForm"
+"createFormBuilder"
+"getDoctrine"
+"getUser"
+"isCsrfTokenValid"
+"dispatchMessage"
+"getRecruitment"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#357
+    -path: "/recruitment/{id}"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"getRecruitments"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#360
+    -path: "/recruitment"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"postRecruitment"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#404
+    -path: "/recruitment/{id}"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "POST"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"__construct"
+"setIncludes"
+"setSerializer"
+"view"
+"getParameter"
+"setContainer"
+"has"
+"get"
+"generateUrl"
+"forward"
+"redirect"
+"redirectToRoute"
+"json"
+"file"
+"addFlash"
+"isGranted"
+"denyAccessUnlessGranted"
+"renderView"
+"render"
+"stream"
+"createNotFoundException"
+"createAccessDeniedException"
+"createForm"
+"createFormBuilder"
+"getDoctrine"
+"getUser"
+"isCsrfTokenValid"
+"dispatchMessage"
+"getCharacter"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#362
+    -path: "/character/{id}"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"removeCharacter"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#365
+    -path: "/character/{id}"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "DELETE"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"__construct"
+"setIncludes"
+"setSerializer"
+"view"
+"getParameter"
+"setContainer"
+"has"
+"get"
+"generateUrl"
+"forward"
+"redirect"
+"redirectToRoute"
+"json"
+"file"
+"addFlash"
+"isGranted"
+"denyAccessUnlessGranted"
+"renderView"
+"render"
+"stream"
+"createNotFoundException"
+"createAccessDeniedException"
+"createForm"
+"createFormBuilder"
+"getDoctrine"
+"getUser"
+"isCsrfTokenValid"
+"dispatchMessage"
+"postRegistration"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#367
+    -path: "/register"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "POST"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"__construct"
+"setIncludes"
+"setSerializer"
+"view"
+"getParameter"
+"setContainer"
+"has"
+"get"
+"generateUrl"
+"forward"
+"redirect"
+"redirectToRoute"
+"json"
+"file"
+"addFlash"
+"isGranted"
+"denyAccessUnlessGranted"
+"renderView"
+"render"
+"stream"
+"createNotFoundException"
+"createAccessDeniedException"
+"createForm"
+"createFormBuilder"
+"getDoctrine"
+"getUser"
+"isCsrfTokenValid"
+"dispatchMessage"
+"__construct"
+"setIncludes"
+"setSerializer"
+"view"
+"getParameter"
+"setContainer"
+"has"
+"get"
+"generateUrl"
+"forward"
+"redirect"
+"redirectToRoute"
+"json"
+"file"
+"addFlash"
+"isGranted"
+"denyAccessUnlessGranted"
+"renderView"
+"render"
+"stream"
+"createNotFoundException"
+"createAccessDeniedException"
+"createForm"
+"createFormBuilder"
+"getDoctrine"
+"getUser"
+"isCsrfTokenValid"
+"dispatchMessage"
+"getRedirect"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#358
+    -path: "/sso/login/{id}"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"getCallback"
+array:1 [
+  0 => Symfony\Component\Routing\Annotation\Route {#381
+    -path: "/sso/callback"
+    -localizedPaths: []
+    -name: null
+    -requirements: []
+    -options: []
+    -defaults: []
+    -host: null
+    -methods: array:1 [
+      0 => "GET"
+    ]
+    -schemes: []
+    -condition: null
+  }
+]
+"__construct"
+"setIncludes"
+"setSerializer"
+"view"
+"getParameter"
+"setContainer"
+"has"
+"get"
+"generateUrl"
+"forward"
+"redirect"
+"redirectToRoute"
+"json"
+"file"
+"addFlash"
+"isGranted"
+"denyAccessUnlessGranted"
+"renderView"
+"render"
+"stream"
+"createNotFoundException"
+"createAccessDeniedException"
+"createForm"
+"createFormBuilder"
+"getDoctrine"
+"getUser"
+"isCsrfTokenValid"
+"dispatchMessage"

@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class CharacterNotFoundException.
+ *
+ * @OA\Response(
+ *     response="CharacterNotFoundException",
+ *     description="error operation"
+ * )
  */
 class CharacterNotFoundException extends ApiException
 {

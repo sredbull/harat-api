@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class LdapUserNotFoundException.
+ *
+ * @OA\Response(
+ *     response="LdapUserNotFoundException",
+ *     description="error operation"
+ * )
  */
 class LdapUserNotFoundException extends ApiException
 {

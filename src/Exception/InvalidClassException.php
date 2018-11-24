@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class InvalidClassException.
+ *
+ * @OA\Response(
+ *     response="InvalidClassException",
+ *     description="error operation"
+ * )
  */
 class InvalidClassException extends ApiException
 {

@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DatabaseException.
+ *
+ * @OA\Response(
+ *     response="DatabaseException",
+ *     description="error operation"
+ * )
  */
 class DatabaseException extends ApiException
 {

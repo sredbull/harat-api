@@ -10,11 +10,17 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Class ValidationException.
+ *
+ * @OA\Response(
+ *     response="ValidationException",
+ *     description="error operation"
+ * )
  */
 class ValidationException extends ApiException
 {

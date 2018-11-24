@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class EveSsoException.
+ *
+ * @OA\Response(
+ *     response="EveSsoException",
+ *     description="error operation"
+ * )
  */
 class EveSsoException extends ApiException
 {

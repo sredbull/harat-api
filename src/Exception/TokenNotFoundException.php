@@ -10,10 +10,16 @@
  */
 namespace App\Exception;
 
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TokenNotFoundException.
+ *
+ * @OA\Response(
+ *     response="TokenNotFoundException",
+ *     description="error operation"
+ * )
  */
 class TokenNotFoundException extends ApiException
 {
