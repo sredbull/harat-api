@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 class BaseResponse extends JsonResponse
 {
 
+    public const HTTP_CODE = Response::HTTP_OK;
+
     /**
      * The includes.
      *
@@ -50,7 +52,7 @@ class BaseResponse extends JsonResponse
         $this->setIncludes($request);
         $this->setSerializer();
 
-        parent::__construct('', 200, []);
+        parent::__construct([], self::HTTP_CODE, []);
     }
 
     /**
