@@ -14,11 +14,19 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class UserNotFoundException.
- *
- * @OA\Response(
- *     response="UserNotFoundException",
- *     description="error operation"
+ * @OA\Schema(
+ *     @OA\Property(
+ *         property="exception",
+ *         description="The exception class",
+ *         type="string",
+ *         example="App\Exception\UserNotFoundException"
+ *     ),
+ *     @OA\Property(
+ *         property="message",
+ *         description="The exception message",
+ *         type="string",
+ *         example="User not found"
+ *     )
  * )
  */
 class UserNotFoundException extends ApiException

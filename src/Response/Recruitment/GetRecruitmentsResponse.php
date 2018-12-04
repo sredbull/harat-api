@@ -18,7 +18,11 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Response(
  *     response="GetRecruitmentsResponse",
- *     description="successful operation"
+ *     description="successful operation",
+ *     @OA\JsonContent(
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/RecruitmentEntity")
+ *     ),
  * )
  */
 class GetRecruitmentsResponse extends BaseResponse

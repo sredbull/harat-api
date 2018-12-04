@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Interfaces\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMSSerializer;
+use OpenApi\Annotations as OA;
 
 /**
  * Class CharacterEntity.
@@ -23,6 +24,8 @@ use JMS\Serializer\Annotation as JMSSerializer;
  * @ORM\Table(name="`recruitment`")
  *
  * @JMSSerializer\ExclusionPolicy("all")
+ *
+ * @OA\Schema(schema="RecruitmentEntity")
  */
 class RecruitmentEntity implements EntityInterface
 {
@@ -38,6 +41,8 @@ class RecruitmentEntity implements EntityInterface
      *
      * @JMSSerializer\Expose
      * @JMSSerializer\Type("integer")
+     *
+     * @OA\Property(example=1)
      */
     private $id;
 
@@ -51,6 +56,8 @@ class RecruitmentEntity implements EntityInterface
      *
      * @JMSSerializer\Expose(if="isIncluded('users')")
      * @JMSSerializer\Type("App\Entity\UserEntity")
+     *
+     * @OA\Property(ref="#/components/schemas/UserEntity")
      */
     private $user;
 
@@ -63,6 +70,10 @@ class RecruitmentEntity implements EntityInterface
      *
      * @JMSSerializer\Expose
      * @JMSSerializer\Type("array")
+     *
+     * @OA\Property(
+     *     @OA\Items(type="string")
+     * )
      */
     private $form;
 

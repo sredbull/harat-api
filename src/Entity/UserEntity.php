@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMSSerializer;
+use OpenApi\Annotations as OA;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -31,6 +32,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("username")
  *
  * @JMSSerializer\ExclusionPolicy("all")
+ *
+ * @OA\Schema(schema="UserEntity")
  */
 class UserEntity extends BaseUser implements EntityInterface
 {

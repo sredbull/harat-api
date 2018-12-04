@@ -20,8 +20,8 @@ use App\Response\Recruitment\GetRecruitmentResponse;
 use App\Response\Recruitment\GetRecruitmentsResponse;
 use App\Response\Recruitment\PostRecruitmentResponse;
 use App\Service\RecruitmentService;
-use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The RecruitmentController Class.
@@ -80,7 +80,7 @@ class RecruitmentController extends BaseController
      * @param PostRecruitmentArgumentResolver $request            The validated recruitment request.
      * @param PostRecruitmentResponse         $response           The response object.
      *
-     * @Route("/recruitment/{$user}", methods={"POST"})
+     * @Route("/recruitment/{user}", methods={"POST"})
      *
      * @return PostRecruitmentResponse
      *

@@ -14,11 +14,19 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DatabaseException.
- *
- * @OA\Response(
- *     response="DatabaseException",
- *     description="error operation"
+ * @OA\Schema(
+ *     @OA\Property(
+ *         property="exception",
+ *         description="The exception class",
+ *         type="string",
+ *         example="App\Exception\DatabaseException"
+ *     ),
+ *     @OA\Property(
+ *         property="message",
+ *         description="The exception message",
+ *         type="string",
+ *         example="Database action failed"
+ *     )
  * )
  */
 class DatabaseException extends ApiException

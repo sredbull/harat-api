@@ -14,11 +14,19 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RecruitmentNotFoundException.
- *
- * @OA\Response(
- *     response="RecruitmentNotFoundException",
- *     description="error operation"
+ * @OA\Schema(
+ *     @OA\Property(
+ *         property="exception",
+ *         description="The exception class",
+ *         type="string",
+ *         example="App\Exception\RecruitmentNotFoundException"
+ *     ),
+ *     @OA\Property(
+ *         property="message",
+ *         description="The exception message",
+ *         type="string",
+ *         example="Recruitment not found"
+ *     )
  * )
  */
 class RecruitmentNotFoundException extends ApiException
