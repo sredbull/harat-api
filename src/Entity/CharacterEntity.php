@@ -23,6 +23,8 @@ use JMS\Serializer\Annotation as JMSSerializer;
  * @ORM\Table(name="`character`")
  *
  * @JMSSerializer\ExclusionPolicy("all")
+ *
+ * @OA\Schema(schema="CharacterEntity")
  */
 class CharacterEntity implements EntityInterface
 {

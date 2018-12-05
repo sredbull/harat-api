@@ -24,6 +24,8 @@ use JMS\Serializer\Annotation as JMSSerializer;
  * @ORM\Table(name="groups")
  *
  * @JMSSerializer\ExclusionPolicy("all")
+ *
+ * @OA\Schema(schema="GroupEntity")
  */
 class GroupEntity extends BaseGroup implements EntityInterface
 {

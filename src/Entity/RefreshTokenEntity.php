@@ -20,6 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="`refresh_token`")
+ *
+ * @OA\Schema(schema="RefreshTokenEntity")
  */
 class RefreshTokenEntity implements EntityInterface
 {
