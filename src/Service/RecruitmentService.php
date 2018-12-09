@@ -15,9 +15,6 @@ use App\Entity\UserEntity;
 use App\Exception\DatabaseException;
 use App\Repository\RecruitmentRepository;
 
-/**
- * Class RecruitmentService.
- */
 class RecruitmentService
 {
 

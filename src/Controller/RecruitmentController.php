@@ -13,6 +13,7 @@ namespace App\Controller;
 use App\ArgumentResolver\Recruitment\PostRecruitmentArgumentResolver;
 use App\Entity\RecruitmentEntity;
 use App\Entity\UserEntity;
+use App\Exception\ApiException;
 use App\Exception\DatabaseException;
 use App\Exception\RecruitmentNotFoundException;
 use App\Exception\UserNotFoundException;
@@ -23,22 +24,19 @@ use App\Service\RecruitmentService;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * The RecruitmentController Class.
- */
 class RecruitmentController extends BaseController
 {
 
     /**
      * Get a recruitment.
      *
-     * @param RecruitmentEntity      $recruitment The recruitment id.
-     * @param GetRecruitmentResponse $response    The response object.
+     * @param RecruitmentEntity $recruitment The recruitment id.
      *
      * @Route("/recruitment/{recruitment}", methods={"GET"})
      *
      * @return GetRecruitmentResponse
      *
+     * @throws ApiException                 When the includes passed are not array values.
      * @throws RecruitmentNotFoundException When the recruitment could not be found.
      *
      * @OA\SecurityScheme(
@@ -48,28 +46,29 @@ class RecruitmentController extends BaseController
      *     bearerFormat="JWT"
      * )
      */
-    public function getRecruitment(?RecruitmentEntity $recruitment, GetRecruitmentResponse $response): GetRecruitmentResponse
+    public function getRecruitment(?RecruitmentEntity $recruitment): GetRecruitmentResponse
     {
         if ($recruitment === null) {
             throw new RecruitmentNotFoundException();
         }
 
-        return $response->getResponse($recruitment);
+        return GetRecruitmentResponse::get($recruitment);
     }
 
     /**
      * Get all recruitments.
      *
-     * @param RecruitmentService      $recruitmentService The recruitment service.
-     * @param GetRecruitmentsResponse $response           The response object.
+     * @param RecruitmentService $recruitmentService The recruitment service.
      *
      * @Route("/recruitment", methods={"GET"})
      *
      * @return GetRecruitmentsResponse
+     *
+     * @throws ApiException  When the includes passed are not array values.
      */
-    public function getRecruitments(RecruitmentService $recruitmentService, GetRecruitmentsResponse $response): GetRecruitmentsResponse
+    public function getRecruitments(RecruitmentService $recruitmentService): GetRecruitmentsResponse
     {
-        return $response->getResponse($recruitmentService->getAllRecruitments());
+        return GetRecruitmentsResponse::get($recruitmentService->getAllRecruitments());
     }
 
     /**
@@ -78,16 +77,16 @@ class RecruitmentController extends BaseController
      * @param RecruitmentService              $recruitmentService The recruitment service.
      * @param UserEntity|null                 $user               The user the recruitment belongs to.
      * @param PostRecruitmentArgumentResolver $request            The validated recruitment request.
-     * @param PostRecruitmentResponse         $response           The response object.
      *
      * @Route("/recruitment/{user}", methods={"POST"})
      *
      * @return PostRecruitmentResponse
      *
+     * @throws ApiException  When the includes passed are not array values.
      * @throws DatabaseException     When saving or removing a recruitment fails.
      * @throws UserNotFoundException When the user could not be found.
      */
-    public function postRecruitment(RecruitmentService $recruitmentService, ?UserEntity $user, PostRecruitmentArgumentResolver $request, PostRecruitmentResponse $response): PostRecruitmentResponse
+    public function postRecruitment(RecruitmentService $recruitmentService, ?UserEntity $user, PostRecruitmentArgumentResolver $request): PostRecruitmentResponse
     {
         if ($user === null) {
             throw new UserNotFoundException();
@@ -96,7 +95,7 @@ class RecruitmentController extends BaseController
         $recruitmentService->deleteRecruitmentsFromUser($user);
         $recruitmentService->newRecruitmentForUser($user, $request->getForm());
 
-        return $response->getResponse();
+        return PostRecruitmentResponse::get();
     }
 
 }

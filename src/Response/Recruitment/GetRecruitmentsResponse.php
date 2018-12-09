@@ -10,12 +10,11 @@
  */
 namespace App\Response\Recruitment;
 
+use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
 /**
- * Class GetRecruitmentsResponse
- *
  * @OA\Response(
  *     response="GetRecruitmentsResponse",
  *     description="successful operation",
@@ -31,16 +30,19 @@ class GetRecruitmentsResponse extends BaseResponse
     /**
      * Get the response.
      *
-     * @param mixed $data The data to return.
+     * @param array $recruitments The recruitments to return.
+     *
+     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */
-    public function getResponse($data): self
+    public static function get(array $recruitments): self
     {
-        $this->setData($data);
+        $response = new self();
 
-        return $this;
+        $response->setData($recruitments);
+
+        return $response;
     }
 
 }
-

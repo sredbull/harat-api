@@ -10,6 +10,8 @@
  */
 namespace App\Response\Recruitment;
 
+use App\Entity\RecruitmentEntity;
+use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
@@ -28,16 +30,19 @@ class GetRecruitmentResponse extends BaseResponse
     /**
      * Get the response.
      *
-     * @param mixed $data The data to return.
+     * @param RecruitmentEntity $recruitment The data to return.
+     *
+     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */
-    public function getResponse($data): self
+    public static function get(RecruitmentEntity $recruitment): self
     {
-        $this->setData($data);
+        $response = new self();
 
-        return $this;
+        $response->setData($recruitment);
+
+        return $response;
     }
 
 }
-

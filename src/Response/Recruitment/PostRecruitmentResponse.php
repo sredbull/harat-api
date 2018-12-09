@@ -10,15 +10,17 @@
  */
 namespace App\Response\Recruitment;
 
+use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
 /**
- * Class PostRecruitmentResponse
- *
  * @OA\Response(
  *     response="PostRecruitmentResponse",
- *     description="successful operation"
+ *     description="successful operation",
+ *     @OA\JsonContent(
+ *         @OA\Property(property="message", type="string")
+ *     )
  * )
  */
 class PostRecruitmentResponse extends BaseResponse
@@ -27,14 +29,16 @@ class PostRecruitmentResponse extends BaseResponse
     /**
      * Get the response.
      *
+     * @throws ApiException When the includes passed are not array values.
+     *
      * @return self
      */
-    public function getResponse(): self
+    public static function get(): self
     {
-        $this->setData(['message' => 'Recruitment posted']);
+        $response = new self();
+        $response->setData(['message' => 'Recruitment posted']);
 
-        return $this;
+        return $response;
     }
 
 }
-
