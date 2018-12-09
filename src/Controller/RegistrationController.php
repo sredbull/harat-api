@@ -11,10 +11,10 @@
 namespace App\Controller;
 
 use App\ArgumentResolver\Registration\PostRegisterArgumentResolver;
+use App\Exception\ApiException;
 use App\Exception\RegistrationFailedException;
+use App\Response\Registration\PostRegistrationResponse;
 use App\Service\AuthenticationService;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,16 +26,17 @@ class RegistrationController extends BaseController
     /**
      * Register a new user.
      *
-     * @param AuthenticationService        $authenticationService The authentication service.
      * @param PostRegisterArgumentResolver $request               The request.
+     * @param AuthenticationService        $authenticationService The authentication service.
      *
      * @Route("/register", methods={"POST"})
      *
-     * @return JsonResponse
+     * @return PostRegistrationResponse
      *
+     * @throws ApiException                When the includes passed are not array values.
      * @throws RegistrationFailedException When registration fails.
      */
-    public function postRegistration(AuthenticationService $authenticationService, PostRegisterArgumentResolver $request): JsonResponse
+    public function postRegistration(PostRegisterArgumentResolver $request, AuthenticationService $authenticationService): PostRegistrationResponse
     {
         $authenticationService->register(
             $request->getEmail(),
@@ -43,7 +44,7 @@ class RegistrationController extends BaseController
             $request->getPassword()
         );
 
-        return $this->view(['message' => 'User registered'], Response::HTTP_OK);
+        return PostRegistrationResponse::get();
     }
 
 }

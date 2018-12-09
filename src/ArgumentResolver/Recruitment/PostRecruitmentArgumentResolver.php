@@ -14,12 +14,13 @@ use App\ArgumentResolver\BaseArgumentResolver;
 use App\Exception\InvalidContentException;
 use App\Exception\InvalidContentTypeException;
 use App\Exception\ValidationException;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class PostRecruitmentArgumentResolver.
+ * @OA\Schema(schema="PostRecruitmentArgumentResolver")
  */
 class PostRecruitmentArgumentResolver extends BaseArgumentResolver
 {
@@ -28,6 +29,12 @@ class PostRecruitmentArgumentResolver extends BaseArgumentResolver
      * The recruitment form.
      *
      * @var array $form
+     *
+     * @OA\Property(
+     *     @OA\Items(
+     *         type="string"
+     *     )
+     * )
      */
     private $form;
 

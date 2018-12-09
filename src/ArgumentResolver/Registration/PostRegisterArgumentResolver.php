@@ -16,12 +16,13 @@ use App\Exception\InvalidContentException;
 use App\Exception\InvalidContentTypeException;
 use App\Exception\ValidationException;
 use App\Validator\Constraints as AppAssert;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class PostLoginRequest.
+ * @OA\Schema(schema="PostRegisterArgumentResolver")
  */
 class PostRegisterArgumentResolver extends BaseArgumentResolver
 {
@@ -30,6 +31,8 @@ class PostRegisterArgumentResolver extends BaseArgumentResolver
      * The email field of the registration.
      *
      * @var string $email
+     *
+     * @OA\Property()
      */
     private $email;
 
@@ -37,6 +40,8 @@ class PostRegisterArgumentResolver extends BaseArgumentResolver
      * The username field of the login request.
      *
      * @var string $username
+     *
+     * @OA\Property()
      */
     private $username;
 
@@ -44,6 +49,13 @@ class PostRegisterArgumentResolver extends BaseArgumentResolver
      * The password field of the login request.
      *
      * @var array $password
+     *
+     * @OA\Property(
+     *     @OA\Items(
+     *         @OA\Property(property="first", type="string"),
+     *         @OA\Property(property="second", type="string")
+     *     )
+     * )
      */
     private $password;
 
