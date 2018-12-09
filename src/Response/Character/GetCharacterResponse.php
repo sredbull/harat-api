@@ -10,12 +10,12 @@
  */
 namespace App\Response\Character;
 
+use App\Entity\CharacterEntity;
+use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
 /**
- * Class GetCharacterResponse
- *
  * @OA\Response(
  *     response="GetCharacterResponse",
  *     description="successful operation",
@@ -28,16 +28,18 @@ class GetCharacterResponse extends BaseResponse
     /**
      * Get the response.
      *
-     * @param mixed $data The data to return.
+     * @param CharacterEntity $character The character.
+     *
+     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */
-    public function getResponse($data): self
+    public static function get(CharacterEntity $character): self
     {
-        $this->setData($data);
+        $response = new self();
+        $response->setData($character);
 
-        return $this;
+        return $response;
     }
 
 }
-

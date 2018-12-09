@@ -11,6 +11,7 @@
 namespace App\Exception;
 
 use App\Interfaces\ApiExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ApiException.
@@ -24,7 +25,7 @@ class ApiException extends \Exception implements ApiExceptionInterface
      * @param string  $message The exception message.
      * @param integer $code    The HTTP error code.
      */
-    public function __construct(string $message, int $code)
+    public function __construct(string $message = '', int $code = Response::HTTP_BAD_REQUEST)
     {
         parent::__construct($message, $code);
     }

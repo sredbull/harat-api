@@ -10,13 +10,12 @@
  */
 namespace App\Response\Character;
 
+use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RemoveCharacterResponse
- *
  * @OA\Response(
  *     response="RemoveCharacterResponse",
  *     description="successful operation",
@@ -31,16 +30,13 @@ class RemoveCharacterResponse extends BaseResponse
     /**
      * Get the response.
      *
-     * @param mixed $data The data to return.
+     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */
-    public function getResponse($data): self
+    public static function get(): self
     {
-        $this->setData($data);
-
-        return $this;
+        return new self();
     }
 
 }
-

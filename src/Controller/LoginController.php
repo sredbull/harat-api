@@ -22,7 +22,7 @@ use App\Service\AuthenticationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LoginController extends BaseController
+class LoginController
 {
 
     /**
