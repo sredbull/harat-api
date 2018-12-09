@@ -11,19 +11,17 @@
 namespace App\Controller;
 
 use App\ArgumentResolver\Login\PostLoginArgumentResolver;
+use App\Exception\ApiException;
 use App\Exception\AuthenticationFailedException;
 use App\Exception\DatabaseException;
 use App\Exception\InvalidTokenException;
 use App\Exception\TokenNotFoundException;
+use App\Response\Login\GetRefreshResponse;
+use App\Response\Login\PostLoginResponse;
 use App\Service\AuthenticationService;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class LoginController.
- */
 class LoginController extends BaseController
 {
 
@@ -35,13 +33,14 @@ class LoginController extends BaseController
      *
      * @Route("/login/refresh", methods={"GET"})
      *
-     * @return JsonResponse
+     * @return GetRefreshResponse
      *
+     * @throws ApiException           When the includes passed are not array values.
      * @throws TokenNotFoundException When the token was not found in the Authorization header.
      * @throws DatabaseException      When the refresh token could not be saved.
      * @throws InvalidTokenException  When the token appears to be invalid or expired.
      */
-    public function postRefresh(Request $request, AuthenticationService $authenticationService): JsonResponse
+    public function getRefresh(Request $request, AuthenticationService $authenticationService): GetRefreshResponse
     {
         $currentToken = str_replace('Bearer ', '', $request->headers->get('Authorization'));
         if($currentToken === null) {
@@ -50,7 +49,7 @@ class LoginController extends BaseController
 
         $token = $authenticationService->refresh($currentToken);
 
-        return $this->view(['message' => 'Refresh successful', 'token' => $token], Response::HTTP_OK);
+        return GetRefreshResponse::get($token);
     }
 
     /**
@@ -61,15 +60,16 @@ class LoginController extends BaseController
      *
      * @Route("/login", methods={"POST"})
      *
-     * @return JsonResponse
+     * @return PostLoginResponse
      *
+     * @throws ApiException                  When the includes passed are not array values.
      * @throws AuthenticationFailedException When authentication fails.
      */
-    public function postLogin(PostLoginArgumentResolver $request, AuthenticationService $authenticationService): JsonResponse
+    public function postLogin(PostLoginArgumentResolver $request, AuthenticationService $authenticationService): PostLoginResponse
     {
         $token = $authenticationService->login($request->getUsername(), $request->getPassword());
 
-        return $this->view(['message' => 'Login successful', 'token' => $token], Response::HTTP_OK);
+        return PostLoginResponse::get($token);
     }
 
 }

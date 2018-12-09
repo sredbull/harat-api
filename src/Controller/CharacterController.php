@@ -18,9 +18,6 @@ use App\Response\Character\RemoveCharacterResponse;
 use App\Service\CharacterService;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class CharacterController.
- */
 class CharacterController extends BaseController
 {
 

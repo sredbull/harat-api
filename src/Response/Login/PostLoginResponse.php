@@ -8,39 +8,44 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Response\Character;
+namespace App\Response\Login;
 
+use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RemoveCharacterResponse
- *
  * @OA\Response(
- *     response="RemoveCharacterResponse",
+ *     response="PostLoginResponse",
  *     description="successful operation",
- *     @OA\JsonContent(ref="#/components/schemas/CharacterEntity")
+ *     @OA\JsonContent(
+ *         @OA\Property(property="message", type="string"),
+ *         @OA\Property(property="token", type="string")
+ *     )
  * )
  */
-class RemoveCharacterResponse extends BaseResponse
+class PostLoginResponse extends BaseResponse
 {
-
-    public const HTTP_CODE = Response::HTTP_NO_CONTENT;
 
     /**
      * Get the response.
      *
-     * @param mixed $data The data to return.
+     * @param string $token The token.
      *
-     * @return self
+     * @return PostLoginResponse
+     *
+     * @throws ApiException When the includes passed are not array values.
      */
-    public function getResponse($data): self
+    public static function get(string $token): self
     {
-        $this->setData($data);
+        $response = new self();
 
-        return $this;
+        $response->setData([
+            'message' => 'Login successful',
+            'token' => $token,
+        ]);
+
+        return $response;
     }
 
 }
-

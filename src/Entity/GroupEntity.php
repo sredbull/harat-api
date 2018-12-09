@@ -16,6 +16,7 @@ use App\Interfaces\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\Group as BaseGroup;
 use JMS\Serializer\Annotation as JMSSerializer;
+use OpenApi\Annotations as OA;
 
 /**
  * Class GroupEntity.

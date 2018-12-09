@@ -15,7 +15,6 @@ use App\Provider\ExpressionLanguage\ExpressionLanguageProvider;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -41,15 +40,13 @@ class BaseResponse extends JsonResponse
     public $serializer;
 
     /**
-     * JsonResponseJob constructor.
-     *
-     * @param RequestStack $request The request.
+     * BaseResponse constructor.
      *
      * @throws ApiException WHen setting the includes fails.
      */
-    public function __construct(RequestStack $request)
+    public function __construct()
     {
-        $this->setIncludes($request);
+        $this->setIncludes();
         $this->setSerializer();
 
         parent::__construct([], self::HTTP_CODE, []);
@@ -58,14 +55,15 @@ class BaseResponse extends JsonResponse
     /**
      * Set the includes.
      *
-     * @param RequestStack $request The request stack.
-     *
      * @return void
      *
      * @throws ApiException When the includes passed are not array values.
      */
-    public function setIncludes(RequestStack $request): void
+    public function setIncludes(): void
     {
+        global $kernel;
+        $request = $kernel->getContainer()->get('request_stack');
+
         $includes = null;
 
         if ($request->getCurrentRequest() !== null) {

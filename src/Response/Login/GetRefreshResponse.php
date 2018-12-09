@@ -16,7 +16,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Response(
- *     response="PostLoginResponse",
+ *     response="GetRefreshResponse",
  *     description="successful operation",
  *     @OA\JsonContent(
  *         @OA\Property(property="message", type="string"),
@@ -24,7 +24,7 @@ use OpenApi\Annotations as OA;
  *     )
  * )
  */
-class PostLoginResponse extends BaseResponse
+class GetRefreshResponse extends BaseResponse
 {
 
     /**
@@ -32,7 +32,7 @@ class PostLoginResponse extends BaseResponse
      *
      * @param string $token The token.
      *
-     * @return PostLoginResponse
+     * @return GetRefreshResponse
      *
      * @throws ApiException When the includes passed are not array values.
      */
@@ -41,7 +41,7 @@ class PostLoginResponse extends BaseResponse
         $response = new self();
 
         $response->setData([
-            'message' => 'Login successful',
+            'message' => 'Refresh successful',
             'token' => $token,
         ]);
 

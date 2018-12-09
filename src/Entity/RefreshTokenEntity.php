@@ -14,6 +14,7 @@ namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 
 /**
  * Class RefreshTokenEntity.
