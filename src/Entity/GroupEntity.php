@@ -15,7 +15,6 @@ namespace App\Entity;
 use App\Interfaces\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\Group as BaseGroup;
-use JMS\Serializer\Annotation as JMSSerializer;
 use OpenApi\Annotations as OA;
 
 /**
@@ -23,8 +22,6 @@ use OpenApi\Annotations as OA;
  *
  * @ORM\Entity
  * @ORM\Table(name="groups")
- *
- * @JMSSerializer\ExclusionPolicy("all")
  *
  * @OA\Schema(schema="GroupEntity")
  */
@@ -39,9 +36,6 @@ class GroupEntity extends BaseGroup implements EntityInterface
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("integer")
      */
     protected $id;
 

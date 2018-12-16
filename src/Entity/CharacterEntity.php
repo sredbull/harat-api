@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMSSerializer;
 use OpenApi\Annotations as OA;
 
 /**
@@ -22,8 +21,6 @@ use OpenApi\Annotations as OA;
  *
  * @ORM\Entity
  * @ORM\Table(name="`character`")
- *
- * @JMSSerializer\ExclusionPolicy("all")
  *
  * @OA\Schema(schema="CharacterEntity")
  */
@@ -39,8 +36,7 @@ class CharacterEntity implements EntityInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("integer")
+     * @OA\Property()
      */
     private $id;
 
@@ -51,8 +47,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\Column(type="integer")
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("integer")
+     * @OA\Property()
      */
     private $characterId;
 
@@ -62,9 +57,6 @@ class CharacterEntity implements EntityInterface
      * @var string $characterName
      *
      * @ORM\Column(type="string", length=255)
-     *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
      */
     private $characterName;
 
@@ -75,8 +67,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\Column(type="array")
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("array")
+     * @OA\Property()
      */
     private $scopes;
 
@@ -86,9 +77,6 @@ class CharacterEntity implements EntityInterface
      * @var string $tokenType
      *
      * @ORM\Column(type="string", length=255)
-     *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
      */
     private $tokenType;
 
@@ -99,8 +87,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
+     * @OA\Property()
      */
     private $ownerHash;
 
@@ -111,8 +98,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\Column(type="text", length=16777215)
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
+     * @OA\Property()
      */
     private $refreshToken;
 
@@ -123,8 +109,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
+     * @OA\Property()
      */
     private $accessToken;
 
@@ -135,9 +120,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\UserEntity", inversedBy="characters")
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("integer")
-     * @JMSSerializer\Accessor(getter="getUserId")
+     * @OA\Property()
      */
     private $user;
 
@@ -148,8 +131,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\Column(type="string", length=2048, nullable=true)
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
+     * @OA\Property()
      */
     private $avatar;
 

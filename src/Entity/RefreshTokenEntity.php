@@ -35,6 +35,8 @@ class RefreshTokenEntity implements EntityInterface
      * @ORM\Id()
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue()
+     *
+     * @OA\Property()
      */
     private $id;
 
@@ -44,6 +46,8 @@ class RefreshTokenEntity implements EntityInterface
      * @var string $refreshToken
      *
      * @ORM\Column(type="text", length=16777215)
+     *
+     * @OA\Property()
      */
     private $refreshToken;
 
@@ -53,6 +57,8 @@ class RefreshTokenEntity implements EntityInterface
      * @var \Datetime $valid
      *
      * @ORM\Column(type="datetime")
+     *
+     * @OA\Property()
      */
     private $valid;
 

@@ -18,20 +18,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
-use JMS\Serializer\Annotation as JMSSerializer;
+use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class UserEntity.
  *
  * @ORM\Entity
  * @ORM\Table(name="user")
- *
- * @UniqueEntity("email")
- * @UniqueEntity("username")
- *
- * @JMSSerializer\ExclusionPolicy("all")
  *
  * @OA\Schema(schema="UserEntity")
  */
@@ -47,8 +41,9 @@ class UserEntity extends BaseUser implements EntityInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("integer")
+     * @JMS\Groups({"user"})
+     *
+     * @OA\Property()
      */
     protected $id;
 
@@ -57,20 +52,76 @@ class UserEntity extends BaseUser implements EntityInterface
      *
      * @var string $username
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
+     * @JMS\Groups({"user"})
+     *
+     * @OA\Property()
      */
     protected $username;
+
+    /**
+     * The stripped name of the user.
+     *
+     * @var string $usernameCanonical
+     *
+     * @JMS\Groups({"hidden"})
+     */
+    protected $usernameCanonical;
 
     /**
      * The email of the user.
      *
      * @var string $email
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
+     * @JMS\Groups({"user"})
+     *
+     * @OA\Property()
      */
     protected $email;
+
+    /**
+     * The stripped email of the user.
+     *
+     * @var string $emailCanonical
+     *
+     * @JMS\Groups({"hidden"})
+     */
+    protected $emailCanonical;
+
+    /**
+     * The enabled state of the user.
+     *
+     * @var bool $enabled
+     *
+     * @JMS\Groups({"hidden"})
+     */
+    protected $enabled;
+
+    /**
+     * The password of the user.
+     *
+     * @var string $password
+     *
+     * @JMS\Groups({"hidden"})
+     */
+    protected $password;
+
+    /**
+     * The last login date of the user.
+     *
+     * @var \DateTime|null $lastLogin
+     *
+     * @JMS\Groups({"hidden"})
+     */
+    protected $lastLogin;
+
+    /**
+     * The roles of the user.
+     *
+     * @var array $roles
+     *
+     * @JMS\Groups({"hidden"})
+     */
+    protected $roles;
 
     /**
      * The user groups.
@@ -83,8 +134,9 @@ class UserEntity extends BaseUser implements EntityInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      *
-     * @JMSSerializer\Expose(if="isIncluded('groups')")
-     * @JMSSerializer\Type("array")
+     * @JMS\Groups({"groups"})
+     *
+     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/GroupEntity"))
      */
     protected $groups;
 
@@ -95,8 +147,7 @@ class UserEntity extends BaseUser implements EntityInterface
      *
      * @ORM\Column(type="string", length=2048, nullable=true)
      *
-     * @JMSSerializer\Expose
-     * @JMSSerializer\Type("string")
+     * @OA\Property()
      */
     private $avatar;
 
@@ -107,8 +158,9 @@ class UserEntity extends BaseUser implements EntityInterface
      *
      * @ORM\OneToMany(targetEntity="App\Entity\CharacterEntity", mappedBy="user", cascade={"persist"})
      *
-     * @JMSSerializer\Expose(if="isIncluded('characters')")
-     * @JMSSerializer\Type("array")
+     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/CharacterEntity"))
+     *
+     * @JMS\Groups({"character"})
      */
     private $characters;
 
@@ -119,8 +171,9 @@ class UserEntity extends BaseUser implements EntityInterface
      *
      * @ORM\OneToMany(targetEntity="App\Entity\RecruitmentEntity", mappedBy="user")
      *
-     * @JMSSerializer\Expose(if="isIncluded('recruitments')")
-     * @JMSSerializer\Type("array")
+     * @JMS\Groups({"recruitment"})
+     *
+     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/RecruitmentEntity"))
      */
     private $recruitments;
 
@@ -130,8 +183,12 @@ class UserEntity extends BaseUser implements EntityInterface
      * @var RefreshTokenEntity $refreshToken
      *
      * @ORM\OneToOne(targetEntity="App\Entity\RefreshTokenEntity", mappedBy="user", cascade={"persist", "remove"})
+     *
+     * @JMS\Groups({"refreshToken"})
+     *
+     * @OA\Property(ref="#/components/schemas/RefreshTokenEntity")
      */
-    private $refreshToken;
+    private $refreshToken   ;
 
     /**
      * UserEntity constructor.
