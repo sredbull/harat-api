@@ -19,10 +19,14 @@ use App\Exception\TokenNotFoundException;
 use App\Response\Login\GetRefreshResponse;
 use App\Response\Login\PostLoginResponse;
 use App\Service\AuthenticationService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LoginController
+/**
+ * Class LoginController
+ */
+class LoginController extends AbstractController
 {
 
     /**

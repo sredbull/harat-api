@@ -17,9 +17,13 @@ use App\Exception\DatabaseException;
 use App\Response\Character\GetCharacterResponse;
 use App\Response\Character\RemoveCharacterResponse;
 use App\Service\CharacterService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CharacterController
+/**
+ * Class CharacterController
+ */
+class CharacterController extends AbstractController
 {
 
     /**

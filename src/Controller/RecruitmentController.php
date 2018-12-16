@@ -22,9 +22,13 @@ use App\Response\Recruitment\GetRecruitmentsResponse;
 use App\Response\Recruitment\PostRecruitmentResponse;
 use App\Service\RecruitmentService;
 use OpenApi\Annotations as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class RecruitmentController extends BaseController
+/**
+ * Class RecruitmentController
+ */
+class RecruitmentController extends AbstractController
 {
 
     /**

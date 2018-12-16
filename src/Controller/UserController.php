@@ -10,15 +10,16 @@
  */
 namespace App\Controller;
 
+use App\Response\User\GetProfileResponse;
+use App\Response\User\GetUsersResponse;
 use App\Service\UserService;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class UserController.
+ * Class UserController
  */
-class UserController extends BaseController
+class UserController extends AbstractController
 {
 
     /**
@@ -28,11 +29,11 @@ class UserController extends BaseController
      *
      * @Route("/user", methods={"GET"})
      *
-     * @return JsonResponse
+     * @return GetUsersResponse
      */
-    public function getUsers(UserService $userService): JsonResponse
+    public function getUsers(UserService $userService): GetUsersResponse
     {
-        return $this->view($userService->getAllUsers(), Response::HTTP_OK);
+        return GetUsersResponse::get($userService->getAllUsers());
     }
 
     /**
@@ -42,11 +43,11 @@ class UserController extends BaseController
      *
      * @Route("/user/profile", methods={"GET"})
      *
-     * @return JsonResponse
+     * @return GetProfileResponse
      */
-    public function getProfile(UserService $userService): JsonResponse
+    public function getProfile(UserService $userService): GetProfileResponse
     {
-        return $this->view($userService->getProfile(), Response::HTTP_OK);
+        return GetProfileResponse::get($userService->getProfile());
     }
 
 }

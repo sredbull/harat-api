@@ -10,14 +10,15 @@
  */
 namespace App\Controller;
 
+use App\ArgumentResolver\EveSso\GetCallbackArgumentResolver;
+use App\ArgumentResolver\EveSso\GetRedirectArgumentResolver;
 use App\Entity\UserEntity;
 use App\Exception\DatabaseException;
 use App\Exception\EveSsoException;
 use App\Exception\InvalidStateException;
 use App\Exception\UserNotFoundException;
-use App\ArgumentResolver\EveSso\GetCallbackArgumentResolver;
-use App\ArgumentResolver\EveSso\GetRedirectArgumentResolver;
 use App\Service\EveSsoService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class EveSsoController.
  */
-class EveSsoController extends BaseController
+class EveSsoController extends AbstractController
 {
 
     /**
@@ -35,9 +36,9 @@ class EveSsoController extends BaseController
      * @param UserEntity|null             $user          The user.
      * @param GetRedirectArgumentResolver $request       The request.
      *
-     * @return RedirectResponse
+     * @Route("/sso/login/{user}", methods={"GET"})
      *
-     * @Route("/sso/login/{id}", methods={"GET"})
+     * @return RedirectResponse
      *
      * @throws UserNotFoundException When the user was not found.
      */

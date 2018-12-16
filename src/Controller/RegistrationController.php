@@ -15,12 +15,13 @@ use App\Exception\ApiException;
 use App\Exception\RegistrationFailedException;
 use App\Response\Registration\PostRegistrationResponse;
 use App\Service\AuthenticationService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class RegistrationController.
  */
-class RegistrationController extends BaseController
+class RegistrationController extends AbstractController
 {
 
     /**
