@@ -11,7 +11,6 @@
 namespace App\Controller;
 
 use App\ArgumentResolver\Login\PostLoginArgumentResolver;
-use App\Exception\ApiException;
 use App\Exception\AuthenticationFailedException;
 use App\Exception\DatabaseException;
 use App\Exception\InvalidTokenException;

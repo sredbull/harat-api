@@ -11,7 +11,6 @@
 namespace App\Controller;
 
 use App\ArgumentResolver\Registration\PostRegisterArgumentResolver;
-use App\Exception\ApiException;
 use App\Exception\RegistrationFailedException;
 use App\Response\Registration\PostRegistrationResponse;
 use App\Service\AuthenticationService;

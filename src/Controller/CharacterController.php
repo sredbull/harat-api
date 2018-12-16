@@ -11,7 +11,7 @@
 namespace App\Controller;
 
 use App\Entity\CharacterEntity;
-use App\Exception\ApiException;
+
 use App\Exception\CharacterNotFoundException;
 use App\Exception\DatabaseException;
 use App\Response\Character\GetCharacterResponse;

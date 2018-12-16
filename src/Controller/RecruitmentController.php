@@ -13,7 +13,6 @@ namespace App\Controller;
 use App\ArgumentResolver\Recruitment\PostRecruitmentArgumentResolver;
 use App\Entity\RecruitmentEntity;
 use App\Entity\UserEntity;
-use App\Exception\ApiException;
 use App\Exception\DatabaseException;
 use App\Exception\RecruitmentNotFoundException;
 use App\Exception\UserNotFoundException;
