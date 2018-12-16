@@ -8,39 +8,36 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Response\Login;
+namespace App\Response\User;
 
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
 /**
  * @OA\Response(
- *     response="PostLoginResponse",
+ *     response="GetUsersResponse",
  *     description="successful operation",
  *     @OA\JsonContent(
- *         @OA\Property(property="message", type="string"),
- *         @OA\Property(property="token", type="string")
- *     )
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/UserEntity")
+ *     ),
  * )
  */
-class PostLoginResponse extends BaseResponse
+class GetUsersResponse extends BaseResponse
 {
 
     /**
      * Get the response.
      *
-     * @param string $token The token.
+     * @param array $users The users to return.
      *
-     * @return PostLoginResponse
+     * @return self
      */
-    public static function get(string $token): self
+    public static function get(array $users): self
     {
         $response = new self();
 
-        $response->setData([
-            'message' => 'Login successful',
-            'token' => $token,
-        ]);
+        $response->setData($users, ['user']);
 
         return $response;
     }

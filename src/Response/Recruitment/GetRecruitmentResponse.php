@@ -11,13 +11,10 @@
 namespace App\Response\Recruitment;
 
 use App\Entity\RecruitmentEntity;
-use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
 /**
- * Class GetRecruitmentResponse
- *
  * @OA\Response(
  *     response="GetRecruitmentResponse",
  *     description="successful operation",
@@ -31,8 +28,6 @@ class GetRecruitmentResponse extends BaseResponse
      * Get the response.
      *
      * @param RecruitmentEntity $recruitment The data to return.
-     *
-     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */

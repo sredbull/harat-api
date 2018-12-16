@@ -10,7 +10,6 @@
  */
 namespace App\Response\Recruitment;
 
-use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
@@ -31,8 +30,6 @@ class GetRecruitmentsResponse extends BaseResponse
      * Get the response.
      *
      * @param array $recruitments The recruitments to return.
-     *
-     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */

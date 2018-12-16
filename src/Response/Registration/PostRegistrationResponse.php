@@ -10,7 +10,6 @@
  */
 namespace App\Response\Registration;
 
-use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
@@ -28,8 +27,6 @@ class PostRegistrationResponse extends BaseResponse
 
     /**
      * Get the response.
-     *
-     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */

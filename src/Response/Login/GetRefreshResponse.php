@@ -10,7 +10,6 @@
  */
 namespace App\Response\Login;
 
-use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
@@ -33,8 +32,6 @@ class GetRefreshResponse extends BaseResponse
      * @param string $token The token.
      *
      * @return GetRefreshResponse
-     *
-     * @throws ApiException When the includes passed are not array values.
      */
     public static function get(string $token): self
     {

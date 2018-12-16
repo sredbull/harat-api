@@ -11,7 +11,6 @@
 namespace App\Response\Character;
 
 use App\Entity\CharacterEntity;
-use App\Exception\ApiException;
 use App\Response\BaseResponse;
 use OpenApi\Annotations as OA;
 
@@ -29,8 +28,6 @@ class GetCharacterResponse extends BaseResponse
      * Get the response.
      *
      * @param CharacterEntity $character The character.
-     *
-     * @throws ApiException When the includes passed are not array values.
      *
      * @return self
      */
