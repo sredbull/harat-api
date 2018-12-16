@@ -10,8 +10,7 @@
  */
 namespace App\Response;
 
-use App\Exception\ApiException;
-use App\Provider\ExpressionLanguage\ExpressionLanguageProvider;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,12 +24,7 @@ class BaseResponse extends JsonResponse
 
     public const HTTP_CODE = Response::HTTP_OK;
 
-    /**
-     * The includes.
-     *
-     * @var array $includes
-     */
-    private $includes;
+    public const DEFAULT_FORMAT = 'json';
 
     /**
      * The serializer.
@@ -41,46 +35,35 @@ class BaseResponse extends JsonResponse
 
     /**
      * BaseResponse constructor.
-     *
-     * @throws ApiException WHen setting the includes fails.
      */
     public function __construct()
     {
-        $this->setIncludes();
         $this->setSerializer();
 
         parent::__construct([], self::HTTP_CODE, []);
     }
 
     /**
-     * Set the includes.
+     * Get the groups to include at the serialization process.
      *
-     * @return void
-     *
-     * @throws ApiException When the includes passed are not array values.
+     * @return array
      */
-    public function setIncludes(): void
+    public function getIncludedGroups(): array
     {
         global $kernel;
         $request = $kernel->getContainer()->get('request_stack');
 
-        $includes = null;
+        $includedGroups = null;
 
         if ($request->getCurrentRequest() !== null) {
-            $includes = $request->getCurrentRequest()->get('includes');
+            $includedGroups = $request->getCurrentRequest()->get('includes');
         }
 
-        if ($includes === null) {
-            $this->includes = [];
-
-            return;
+        if ($includedGroups === null) {
+            return [];
         }
 
-        if (\is_array($includes) === false) {
-            throw new ApiException('Includes should always be passed as array values. e.g. ?includes[]=default', Response::HTTP_METHOD_NOT_ALLOWED);
-        }
-
-        $this->includes = $includes;
+        return explode(',', $includedGroups);
     }
 
     /**
@@ -90,12 +73,7 @@ class BaseResponse extends JsonResponse
      */
     public function setSerializer(): void
     {
-        $expressionLanguageProvider = new ExpressionLanguageProvider($this->includes);
-        $expressionEvaluator = $expressionLanguageProvider->getExpressionEvaluator();
-
         $serializer = SerializerBuilder::create()
-            ->setExpressionEvaluator($expressionEvaluator)
-            ->addMetadataDir(str_replace('Response', '', __DIR__) . 'Resources/FOSUserBundle/serializer', 'FOS\\UserBundle')
             ->setCacheDir(str_replace('/src/Response', '', __DIR__) . '/var/cache/' . getenv('APP_ENV') . '/jms_serializer')
             ->setDebug(getenv('APP_ENV') === 'dev')
             ->build()
@@ -108,13 +86,16 @@ class BaseResponse extends JsonResponse
      * Set the data to serialize.
      *
      * @param mixed|array $data   The data.
-     * @param string      $format The format to serialize to.
+     * @param array       $groups The groups to serialize.
      *
      * @return void
      */
-    public function setData($data = [], string $format = 'json'): void
+    public function setData($data = [], array $groups = []): void
     {
-        $json = $this->serializer->serialize($data, $format);
+        $groups[] = 'Default';
+        $groups = array_merge($groups, $this->getIncludedGroups());
+
+        $json = $this->serializer->serialize($data, self::DEFAULT_FORMAT, SerializationContext::create()->setGroups($groups));
 
         $this->setJson($json);
     }
