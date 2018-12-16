@@ -67,7 +67,7 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\Column(type="array")
      *
-     * @OA\Property()
+     * @OA\Property(@OA\Items(type="string"))
      */
     private $scopes;
 

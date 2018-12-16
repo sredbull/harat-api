@@ -40,7 +40,6 @@ class RecruitmentController extends AbstractController
      *
      * @return GetRecruitmentResponse
      *
-     * @throws ApiException                 When the includes passed are not array values.
      * @throws RecruitmentNotFoundException When the recruitment could not be found.
      *
      * @OA\SecurityScheme(
@@ -67,8 +66,6 @@ class RecruitmentController extends AbstractController
      * @Route("/recruitment", methods={"GET"})
      *
      * @return GetRecruitmentsResponse
-     *
-     * @throws ApiException  When the includes passed are not array values.
      */
     public function getRecruitments(RecruitmentService $recruitmentService): GetRecruitmentsResponse
     {
@@ -86,7 +83,6 @@ class RecruitmentController extends AbstractController
      *
      * @return PostRecruitmentResponse
      *
-     * @throws ApiException  When the includes passed are not array values.
      * @throws DatabaseException     When saving or removing a recruitment fails.
      * @throws UserNotFoundException When the user could not be found.
      */

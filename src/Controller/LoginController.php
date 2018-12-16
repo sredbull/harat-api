@@ -39,7 +39,6 @@ class LoginController extends AbstractController
      *
      * @return GetRefreshResponse
      *
-     * @throws ApiException           When the includes passed are not array values.
      * @throws TokenNotFoundException When the token was not found in the Authorization header.
      * @throws DatabaseException      When the refresh token could not be saved.
      * @throws InvalidTokenException  When the token appears to be invalid or expired.
@@ -66,7 +65,6 @@ class LoginController extends AbstractController
      *
      * @return PostLoginResponse
      *
-     * @throws ApiException                  When the includes passed are not array values.
      * @throws AuthenticationFailedException When authentication fails.
      */
     public function postLogin(PostLoginArgumentResolver $request, AuthenticationService $authenticationService): PostLoginResponse

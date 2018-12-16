@@ -34,7 +34,6 @@ class RegistrationController extends AbstractController
      *
      * @return PostRegistrationResponse
      *
-     * @throws ApiException                When the includes passed are not array values.
      * @throws RegistrationFailedException When registration fails.
      */
     public function postRegistration(PostRegisterArgumentResolver $request, AuthenticationService $authenticationService): PostRegistrationResponse

@@ -35,7 +35,6 @@ class CharacterController extends AbstractController
      *
      * @return GetCharacterResponse
      *
-     * @throws ApiException               When the includes passed are not array values.
      * @throws CharacterNotFoundException When the character could not be found.
      */
     public function getCharacter(?CharacterEntity $character): GetCharacterResponse
@@ -57,7 +56,6 @@ class CharacterController extends AbstractController
      *
      * @return RemoveCharacterResponse
      *
-     * @throws ApiException               When the includes passed are not array values.
      * @throws CharacterNotFoundException When the character could not be found.
      * @throws DatabaseException          When the character could not be removed.
      */
