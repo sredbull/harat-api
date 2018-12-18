@@ -2,8 +2,8 @@ security:
     encoders:
         App\Entity\UserEntity: bcrypt
     providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username
+        user_provider:
+            id: App\Provider\UserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -28,7 +28,7 @@ security:
         api:
             pattern: '[^/]'
             stateless: true
-            provider: fos_userbundle
+            provider: user_provider
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator

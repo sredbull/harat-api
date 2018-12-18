@@ -23,8 +23,6 @@ services:
     App\Repository\BaseRepository:
         autowire: false
         arguments: ['@Symfony\Bridge\Doctrine\RegistryInterface', 'BaseRepository']
-    App\Controller\BaseController:
-        arguments: ['@request_stack']
     App\ArgumentResolver\BaseArgumentResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }
