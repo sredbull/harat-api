@@ -74,9 +74,6 @@
     "escapestudios/symfony2-coding-standard": {
         "version": "3.x-dev"
     },
-    "friendsofsymfony/user-bundle": {
-        "version": "v2.1.2"
-    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
@@ -142,12 +139,6 @@
             "version": "3.0",
             "ref": "384cec52df45f3bfd46a09930d6960a58872b268"
         }
-    },
-    "knplabs/knp-components": {
-        "version": "1.3.8"
-    },
-    "knplabs/knp-paginator-bundle": {
-        "version": "v2.8.0"
     },
     "lcobucci/jwt": {
         "version": "3.2.4"
@@ -305,9 +296,6 @@
             "ref": "e921bdbfe20cdefa3b82f379d1cd36df1bc8d115"
         }
     },
-    "symfony/form": {
-        "version": "v4.0.11"
-    },
     "symfony/framework-bundle": {
         "version": "3.3",
         "recipe": {
@@ -326,9 +314,6 @@
     "symfony/inflector": {
         "version": "v4.0.11"
     },
-    "symfony/intl": {
-        "version": "v4.0.11"
-    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -337,9 +322,6 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
-    },
-    "symfony/options-resolver": {
-        "version": "v4.0.11"
     },
     "symfony/orm-pack": {
         "version": "v1.0.5"
@@ -352,9 +334,6 @@
             "version": "4.1",
             "ref": "b14c7f62fabeedf256d3211b0f704402b5530ba1"
         }
-    },
-    "symfony/polyfill-intl-icu": {
-        "version": "v1.8.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.8.0"
