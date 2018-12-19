@@ -49,9 +49,9 @@ class RecruitmentEntity implements EntityInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\UserEntity", inversedBy="recruitments")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @JMS\Groups({"user"})
+     * @JMS\Accessor(getter="getUserId")
      *
-     * @OA\Property(ref="#/components/schemas/UserEntity")
+     * @OA\Property(type="integer")
      */
     private $user;
 
@@ -84,6 +84,16 @@ class RecruitmentEntity implements EntityInterface
     public function getUser(): UserEntity
     {
         return $this->user;
+    }
+
+    /**
+     * Get the user id where this recruitment belongs to.
+     *
+     * @return integer
+     */
+    public function getUserId(): ?int
+    {
+        return $this->getUser() ? $this->getUser()->getId() : null;
     }
 
     /**
