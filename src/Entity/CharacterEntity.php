@@ -14,6 +14,7 @@ namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
 
 /**
@@ -120,7 +121,9 @@ class CharacterEntity implements EntityInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\UserEntity", inversedBy="characters")
      *
-     * @OA\Property()
+     * @JMS\Accessor(getter="getUserId")
+     *
+     * @OA\Property(type="integer")
      */
     private $user;
 
@@ -310,7 +313,7 @@ class CharacterEntity implements EntityInterface
     }
 
     /**
-     * Get the user id where this recruitment belongs to.
+     * Get the user id where this character belongs to.
      *
      * @return integer
      */
