@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\Group as BaseGroup;
 use OpenApi\Annotations as OA;
 
 /**
@@ -25,7 +24,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Schema(schema="GroupEntity")
  */
-class GroupEntity extends BaseGroup implements EntityInterface
+class GroupEntity implements EntityInterface
 {
 
     /**
@@ -37,6 +36,106 @@ class GroupEntity extends BaseGroup implements EntityInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
+
+    /**
+     * The group name.
+     *
+     * @var string $name
+     *
+     * @ORM\Column(type="string", length=255, unique=true)
+     *
+     * @OA\Property()
+     */
+    private $name;
+
+    /**
+     * The roles.
+     *
+     * @var array $roles
+     *
+     * @ORM\Column(type="array")
+     *
+     * @OA\Property(@OA\Items(type="string"))
+     */
+    private $roles;
+
+    /**
+     * Group constructor.
+     *
+     * @param string $name  The name of the group.
+     * @param array  $roles The roles of the group.
+     */
+    public function __construct(string $name, array $roles = [])
+    {
+        $this->name = $name;
+        $this->roles = $roles;
+    }
+
+    /**
+     * Get the id of the group.
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the name of the group
+     *
+     * @param int $id The id.
+     *
+     * @return void
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get the name of the group
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the name of the group.
+     *
+     * @param string $name The name.
+     *
+     * @return void
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get the roles of the group.
+     *
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * Set the roles of the group.
+     *
+     * @param array $roles The roles.
+     *
+     * @return void
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
 
 }

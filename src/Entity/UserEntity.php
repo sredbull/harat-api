@@ -16,10 +16,9 @@ use App\Interfaces\EntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\GroupInterface;
-use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMS;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class UserEntity.
@@ -29,7 +28,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Schema(schema="UserEntity")
  */
-class UserEntity extends BaseUser implements EntityInterface
+class UserEntity implements EntityInterface, UserInterface
 {
 
     /**
@@ -45,88 +44,106 @@ class UserEntity extends BaseUser implements EntityInterface
      *
      * @OA\Property()
      */
-    protected $id;
+    private $id;
 
     /**
      * The name of the user.
      *
      * @var string $username
      *
+     * @ORM\Column(type="string", length=255)
+     *
      * @JMS\Groups({"user"})
      *
      * @OA\Property()
      */
-    protected $username;
-
-    /**
-     * The stripped name of the user.
-     *
-     * @var string $usernameCanonical
-     *
-     * @JMS\Groups({"hidden"})
-     */
-    protected $usernameCanonical;
+    private $username;
 
     /**
      * The email of the user.
      *
      * @var string $email
      *
+     * @ORM\Column(type="string", length=255, unique=true)
+     *
      * @JMS\Groups({"user"})
      *
      * @OA\Property()
      */
-    protected $email;
-
-    /**
-     * The stripped email of the user.
-     *
-     * @var string $emailCanonical
-     *
-     * @JMS\Groups({"hidden"})
-     */
-    protected $emailCanonical;
+    private $email;
 
     /**
      * The enabled state of the user.
      *
      * @var bool $enabled
      *
+     * @ORM\Column(type="boolean")
+     *
      * @JMS\Groups({"hidden"})
      */
-    protected $enabled;
+    private $enabled;
 
     /**
      * The password of the user.
      *
      * @var string $password
      *
+     * @ORM\Column(type="string", length=255)
+     *
      * @JMS\Groups({"hidden"})
      */
-    protected $password;
+    private $password;
+
+    /**
+     * The salt of the user.
+     *
+     * @var string|null $salt
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @JMS\Groups({"hidden"})
+     */
+    private $salt;
 
     /**
      * The last login date of the user.
      *
      * @var \DateTime|null $lastLogin
      *
+     * @ORM\Column(type="datetime", nullable=true)
+     *
      * @JMS\Groups({"hidden"})
      */
-    protected $lastLogin;
+    private $lastLogin;
+
+    /**
+     * The avatar url of the user.
+     *
+     * @var string $avatar
+     *
+     * @ORM\Column(type="string", length=2048, nullable=true)
+     *
+     * @JMS\Groups({"user"})
+     *
+     * @OA\Property()
+     */
+    private $avatar;
 
     /**
      * The roles of the user.
      *
      * @var array $roles
      *
-     * @JMS\Groups({"hidden"})
+     * @ORM\Column(type="array")
+     *
+     * @JMS\Groups({"role"})
      */
-    protected $roles;
+    private $roles;
 
     /**
-     * The user groups.
+     * The groups of the user.
      *
-     * @var GroupInterface[]|Collection $groups
+     * @var GroupEntity[]|Collection $groups
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\GroupEntity")
      * @ORM\JoinTable(name="user_group",
@@ -134,22 +151,11 @@ class UserEntity extends BaseUser implements EntityInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      *
-     * @JMS\Groups({"groups"})
+     * @JMS\Groups({"group"})
      *
      * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/GroupEntity"))
      */
-    protected $groups;
-
-    /**
-     * The avatar url of the member.
-     *
-     * @var string $avatar
-     *
-     * @ORM\Column(type="string", length=2048, nullable=true)
-     *
-     * @OA\Property()
-     */
-    private $avatar;
+    private $groups;
 
     /**
      * The characters of this user.
@@ -178,7 +184,7 @@ class UserEntity extends BaseUser implements EntityInterface
     private $recruitments;
 
     /**
-     * The refresh token.
+     * The refresh token of this user.
      *
      * @var RefreshTokenEntity $refreshToken
      *
@@ -188,20 +194,174 @@ class UserEntity extends BaseUser implements EntityInterface
      *
      * @OA\Property(ref="#/components/schemas/RefreshTokenEntity")
      */
-    private $refreshToken   ;
+    private $refreshToken;
 
     /**
      * UserEntity constructor.
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->groups = new ArrayCollection();
         $this->characters = new ArrayCollection();
         $this->recruitments = new ArrayCollection();
     }
 
     /**
-     * Get the avatar.
+     * Get the id of the user.
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the id of the user.
+     *
+     * @param int $id The id.
+     *
+     * @return void
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get the username of this user.
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set the username of this user.
+     *
+     * @param string $username The username.
+     *
+     * @return void
+     */
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * Get the email of this user.
+     *
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set the email of this user.
+     *
+     * @param string $email The email.
+     *
+     * @return void
+     */
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * Check the enabled state of this user.
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set the enabled state of this user.
+     *
+     * @param bool $enabled The enabled state.
+     *
+     * @return void
+     */
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get the password of this user.
+     *
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the password of this user.
+     *
+     * @param string $password The password.
+     *
+     * @return void
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * Get the salt of this user.
+     *
+     * @return string
+     */
+    public function getSalt(): string
+    {
+        return $this->salt;
+    }
+
+    /**
+     * Set the salt of this user.
+     *
+     * @param string|null $salt The salt.
+     *
+     * @return void
+     */
+    public function setSalt(?string $salt): void
+    {
+        $this->salt = $salt;
+    }
+
+    /**
+     * Get the last login date of this user.
+     *
+     * @return \DateTime|null
+     */
+    public function getLastLogin(): ?\DateTime
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * Set the last login date of this user.
+     *
+     * @param \DateTime|null $lastLogin The last logged in date.
+     *
+     * @return void
+     */
+    public function setLastLogin(?\DateTime $lastLogin): void
+    {
+        $this->lastLogin = $lastLogin;
+    }
+
+    /**
+     * Get the avatar of this user.
      *
      * @return string|null
      */
@@ -211,7 +371,7 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Set the avatar.
+     * Set the avatar of this user.
      *
      * @param string|null $avatar The url of the avatar.
      *
@@ -223,7 +383,51 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Get the characters for this user.
+     * Get the roles of this user.
+     *
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * Set the roles of this user.
+     *
+     * @param array $roles The roles.
+     *
+     * @return void
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
+
+    /**
+     * Get the groups of this user.
+     *
+     * @return GroupEntity[]|Collection
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * Set the groups of this user.
+     *
+     * @param GroupEntity[]|Collection $groups The groups.
+     *
+     * @return void
+     */
+    public function setGroups($groups): void
+    {
+        $this->groups = $groups;
+    }
+
+    /**
+     * Get the characters of this user.
      *
      * @return Collection|CharacterEntity[]
      */
@@ -233,7 +437,7 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Add a character to this user.
+     * Add a character of this user.
      *
      * @param CharacterEntity $character The character to be added.
      *
@@ -248,7 +452,7 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Remove a character from this user.
+     * Remove a character of this user.
      *
      * @param CharacterEntity $character The character to be removed.
      *
@@ -265,7 +469,7 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Get the recruitment's for this user.
+     * Get the recruitment's of this user.
      *
      * @return Collection|RecruitmentEntity[]
      */
@@ -273,7 +477,6 @@ class UserEntity extends BaseUser implements EntityInterface
     {
         return $this->recruitments;
     }
-
 
     /**
      * Add a recruitment to this user.
@@ -291,7 +494,7 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Remove a recruitment from this user.
+     * Remove a recruitment of this user.
      *
      * @param RecruitmentEntity $recruitment The recruitment.
      *
@@ -305,7 +508,7 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Get the refresh token.
+     * Get the refresh token of this user.
      *
      * @return RefreshTokenEntity|null
      */
@@ -315,7 +518,7 @@ class UserEntity extends BaseUser implements EntityInterface
     }
 
     /**
-     * Set the refresh token.
+     * Set the refresh token of this user.
      *
      * @param RefreshTokenEntity $refreshToken The refresh token.
      *
@@ -328,6 +531,16 @@ class UserEntity extends BaseUser implements EntityInterface
         if ($this !== $refreshToken->getUser()) {
             $refreshToken->setUser($this);
         }
+    }
+
+    /**
+     * Erase the credentials of this user.
+     *
+     * @return void
+     */
+    public function eraseCredentials(): void
+    {
+        $this->salt = null;
     }
 
 }
