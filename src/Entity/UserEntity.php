@@ -134,7 +134,7 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @var array $roles
      *
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="json")
      *
      * @JMS\Groups({"role"})
      */
@@ -297,7 +297,7 @@ class UserEntity implements EntityInterface, UserInterface
     /**
      * Get the password of this user.
      *
-     * @return string
+     * @return string|null
      */
     public function getPassword(): string
     {
@@ -321,7 +321,7 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @return string
      */
-    public function getSalt(): string
+    public function getSalt(): ?string
     {
         return $this->salt;
     }
@@ -415,15 +415,31 @@ class UserEntity implements EntityInterface, UserInterface
     }
 
     /**
-     * Set the groups of this user.
+     * Add a group to this user.
      *
-     * @param GroupEntity[]|Collection $groups The groups.
+     * @param GroupEntity $group The group to be added.
      *
      * @return void
      */
-    public function setGroups($groups): void
+    public function addGroup(GroupEntity $group): void
     {
-        $this->groups = $groups;
+        if (!$this->groups->contains($group)) {
+            $this->groups[] = $group;
+        }
+    }
+
+    /**
+     * Remove a group of this user.
+     *
+     * @param GroupEntity $group The group.
+     *
+     * @return void
+     */
+    public function removeGroup(GroupEntity $group): void
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
+        }
     }
 
     /**
@@ -437,7 +453,7 @@ class UserEntity implements EntityInterface, UserInterface
     }
 
     /**
-     * Add a character of this user.
+     * Add a character to this user.
      *
      * @param CharacterEntity $character The character to be added.
      *

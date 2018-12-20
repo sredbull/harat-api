@@ -36,6 +36,7 @@ class AuthenticationService
 {
 
     public const DEFAULT_GROUP = 'harat-users';
+
     public const DEFAULT_PEOPLE_OU = 'ou=people,dc=housearatus,dc=space';
 
     /**
@@ -209,6 +210,7 @@ class AuthenticationService
             $user->setUsername($ldapUser->getUsername());
             $user->setPassword($this->encoder->encodePassword($user, $password));
             $user->setEnabled(true);
+            $user->setRoles([]);
         }
 
         return $user;
