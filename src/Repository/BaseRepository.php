@@ -52,7 +52,7 @@ class BaseRepository extends ServiceEntityRepository implements RepositoryInterf
         try {
             $this->_em->remove($entity);
             $this->_em->flush();
-        } catch (\Throwable $e) {
+        } catch (\Throwable $exception) {
             throw new DatabaseException(sprintf('Removing the %s failed', \get_class($entity)));
         }
     }
@@ -70,8 +70,8 @@ class BaseRepository extends ServiceEntityRepository implements RepositoryInterf
     {
         try {
             $this->_em->persist($entity);
-        } catch (\Throwable $e) {
-            throw new DatabaseException(sprintf('persisting the %s failed', \get_class($entity)));
+        } catch (\Throwable $exception) {
+            throw new DatabaseException(sprintf('persisting the %s failed: %s', \get_class($entity), $exception->getMessage()));
         }
 
     }
@@ -87,8 +87,8 @@ class BaseRepository extends ServiceEntityRepository implements RepositoryInterf
     {
         try {
             $this->_em->flush();
-        } catch (\Throwable $e) {
-            throw new DatabaseException('Flushing failed');
+        } catch (\Throwable $exception) {
+            throw new DatabaseException(sprintf('Flushing failed : %s', $exception->getMessage()));
         }
 
     }
@@ -107,8 +107,8 @@ class BaseRepository extends ServiceEntityRepository implements RepositoryInterf
         try {
             $this->_em->persist($entity);
             $this->_em->flush();
-        } catch (\Throwable $e) {
-            throw new DatabaseException(sprintf('Saving the %s failed', \get_class($entity)));
+        } catch (\Throwable $exception) {
+            throw new DatabaseException(sprintf('Saving the %s failed: %s', \get_class($entity), $exception->getMessage()));
         }
 
     }
