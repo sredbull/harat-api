@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @OA\Response(
  *     response="RemoveCharacterResponse",
  *     description="successful operation",
- *     @OA\JsonContent(ref="#/components/schemas/CharacterEntity")
+ *     @OA\JsonContent()
  * )
  */
 class RemoveCharacterResponse extends BaseResponse
@@ -33,7 +33,10 @@ class RemoveCharacterResponse extends BaseResponse
      */
     public static function get(): self
     {
-        return new self();
+        $response = new self(self::HTTP_CODE);
+        $response->setData('');
+
+        return $response;
     }
 
 }

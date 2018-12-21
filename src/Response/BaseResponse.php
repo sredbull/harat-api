@@ -10,6 +10,8 @@
  */
 namespace App\Response;
 
+use App\Serializer\JsonHalEventSubscriber;
+use JMS\Serializer\EventDispatcher\EventDispatcher;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
@@ -35,12 +37,14 @@ class BaseResponse extends JsonResponse
 
     /**
      * BaseResponse constructor.
+     *
+     * @param int $code The http code.
      */
-    public function __construct()
+    public function __construct(int $code = self::HTTP_CODE)
     {
         $this->setSerializer();
 
-        parent::__construct([], self::HTTP_CODE, []);
+        parent::__construct([], $code, []);
     }
 
     /**
@@ -76,6 +80,9 @@ class BaseResponse extends JsonResponse
         $serializer = SerializerBuilder::create()
             ->setCacheDir(str_replace('/src/Response', '', __DIR__) . '/var/cache/' . getenv('APP_ENV') . '/jms_serializer')
             ->setDebug(getenv('APP_ENV') === 'dev')
+            ->configureListeners(static function(EventDispatcher $dispatcher): void {
+                $dispatcher->addSubscriber(new JsonHalEventSubscriber());
+            })
             ->build()
         ;
 
@@ -95,7 +102,7 @@ class BaseResponse extends JsonResponse
         $groups[] = 'Default';
         $groups = array_merge($groups, $this->getIncludedGroups());
 
-        $json = $this->serializer->serialize($data, self::DEFAULT_FORMAT, SerializationContext::create()->setGroups($groups));
+        $json = $this->serializer->serialize($data, self::DEFAULT_FORMAT, SerializationContext::create()->setGroups($groups)->setSerializeNull(true));
 
         $this->setJson($json);
     }

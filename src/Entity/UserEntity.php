@@ -12,6 +12,7 @@
  */
 namespace App\Entity;
 
+use App\Annotation\HrefLink;
 use App\Interfaces\EntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,7 +27,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @ORM\Table(name="user")
  *
+ * @HrefLink()
+ *
  * @OA\Schema(schema="UserEntity")
+ *
+ * @JMS\AccessorOrder("custom", custom = {"ditismijnfield", "username"})
  */
 class UserEntity implements EntityInterface, UserInterface
 {
@@ -39,8 +44,6 @@ class UserEntity implements EntityInterface, UserInterface
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @JMS\Groups({"user"})
      *
      * @OA\Property()
      */
@@ -66,8 +69,6 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @ORM\Column(type="string", length=255, unique=true)
      *
-     * @JMS\Groups({"user"})
-     *
      * @OA\Property()
      */
     private $email;
@@ -78,8 +79,6 @@ class UserEntity implements EntityInterface, UserInterface
      * @var bool $enabled
      *
      * @ORM\Column(type="boolean")
-     *
-     * @JMS\Groups({"hidden"})
      */
     private $enabled;
 
@@ -90,7 +89,7 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @JMS\Groups({"hidden"})
+     * @JMS\Exclude()
      */
     private $password;
 
@@ -101,7 +100,7 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @JMS\Groups({"hidden"})
+     * @JMS\Exclude()
      */
     private $salt;
 
@@ -111,8 +110,6 @@ class UserEntity implements EntityInterface, UserInterface
      * @var \DateTime|null $lastLogin
      *
      * @ORM\Column(type="datetime", nullable=true)
-     *
-     * @JMS\Groups({"hidden"})
      */
     private $lastLogin;
 
@@ -122,8 +119,6 @@ class UserEntity implements EntityInterface, UserInterface
      * @var string $avatar
      *
      * @ORM\Column(type="string", length=2048, nullable=true)
-     *
-     * @JMS\Groups({"user"})
      *
      * @OA\Property()
      */
@@ -136,7 +131,7 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @ORM\Column(type="json")
      *
-     * @JMS\Groups({"role"})
+     * @JMS\Exclude()
      */
     private $roles;
 
@@ -151,8 +146,6 @@ class UserEntity implements EntityInterface, UserInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      *
-     * @JMS\Groups({"group"})
-     *
      * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/GroupEntity"))
      */
     private $groups;
@@ -165,8 +158,6 @@ class UserEntity implements EntityInterface, UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\CharacterEntity", mappedBy="user", cascade={"persist"})
      *
      * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/CharacterEntity"))
-     *
-     * @JMS\Groups({"character"})
      */
     private $characters;
 
@@ -177,9 +168,9 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @ORM\OneToMany(targetEntity="App\Entity\RecruitmentEntity", mappedBy="user")
      *
-     * @JMS\Groups({"recruitment"})
-     *
      * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/RecruitmentEntity"))
+     *
+     * @JMS\Exclude()
      */
     private $recruitments;
 
@@ -190,9 +181,9 @@ class UserEntity implements EntityInterface, UserInterface
      *
      * @ORM\OneToOne(targetEntity="App\Entity\RefreshTokenEntity", mappedBy="user", cascade={"persist", "remove"})
      *
-     * @JMS\Groups({"refreshToken"})
-     *
      * @OA\Property(ref="#/components/schemas/RefreshTokenEntity")
+     *
+     * @JMS\Accessor(getter="getTrimmedRefreshToken")
      */
     private $refreshToken;
 
@@ -531,6 +522,16 @@ class UserEntity implements EntityInterface, UserInterface
     public function getRefreshToken(): ?RefreshTokenEntity
     {
         return $this->refreshToken;
+    }
+
+    /**
+     * Get the actual refresh token of this user.
+     *
+     * @return string|null
+     */
+    public function getTrimmedRefreshToken(): ?string
+    {
+        return $this->getRefreshToken() ? $this->getRefreshToken()->getRefreshToken() : null;
     }
 
     /**
