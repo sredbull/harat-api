@@ -10,7 +10,10 @@
  */
 namespace App\Controller;
 
+use App\Entity\UserEntity;
+use App\Exception\UserNotFoundException;
 use App\Response\User\GetProfileResponse;
+use App\Response\User\GetUserResponse;
 use App\Response\User\GetUsersResponse;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,6 +37,26 @@ class UserController extends AbstractController
     public function getUsers(UserService $userService): GetUsersResponse
     {
         return GetUsersResponse::get($userService->getAllUsers());
+    }
+
+    /**
+     * Get a user.
+     *
+     * @param UserEntity|null $user The user.
+     *
+     * @Route("/user/{user}", methods={"GET"}, requirements={"user"="\d+"})
+     *
+     * @return GetUserResponse
+     *
+     * @throws UserNotFoundException When the user could not be found.
+     */
+    public function getAUser(?UserEntity $user): GetUserResponse
+    {
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        return GetUserResponse::get($user);
     }
 
     /**
