@@ -20,4 +20,20 @@ namespace App\Annotation;
 final class HrefLink
 {
 
+    /**
+     * The href.
+     *
+     * @var string $href
+     *
+     * @Required
+     */
+    public $href;
+
+    /**
+     * The identifier getter.
+     *
+     * @var string $identifier
+     */
+    public $identifier = 'getId';
+
 }

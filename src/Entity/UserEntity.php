@@ -27,11 +27,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @ORM\Table(name="user")
  *
- * @HrefLink()
+ * @HrefLink(href="/user")
  *
  * @OA\Schema(schema="UserEntity")
- *
- * @JMS\AccessorOrder("custom", custom = {"ditismijnfield", "username"})
  */
 class UserEntity implements EntityInterface, UserInterface
 {
