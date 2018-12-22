@@ -12,16 +12,52 @@
 namespace App\Serializer;
 
 use App\Annotation\HrefLink;
+use App\Exception\NonExisitingIdentifierMethodException;
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
-use JMS\Serializer\JsonSerializationVisitor;
 use JMS\Serializer\Metadata\StaticPropertyMetadata;
+use JMS\Serializer\Visitor\SerializationVisitorInterface;
+use ReflectionClass;
 
 class JsonHalEventSubscriber implements EventSubscriberInterface
 {
 
-    public static function getSubscribedEvents()
+    /**
+     * The doctrine annotion reader.
+     *
+     * @var AnnotationReader $reader
+     */
+    private $reader;
+
+    /**
+     * The object to serialize.
+     *
+     * @var mixed $object
+     */
+    private $object;
+
+    /**
+     * The reflected object.
+     *
+     * @var ReflectionClass $reflectedObject
+     */
+    private $reflectedObject;
+
+    /**
+     * The visitor.
+     *
+     * @var SerializationVisitorInterface $visitor
+     */
+    private $visitor;
+
+    /**
+     * The subscribed event.
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents(): array
     {
         return array(
             array(
@@ -33,34 +69,96 @@ class JsonHalEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onPreSerialize(ObjectEvent $event)
+    /**
+     * Runs on post serialize event.
+     *
+     * @param ObjectEvent $event The event.
+     *
+     * @return ObjectEvent
+     *
+     * @throws AnnotationException                   When the dcotrine reader fails to initialize.
+     * @throws \ReflectionException                  When the class could not be reflected.
+     * @throws NonExisitingIdentifierMethodException When the identifier method does not exist.
+     */
+    public function onPreSerialize(ObjectEvent $event): ObjectEvent
     {
-        if ($this->hasHrefLink($event->getObject()) === true) {
-            return;
+        $this->initializePreSerialize($event);
+
+        if ($this->hasHrefLink() === false) {
+            return $event;
         }
 
-        $this->setHrefLink($event->getVisitor());
+        $this->setHrefSelfLink();
 
         return $event;
     }
 
-    private function hasHrefLink($object)
+    /**
+     * Initialize the subscriber to serialize the datta.
+     *
+     * @param ObjectEvent $event The event.
+     *
+     * @throws AnnotationException  When the doctrine reader fails to initialize.
+     * @throws \ReflectionException When the class could not be reflected.
+     *
+     * @return void
+     */
+    private function initializePreSerialize(ObjectEvent $event): void
     {
-        $reader = new AnnotationReader();
-        $hrefLink = $reader->getClassAnnotation(
-            new \ReflectionClass($object),
-            HrefLink::class
-        );
-
-        return $hrefLink === null;
+        $this->reader = new AnnotationReader();
+        $this->object = $event->getObject();
+        $this->reflectedObject = new \ReflectionClass($this->object);
+        $this->visitor = $event->getVisitor();
     }
 
-    private function setHrefLink(JsonSerializationVisitor $visitor)
+    /**
+     * Checks if the HrefLink is present for the object to be serialized.
+     *
+     * @return bool
+     */
+    private function hasHrefLink(): bool
     {
+        return $this->reader->getClassAnnotation($this->reflectedObject, HrefLink::class) !== null;
+    }
+
+    /**
+     * Set the href link.
+     *
+     * @return void
+     *
+     * @throws NonExisitingIdentifierMethodException When the identifier method does not exist.
+     */
+    private function setHrefSelfLink(): void
+    {
+        $classAnnotation = $this->reader->getClassAnnotation($this->reflectedObject, HrefLink::class);
+
+        // This can never happen but just to keep things sane.
+        if ($classAnnotation === null) {
+            return;
+        }
+
+        if ($this->reflectedObject->hasMethod($classAnnotation->identifier) === false) {
+            throw new NonExisitingIdentifierMethodException(
+                sprintf(
+                    'The identifier "%s" does not exist in class: "%s"',
+                    $classAnnotation->identifier,
+                    \get_class($this->object)
+                )
+            );
+        }
+
         $links = new StaticPropertyMetadata('', '_links', []);
-        $visitor->visitProperty(
+        $this->visitor->visitProperty(
             $links,
-            []
+            [
+                'self' => [
+                    'href' => sprintf(
+                        '%s/%s',
+                        $classAnnotation->href,
+                        $this->object->{$classAnnotation->identifier}()
+                    ),
+                ],
+            ]
         );
     }
 
