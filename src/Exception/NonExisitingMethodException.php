@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class NonExisitingIdentifierMethodException.
  *
  * @OA\Response(
- *     response="InvalidTokenException",
+ *     response="NonExisitingMethodException",
  *     description="error operation"
  * )
  */
