@@ -157,6 +157,10 @@ class UserEntity implements EntityInterface, UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\CharacterEntity", mappedBy="user", cascade={"persist"})
      *
      * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/CharacterEntity"))
+     *
+     * @JMS\Exclude()
+     *
+     * @Linked(href="/character", accessor="getCharacters")
      */
     private $characters;
 
