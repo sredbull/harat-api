@@ -12,9 +12,11 @@
 namespace App\Serializer;
 
 use App\Annotation\HrefLink;
-use App\Exception\NonExisitingIdentifierMethodException;
+use App\Annotation\Linked;
+use App\Exception\NonExisitingMethodException;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\Metadata\StaticPropertyMetadata;
@@ -53,6 +55,20 @@ class JsonHalEventSubscriber implements EventSubscriberInterface
     private $visitor;
 
     /**
+     * The links data
+     *
+     * @var ArrayCollection
+     */
+    private $linksData;
+
+    /**
+     * The links.
+     *
+     * @var StaticPropertyMetadata $links
+     */
+    private $links;
+
+    /**
      * The subscribed event.
      *
      * @return array
@@ -78,7 +94,7 @@ class JsonHalEventSubscriber implements EventSubscriberInterface
      *
      * @throws AnnotationException                   When the dcotrine reader fails to initialize.
      * @throws \ReflectionException                  When the class could not be reflected.
-     * @throws NonExisitingIdentifierMethodException When the identifier method does not exist.
+     * @throws NonExisitingMethodException When the identifier method does not exist.
      */
     public function onPreSerialize(ObjectEvent $event): ObjectEvent
     {
@@ -88,13 +104,19 @@ class JsonHalEventSubscriber implements EventSubscriberInterface
             return $event;
         }
 
-        $this->setHrefSelfLink();
+        $this->setSelfLink();
+        $this->setLinks();
+
+        $this->visitor->visitProperty(
+            $this->links,
+            $this->linksData
+        );
 
         return $event;
     }
 
     /**
-     * Initialize the subscriber to serialize the datta.
+     * Initialize the subscriber to serialize the data.
      *
      * @param ObjectEvent $event The event.
      *
@@ -109,6 +131,8 @@ class JsonHalEventSubscriber implements EventSubscriberInterface
         $this->object = $event->getObject();
         $this->reflectedObject = new \ReflectionClass($this->object);
         $this->visitor = $event->getVisitor();
+        $this->linksData = new ArrayCollection();
+        $this->links = new StaticPropertyMetadata('', '_links', $this->linksData);
     }
 
     /**
@@ -126,9 +150,9 @@ class JsonHalEventSubscriber implements EventSubscriberInterface
      *
      * @return void
      *
-     * @throws NonExisitingIdentifierMethodException When the identifier method does not exist.
+     * @throws NonExisitingMethodException When the identifier method does not exist.
      */
-    private function setHrefSelfLink(): void
+    private function setSelfLink(): void
     {
         $classAnnotation = $this->reader->getClassAnnotation($this->reflectedObject, HrefLink::class);
 
@@ -137,29 +161,77 @@ class JsonHalEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($this->reflectedObject->hasMethod($classAnnotation->identifier) === false) {
-            throw new NonExisitingIdentifierMethodException(
+        $this->checkMethodExist($this->reflectedObject, $classAnnotation->identifier);
+        $this->linksData->set('self', [
+            'href' => sprintf(
+                '%s/%s',
+                $classAnnotation->href,
+                $this->object->{$classAnnotation->identifier}()
+            ),
+        ]);
+    }
+
+    /**
+     * Set the links.
+     *
+     * @return void
+     *
+     * @throws \ReflectionException        When the class could not be reflected.
+     * @throws NonExisitingMethodException When the identifier or accessor method do not exist.
+     */
+    private function setLinks(): void
+    {
+        foreach ($this->reflectedObject->getProperties() as $reflectionProperty) {
+            $propertyAnnotation = $this->reader->getPropertyAnnotation($reflectionProperty, Linked::class);
+
+            if ($propertyAnnotation === null) {
+                continue;
+            }
+
+            $this->checkMethodExist($this->reflectedObject, $propertyAnnotation->accessor, 'accessor');
+
+            $hrefs = [];
+            // @todo non iterable href links
+            if (is_iterable($this->object->{$propertyAnnotation->accessor}()) === true) {
+                foreach ($this->object->{$propertyAnnotation->accessor}() as $object) {
+                    $this->checkMethodExist(new \ReflectionClass($object), $propertyAnnotation->identifier);
+                    $hrefs[] = [
+                        'href' => sprintf(
+                            '%s/%s',
+                            $propertyAnnotation->href,
+                            $object->{$propertyAnnotation->identifier}()
+                        ),
+                    ];
+                }
+            }
+
+            $this->linksData->set($reflectionProperty->getName(), $hrefs);
+        }
+    }
+
+    /**
+     * Checks if the method exists.
+     *
+     * @param ReflectionClass $class  The refected class.
+     * @param string          $method The method.
+     * @param string          $type   The type.
+     *
+     * @return void
+     *
+     * @throws NonExisitingMethodException When the method does not exist.
+     */
+    private function checkMethodExist(ReflectionClass $class, string $method, string $type = 'identifier'): void
+    {
+        if ($class->hasMethod($method) === false) {
+            throw new NonExisitingMethodException(
                 sprintf(
-                    'The identifier "%s" does not exist in class: "%s"',
-                    $classAnnotation->identifier,
-                    \get_class($this->object)
+                    'The %s "%s" does not exist in class: "%s"',
+                    $type,
+                    $method,
+                    $class->getShortName()
                 )
             );
         }
-
-        $links = new StaticPropertyMetadata('', '_links', []);
-        $this->visitor->visitProperty(
-            $links,
-            [
-                'self' => [
-                    'href' => sprintf(
-                        '%s/%s',
-                        $classAnnotation->href,
-                        $this->object->{$classAnnotation->identifier}()
-                    ),
-                ],
-            ]
-        );
     }
 
 }

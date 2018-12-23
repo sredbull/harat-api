@@ -15,10 +15,18 @@ namespace App\Annotation;
 /**
  * @Annotation
  *
- * @Target("CLASS")
+ * @Target("PROPERTY")
  */
-final class HrefLink
+final class Linked
 {
+    /**
+     * The accessor getter.
+     *
+     * @var string $accessor
+     *
+     * @Required
+     */
+    public $accessor;
 
     /**
      * The identifier getter.

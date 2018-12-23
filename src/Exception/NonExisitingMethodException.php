@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  *     description="error operation"
  * )
  */
-class NonExisitingIdentifierMethodException extends ApiException
+class NonExisitingMethodException extends ApiException
 {
 
     /**
@@ -31,8 +31,8 @@ class NonExisitingIdentifierMethodException extends ApiException
      * @param integer $code    The exception code.
      */
     public function __construct(
-        string $message = 'The identifier does not exist',
-        int $code = Response::HTTP_NOT_FOUND
+        string $message = 'The method does not exist',
+        int $code = Response::HTTP_INTERNAL_SERVER_ERROR
     ) {
         parent::__construct($message, $code);
     }

@@ -13,6 +13,7 @@
 namespace App\Entity;
 
 use App\Annotation\HrefLink;
+use App\Annotation\Linked;
 use App\Interfaces\EntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -151,7 +152,7 @@ class UserEntity implements EntityInterface, UserInterface
     /**
      * The characters of this user.
      *
-     * @var array $character
+     * @var ArrayCollection $character
      *
      * @ORM\OneToMany(targetEntity="App\Entity\CharacterEntity", mappedBy="user", cascade={"persist"})
      *
@@ -162,13 +163,15 @@ class UserEntity implements EntityInterface, UserInterface
     /**
      * The recruitments of this user.
      *
-     * @var array $recruitments
+     * @var ArrayCollection $recruitments
      *
      * @ORM\OneToMany(targetEntity="App\Entity\RecruitmentEntity", mappedBy="user")
      *
      * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/RecruitmentEntity"))
      *
      * @JMS\Exclude()
+     *
+     * @Linked(href="/recruitment", accessor="getRecruitments")
      */
     private $recruitments;
 
